@@ -1,0 +1,6 @@
+[
+  {"_id": "s1", "from": 1712000000000, "to": 1712028800000, "workingTime": 28800,
+   "object": {"name": "Objekt A"}, "user": {"general": {"firstName": "***", "lastName": "***"}}},
+  {"_id": "s2", "from": 1714000000000, "to": 1714028800000, "workingTime": 14400,
+   "object": {"name": "Objekt A"}, "user": {"general": {"firstName": "***", "lastName": "***"}}}
+]
