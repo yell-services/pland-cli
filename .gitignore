@@ -1,0 +1,55 @@
+# Secrets / local state — never commit any of these
+.env
+.env.*
+.envrc
+config.toml
+*.key
+*.pem
+accounts.json
+credentials.json
+
+# Python bytecode / build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+wheels/
+
+# Virtualenvs
+.venv/
+venv/
+env/
+.python-version
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Internal docs / scratch — authoring notes, plans, specs that must never
+# ship with the published repo. Only Root-level CLAUDE.md / AGENTS.md are
+# ignored; the shipped skill at src/pland_cli/skills/AGENTS.md stays tracked.
+docs/superpowers/
+.claude/
+.agent-notes/
+/CLAUDE.md
+/AGENTS.md
+
+# Local git worktrees for isolated development
+.worktrees/

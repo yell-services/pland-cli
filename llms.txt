@@ -1,0 +1,55 @@
+# pland-cli
+
+> Inofficial, agent-native CLI for the pland.app API — HR, time tracking, payroll/salaries, absences, invoices, offers, customer objects, quality control, documents. 529 commands across 53 resource groups, generated from pland.app's OpenAPI spec, with `--json` output built for AI agents. Python 3.11+ CLI, Apache-2.0-licensed. Not affiliated with pland.app.
+
+pland-cli lets developers and AI agents drive the pland.app API from the terminal. Every command speaks `--json` for machine-readable output; a hand-maintained enrichment overlay works around unreliable server-side filters (date ranges, object filters) and returns correct results. Agents can introspect rather than guess via `pland describe <group> <command>` and `pland schema <Name>`, and install a curated skill with `pland skill install --agent claude|codex`.
+
+## Key docs
+
+- [README.md](https://github.com/yell-services/pland-cli/blob/main/README.md): Install, quickstart, command discovery, enriched commands, gotchas, profiles, maintenance.
+- [SECURITY.md](https://github.com/yell-services/pland-cli/blob/main/SECURITY.md): API-key handling, data-redaction rules, private reporting channel.
+- [CONTRIBUTING.md](https://github.com/yell-services/pland-cli/blob/main/CONTRIBUTING.md): Dev setup, regenerating commands from the OpenAPI spec, the enrichment overlay.
+- [CHANGELOG.md](https://github.com/yell-services/pland-cli/blob/main/CHANGELOG.md): Release notes.
+
+## Install
+
+```
+uv tool install git+https://github.com/yell-services/pland-cli
+# one-off, no install:
+uvx --from git+https://github.com/yell-services/pland-cli pland --help
+```
+
+Not on PyPI yet — install from GitHub. Requires Python ≥ 3.11.
+
+## Quickstart
+
+```
+export PLAND_API_KEY="<id>:<secret>"     # or: pland auth set-key
+pland --json users active
+```
+
+## Command discovery (529 commands — don't guess)
+
+- `pland --help` (53 groups) · `pland <group> --help`
+- `pland describe <group> <command>` — method, path, parameters
+- `pland schema <Name>` — e.g. `pland schema Absence`
+- Always pass `--json` for machine-readable output.
+
+## Enriched commands (prefer over the generic ones)
+
+```
+pland --json salary for-object --object-id <id> --from <d> --to <d>
+pland --json salary monthly-report --object-id <id> --year 2024 --month 4
+pland --json time-tracking in-range --from <d> --to <d>
+pland --json absences in-range --from <d> --to <d>
+pland --json invoice drafts --object-id <id>
+pland --json documents upload <pdf> --kind faktura|regular
+pland --json users active
+pland --json pay-types wage <id>
+```
+
+## Gotchas
+
+- Timestamps are Unix milliseconds.
+- Server-side `from`/`to` and `objectId` filters are unreliable — use the enriched commands (client-side filtered) instead.
+- For writes (POST/PATCH/DELETE), preview with `--dry-run` first, then run without the flag.

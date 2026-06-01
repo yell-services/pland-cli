@@ -1,0 +1,8 @@
+# Kopiere nach ~/.config/pland/config.toml und trage deinen Key ein.
+default_profile = "prod"
+
+[profiles.prod]
+api_key = "<id>:<secret>"
+
+# [profiles.beta]
+# api_key = "<separater-beta-key>"
