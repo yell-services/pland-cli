@@ -11,7 +11,7 @@ from pland_cli.utils import output as out_mod
 @click.argument("NAME")
 @click.pass_context
 def schema_cmd(ctx: click.Context, name: str) -> None:
-    """Zeigt eine Schema-Definition aus components/schemas."""
+    """Show a schema definition from components/schemas."""
     out_mod.set_json(ctx.obj.get("as_json", False))
     schemas = (load_spec().get("components") or {}).get("schemas") or {}
     if name not in schemas:
@@ -24,7 +24,7 @@ def schema_cmd(ctx: click.Context, name: str) -> None:
 @click.argument("COMMAND")
 @click.pass_context
 def describe_cmd(ctx: click.Context, group: str, command: str) -> None:
-    """Zeigt Methode, Pfad und Parameter eines Commands."""
+    """Show method, path and parameters of a command."""
     out_mod.set_json(ctx.obj.get("as_json", False))
     for op in extract_operations(load_spec()):
         if op.group == group and op.command == command:
@@ -36,7 +36,7 @@ def describe_cmd(ctx: click.Context, group: str, command: str) -> None:
                 "has_json_body": op.has_json_body, "is_multipart": op.is_multipart,
             })
             return
-    # Fallback: enriched/neue Commands stehen nicht in der Spec → aus dem Click-Baum
+    # Fallback: enriched and new commands are absent from the spec → read the Click tree
     from pland_cli.cli import main as _root
     grp = _root.commands.get(group)
     if isinstance(grp, click.Group) and command in grp.commands:

@@ -11,10 +11,10 @@ def time_tracking_group():
 
 @time_tracking_group.command("start-for-job")
 @click.argument("JOBID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_start_for_job(ctx, jobId, data, dry_run, assume_yes, extra_params):
     """Start time tracking for a job"""
@@ -27,10 +27,10 @@ def _cmd_time_tracking_start_for_job(ctx, jobId, data, dry_run, assume_yes, extr
     )
 
 @time_tracking_group.command("start-simple")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_start_simple(ctx, data, dry_run, assume_yes, extra_params):
     """Start simple time tracking"""
@@ -43,10 +43,10 @@ def _cmd_time_tracking_start_simple(ctx, data, dry_run, assume_yes, extra_params
     )
 
 @time_tracking_group.command("stop")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_stop(ctx, data, dry_run, assume_yes, extra_params):
     """Stop active time tracking"""
@@ -59,8 +59,8 @@ def _cmd_time_tracking_stop(ctx, data, dry_run, assume_yes, extra_params):
     )
 
 @time_tracking_group.command("get-active")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_get_active(ctx, fetch_all, extra_params):
     """Get active time tracking status"""
@@ -83,8 +83,8 @@ def _cmd_time_tracking_get_active(ctx, fetch_all, extra_params):
 @click.option("--activityTypeId", "activityTypeId", default=None, help="")
 @click.option("--status", "status", default=None, help="")
 @click.option("--timeTrackingNotApproved", "timeTrackingNotApproved", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_filter(ctx, limit, offset, sort, userId, from_, to, objectId, activityTypeId, status, timeTrackingNotApproved, fetch_all, extra_params):
     """Filter time tracking entries"""
@@ -101,7 +101,7 @@ def _cmd_time_tracking_filter(ctx, limit, offset, sort, userId, from_, to, objec
 @click.option("--from", "from_", default=None, type=int, help="Start timestamp (UTC) for the time range to query")
 @click.option("--to", "to", default=None, type=int, help="End timestamp (UTC) for the time range to query")
 @click.option("--includeForTrackingDate", "includeForTrackingDate", default=None, type=bool, help="Whether to include entries filtered by tracking date instead of time start")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_list_from_user(ctx, userId, from_, to, includeForTrackingDate, extra_params):
     """Get time tracking entries for a user"""
@@ -114,10 +114,10 @@ def _cmd_time_tracking_list_from_user(ctx, userId, from_, to, includeForTracking
     )
 
 @time_tracking_group.command("sync-offline")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_sync_offline(ctx, data, dry_run, assume_yes, extra_params):
     """Sync single offline time tracking"""
@@ -130,10 +130,10 @@ def _cmd_time_tracking_sync_offline(ctx, data, dry_run, assume_yes, extra_params
     )
 
 @time_tracking_group.command("sync-offline-batch")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_sync_offline_batch(ctx, data, dry_run, assume_yes, extra_params):
     """Sync multiple offline time tracking entries"""
@@ -147,9 +147,9 @@ def _cmd_time_tracking_sync_offline_batch(ctx, data, dry_run, assume_yes, extra_
 
 @time_tracking_group.command("release-by-working", short_help="🔴 Release time tracking by working time (deprecated)")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_release_by_working(ctx, id, dry_run, assume_yes, extra_params):
     """Release time tracking by working time (deprecated)"""
@@ -163,9 +163,9 @@ def _cmd_time_tracking_release_by_working(ctx, id, dry_run, assume_yes, extra_pa
 
 @time_tracking_group.command("release-by-target", short_help="🔴 Release time tracking by target time (deprecated)")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_release_by_target(ctx, id, dry_run, assume_yes, extra_params):
     """Release time tracking by target time (deprecated)"""
@@ -179,10 +179,10 @@ def _cmd_time_tracking_release_by_target(ctx, id, dry_run, assume_yes, extra_par
 
 @time_tracking_group.command("release-by-custom-by-admin", short_help="🔴 Release time tracking with custom time by admin (deprecated)")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_release_by_custom_by_admin(ctx, id, data, dry_run, assume_yes, extra_params):
     """Release time tracking with custom time by admin (deprecated)"""
@@ -196,10 +196,10 @@ def _cmd_time_tracking_release_by_custom_by_admin(ctx, id, data, dry_run, assume
 
 @time_tracking_group.command("release-by-custom", short_help="🔴 Release time tracking with custom time (deprecated)")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_release_by_custom(ctx, id, data, dry_run, assume_yes, extra_params):
     """Release time tracking with custom time (deprecated)"""
@@ -213,9 +213,9 @@ def _cmd_time_tracking_release_by_custom(ctx, id, data, dry_run, assume_yes, ext
 
 @time_tracking_group.command("cancel", short_help="🔴 Cancel time tracking entry")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_cancel(ctx, id, dry_run, assume_yes, extra_params):
     """Cancel time tracking entry"""
@@ -229,9 +229,9 @@ def _cmd_time_tracking_cancel(ctx, id, dry_run, assume_yes, extra_params):
 
 @time_tracking_group.command("un-cancel", short_help="🔴 Restore cancelled time tracking entry")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_un_cancel(ctx, id, dry_run, assume_yes, extra_params):
     """Restore cancelled time tracking entry"""
@@ -245,10 +245,10 @@ def _cmd_time_tracking_un_cancel(ctx, id, dry_run, assume_yes, extra_params):
 
 @time_tracking_group.command("add-manually")
 @click.argument("JOBID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_add_manually(ctx, jobId, data, dry_run, assume_yes, extra_params):
     """Add time tracking manually (deprecated)"""
@@ -267,8 +267,8 @@ def _cmd_time_tracking_add_manually(ctx, jobId, data, dry_run, assume_yes, extra
 @click.option("--FilterFrom", "FilterFrom", default=None, type=int, help="Filter entries from this date (UTC timestamp)")
 @click.option("--FilterTo", "FilterTo", default=None, type=int, help="Filter entries until this date (UTC timestamp)")
 @click.option("--FilterObject", "FilterObject", default=None, help="Filter by object ID")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_get_not_approved_stamps(ctx, limit, offset, FilterUser, FilterFrom, FilterTo, FilterObject, fetch_all, extra_params):
     """Get not approved time tracking entries"""
@@ -283,7 +283,7 @@ def _cmd_time_tracking_get_not_approved_stamps(ctx, limit, offset, FilterUser, F
 @time_tracking_group.command("can-be-approved-by-target")
 @click.argument("ID")
 @click.option("--timeToAdd", "timeToAdd", default=None, type=int, help="Additional time to add for approval check (in minutes)")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_can_be_approved_by_target(ctx, id, timeToAdd, extra_params):
     """Check if time tracking can be approved by target time"""
@@ -296,8 +296,8 @@ def _cmd_time_tracking_can_be_approved_by_target(ctx, id, timeToAdd, extra_param
     )
 
 @time_tracking_group.command("count-new")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_time_tracking_count_new(ctx, fetch_all, extra_params):
     """Count new time trackings"""

@@ -28,8 +28,8 @@ def complaints_group():
 @click.option("--to", "to", default=None, help="")
 @click.option("--searchComplaint", "searchComplaint", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_list(ctx, limit, offset, sort, status, ids, objectIds, object, customerIds, objectManager, objectManagers, objectsByName, userIds, user, complaintStatus, from_, to, searchComplaint, generalField, fetch_all, extra_params):
     """List complaints"""
@@ -42,10 +42,10 @@ def _cmd_complaints_list(ctx, limit, offset, sort, status, ids, objectIds, objec
     )
 
 @complaints_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create complaint"""
@@ -59,7 +59,7 @@ def _cmd_complaints_create(ctx, data, dry_run, assume_yes, extra_params):
 
 @complaints_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_get(ctx, id, extra_params):
     """Get complaint by ID"""
@@ -73,9 +73,9 @@ def _cmd_complaints_get(ctx, id, extra_params):
 
 @complaints_group.command("delete", short_help="🟡 Delete complaint")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete complaint"""
@@ -89,10 +89,10 @@ def _cmd_complaints_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @complaints_group.command("update", short_help="🟡 Update complaint")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update complaint"""
@@ -120,8 +120,8 @@ def _cmd_complaints_update(ctx, id, data, dry_run, assume_yes, extra_params):
 @click.option("--to", "to", default=None, help="")
 @click.option("--searchComplaint", "searchComplaint", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_count(ctx, status, ids, objectIds, object, customerIds, objectManager, objectManagers, objectsByName, userIds, user, complaintStatus, from_, to, searchComplaint, generalField, fetch_all, extra_params):
     """Count complaints"""
@@ -134,8 +134,8 @@ def _cmd_complaints_count(ctx, status, ids, objectIds, object, customerIds, obje
     )
 
 @complaints_group.command("count-new")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_count_new(ctx, fetch_all, extra_params):
     """Count new complaints"""
@@ -149,8 +149,8 @@ def _cmd_complaints_count_new(ctx, fetch_all, extra_params):
 
 @complaints_group.command("get-distinct-values")
 @click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     """Get complaint distinct values"""
@@ -164,7 +164,7 @@ def _cmd_complaints_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
 
 @complaints_group.command("get-user")
 @click.argument("USERID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_get_user(ctx, userId, extra_params):
     """Get user complaints"""
@@ -178,10 +178,10 @@ def _cmd_complaints_get_user(ctx, userId, extra_params):
 
 @complaints_group.command("assign", short_help="🟡 Assign complaint to user")
 @click.argument("COMPLAINTID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_assign(ctx, complaintId, data, dry_run, assume_yes, extra_params):
     """Assign complaint to user"""
@@ -195,10 +195,10 @@ def _cmd_complaints_assign(ctx, complaintId, data, dry_run, assume_yes, extra_pa
 
 @complaints_group.command("resolve", short_help="🟡 Resolve complaint")
 @click.argument("COMPLAINTID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_resolve(ctx, complaintId, data, dry_run, assume_yes, extra_params):
     """Resolve complaint"""
@@ -212,7 +212,7 @@ def _cmd_complaints_resolve(ctx, complaintId, data, dry_run, assume_yes, extra_p
 
 @complaints_group.command("count-user")
 @click.argument("USERID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_count_user(ctx, userId, extra_params):
     """Count user complaints"""
@@ -225,8 +225,8 @@ def _cmd_complaints_count_user(ctx, userId, extra_params):
     )
 
 @complaints_group.command("get-generations-left")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_complaints_get_generations_left(ctx, fetch_all, extra_params):
     """Get remaining AI generations"""

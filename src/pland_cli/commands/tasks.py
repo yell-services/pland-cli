@@ -31,8 +31,8 @@ def tasks_group():
 @click.option("--taskType", "taskType", default=None, help="")
 @click.option("--taskFromRecurringTemplate", "taskFromRecurringTemplate", default=None, help="")
 @click.option("--status", "status", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_tasks_list(ctx, limit, offset, sort, customer, userIds, taskByTitleIdentifier, taskAssignee, relatedContacts, relatedUsers, relatedObjects, relatedCustomers, relatedAssignments, relatedInvoices, relatedEquipments, taskStatus, priority, callId, taskTabs, taskType, taskFromRecurringTemplate, status, fetch_all, extra_params):
     """List tasks"""
@@ -45,10 +45,10 @@ def _cmd_tasks_list(ctx, limit, offset, sort, customer, userIds, taskByTitleIden
     )
 
 @tasks_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_tasks_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create task"""
@@ -62,7 +62,7 @@ def _cmd_tasks_create(ctx, data, dry_run, assume_yes, extra_params):
 
 @tasks_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_tasks_get(ctx, id, extra_params):
     """Get task"""
@@ -76,10 +76,10 @@ def _cmd_tasks_get(ctx, id, extra_params):
 
 @tasks_group.command("update", short_help="🟡 Update task")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_tasks_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update task"""
@@ -92,10 +92,10 @@ def _cmd_tasks_update(ctx, id, data, dry_run, assume_yes, extra_params):
     )
 
 @tasks_group.command("delete-multiple", short_help="🔴 Delete multiple tasks")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_tasks_delete_multiple(ctx, data, dry_run, assume_yes, extra_params):
     """Delete multiple tasks"""
@@ -109,9 +109,9 @@ def _cmd_tasks_delete_multiple(ctx, data, dry_run, assume_yes, extra_params):
 
 @tasks_group.command("resolve", short_help="🟡 Resolve task")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_tasks_resolve(ctx, id, dry_run, assume_yes, extra_params):
     """Resolve task"""
@@ -125,10 +125,10 @@ def _cmd_tasks_resolve(ctx, id, dry_run, assume_yes, extra_params):
 
 @tasks_group.command("complete", short_help="🟡 Complete task")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_tasks_complete(ctx, id, data, dry_run, assume_yes, extra_params):
     """Complete task"""
@@ -141,8 +141,8 @@ def _cmd_tasks_complete(ctx, id, data, dry_run, assume_yes, extra_params):
     )
 
 @tasks_group.command("count-new")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_tasks_count_new(ctx, fetch_all, extra_params):
     """Count new tasks"""

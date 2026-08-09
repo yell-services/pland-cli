@@ -30,12 +30,12 @@ def test_auth_bootstrap_saves_key_not_credentials(tmp_path, monkeypatch):
     # Logikseitig kamen die Credentials an …
     assert captured["login_id"] == "4711"
     assert captured["password"] == "mypassword"
-    # … aber NUR der Key wird persistiert, nicht die Zugangsdaten.
+    # … but ONLY the key is persisted, never the credentials.
     saved = (tmp_path / "config.toml").read_text()
     assert "newid:newsecret" in saved
     assert "mypassword" not in saved
     assert "4711" not in saved
-    # Weder Passwort noch der Key selbst dürfen im Output stehen.
+    # Neither the password nor the key itself may appear in the output.
     assert "mypassword" not in result.output
     assert "newsecret" not in result.output
 

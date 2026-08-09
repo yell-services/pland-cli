@@ -12,8 +12,8 @@ def pay_type_templates_group():
 @pay_type_templates_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_pay_type_templates_list(ctx, limit, offset, fetch_all, extra_params):
     """List pay type templates"""

@@ -1,7 +1,7 @@
-"""Nimmt echte (read-only) Responses auf und scrubbt PII.
+"""Record real (read-only) responses and scrub PII.
 
 Nutzung: PLAND_API_KEY=... uv run python tests/record_fixtures.py
-Schreibt anonymisierte JSON-Fixtures nach tests/fixtures/.
+Writes anonymised JSON fixtures to tests/fixtures/.
 """
 from __future__ import annotations
 
@@ -26,14 +26,14 @@ def scrub(obj):
 def record(client: PlandClient, name: str, path: str, params: dict | None = None) -> None:
     data = client.get(path, params=params)
     (FIXTURE_DIR / name).write_text(json.dumps(scrub(data), indent=2, ensure_ascii=False))
-    print(f"→ {name} ({len(data) if isinstance(data, list) else 1} Einträge)")
+    print(f"→ {name} ({len(data) if isinstance(data, list) else 1} entries)")
 
 
 def main() -> None:
     client = PlandClient(resolve_config())
     record(client, "users_page.json", "/users/", {"limit": 3})
     record(client, "absences_page.json", "/absences/", {"limit": 3})
-    # Salary-Objekt-Fixture braucht eine echte objectId — manuell ergänzen.
+    # The salary object fixture needs a real objectId — fill it in manually.
 
 
 if __name__ == "__main__":

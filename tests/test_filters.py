@@ -20,4 +20,4 @@ def test_filters_clientside_by_field_and_dedups():
     ]
     out = list(filter_by_date_range(FakeClient(pages), "/salaries/", {"objectId": "o"},
                                     from_ms=100, to_ms=300, date_field="from"))
-    assert [i["_id"] for i in out] == ["a", "b"]  # c (500) liegt außerhalb
+    assert [i["_id"] for i in out] == ["a", "b"]  # c (500) falls outside

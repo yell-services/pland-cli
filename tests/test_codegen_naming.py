@@ -8,18 +8,18 @@ def test_tag_to_group_kebab():
 
 
 def test_kebab_strips_non_alphanumeric():
-    # Klammern (und sonstige Nicht-Alphanumerische) werden zu Bindestrichen
-    # normalisiert, sonst entsteht ein nicht-importierbarer Modulname.
+    # Parentheses (and any other non-alphanumerics) normalise to hyphens,
+    # otherwise the module name would not be importable.
     assert kebab("Chat (legacy)") == "chat-legacy"
-    # Bestehende Tags bleiben unverändert:
+    # Existing tags stay as they are:
     assert kebab("Time Tracking") == "time-tracking"
     assert kebab("Pay Types") == "pay-types"
     assert kebab("API Keys") == "api-keys"
 
 
 def test_tag_to_group_yields_valid_module_identifier():
-    # group.replace("-", "_") muss ein gültiger Python-Identifier sein,
-    # damit das generierte Modul ein importierbarer Dateiname ist.
+    # group.replace("-", "_") must be a valid Python identifier so the
+    # generated module has an importable filename.
     modname = tag_to_group("Chat (legacy)").replace("-", "_")
     assert modname == "chat_legacy"
     assert modname.isidentifier()

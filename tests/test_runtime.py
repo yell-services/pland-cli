@@ -103,7 +103,7 @@ def test_dry_run_builds_request_without_client(capsys):
 
 
 def test_run_operation_blocks_confirm_without_tty(monkeypatch):
-    # Ohne TTY muss eine confirm-Operation fail-closed sein (Exit 2).
+    # Without a TTY a confirm operation must fail closed (exit 2).
     from click.testing import CliRunner
 
     from pland_cli._codegen import runtime
@@ -132,4 +132,4 @@ def test_run_operation_dry_run_skips_guard(monkeypatch):
                               extra_params=None, data=None, file_=None, output=None,
                               dry_run=True, risk="critical", draftable=None, assume_yes=False)
     res = CliRunner().invoke(cmd)
-    assert res.exit_code == 0  # dry-run zeigt nur den Request, kein Guard
+    assert res.exit_code == 0  # dry run only shows the request, no guard

@@ -10,8 +10,8 @@ def chat_legacy_group():
     pass
 
 @chat_legacy_group.command("get-user-token")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_chat_legacy_get_user_token(ctx, fetch_all, extra_params):
     """Get chat user token"""
@@ -24,10 +24,10 @@ def _cmd_chat_legacy_get_user_token(ctx, fetch_all, extra_params):
     )
 
 @chat_legacy_group.command("create-channel")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_chat_legacy_create_channel(ctx, data, dry_run, assume_yes, extra_params):
     """Create chat channel"""
@@ -41,10 +41,10 @@ def _cmd_chat_legacy_create_channel(ctx, data, dry_run, assume_yes, extra_params
 
 @chat_legacy_group.command("update-channel", short_help="🟡 Update chat channel")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_chat_legacy_update_channel(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update chat channel"""
@@ -58,9 +58,9 @@ def _cmd_chat_legacy_update_channel(ctx, id, data, dry_run, assume_yes, extra_pa
 
 @chat_legacy_group.command("delete-channel", short_help="🟡 Delete chat channel")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_chat_legacy_delete_channel(ctx, id, dry_run, assume_yes, extra_params):
     """Delete chat channel"""
@@ -74,10 +74,10 @@ def _cmd_chat_legacy_delete_channel(ctx, id, dry_run, assume_yes, extra_params):
 
 @chat_legacy_group.command("add-channel-members")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_chat_legacy_add_channel_members(ctx, id, data, dry_run, assume_yes, extra_params):
     """Add channel members"""
@@ -91,10 +91,10 @@ def _cmd_chat_legacy_add_channel_members(ctx, id, data, dry_run, assume_yes, ext
 
 @chat_legacy_group.command("remove-channel-members")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_chat_legacy_remove_channel_members(ctx, id, data, dry_run, assume_yes, extra_params):
     """Remove channel members"""
@@ -107,10 +107,10 @@ def _cmd_chat_legacy_remove_channel_members(ctx, id, data, dry_run, assume_yes, 
     )
 
 @chat_legacy_group.command("send-invite-sms", short_help="🟡 Send chat invite SMS")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_chat_legacy_send_invite_sms(ctx, data, dry_run, assume_yes, extra_params):
     """Send chat invite SMS"""

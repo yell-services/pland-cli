@@ -26,9 +26,9 @@ def test_generates_one_module_per_group(tmp_path):
 
 
 def test_generate_modules_removes_orphaned_files(tmp_path):
-    # Eine verwaiste (z.B. vorher anders benannte) generierte Datei muss beim
-    # erneuten Lauf verschwinden, sonst zählt der Konformitätstest zu viele
-    # Module. Idempotenz: out_dir enthält danach exakt die aktuellen Module.
+    # An orphaned generated file (e.g. one named differently before) must
+    # disappear on the next run, otherwise the conformance test counts too many
+    # modules. Idempotency: out_dir then holds exactly the current modules.
     orphan = tmp_path / "chat_(legacy).py"
     orphan.write_text("# verwaist\n")
     generate_modules(SPEC, tmp_path)
@@ -71,8 +71,8 @@ def test_load_spec_dev_tree_resolves_real_spec():
     The package resources ``pland_cli/openapi.yaml`` and
     ``pland_cli/openapi.overlay.yaml`` are absent from the src tree
     (force-included only on wheel build), so load_spec falls back to the repo
-    root. Upstream ships 421 paths; das Overlay streicht die, die die API nicht
-    bedient, und ergänzt die, die sie undokumentiert bedient.
+    root. Upstream ships 421 paths; the overlay drops the ones the API does not
+    serve and adds the ones it serves without documenting.
     """
     root = Path(__file__).resolve().parents[1]
     raw = load_spec(root / "openapi.yaml")
@@ -80,55 +80,55 @@ def test_load_spec_dev_tree_resolves_real_spec():
 
     overlay = yaml.safe_load((root / "openapi.overlay.yaml").read_text(encoding="utf-8"))
     methods = {"get", "post", "put", "patch", "delete"}
-    # Ein Pfad verschwindet nur, wenn `remove` seine letzte Operation nimmt.
+    # A path only disappears when `remove` takes its last operation.
     dropped = sum(1 for path, gone in overlay["remove"].items()
                   if not (set(raw["paths"][path]) & methods) - set(gone))
     assert len(load_spec()["paths"]) == len(raw["paths"]) - dropped + len(overlay["paths"])
 
 
 def test_overlay_removes_renames_and_adds():
-    """Die drei Overlay-Sektionen greifen auf der echten Spec."""
+    """All three overlay sections take effect on the real spec."""
     spec = load_spec()
-    # remove: Route existiert live nicht ("Failed to parse Id: count")
+    # remove: the route does not exist live ("Failed to parse Id: count")
     assert "/surcharges/count" not in spec["paths"]
-    # remove: nur GET fällt weg, POST bleibt stehen
+    # remove: only GET goes away, POST stays
     assert set(spec["paths"]["/invoiceReminders/"]) == {"post"}
-    # params: die API verlangt fieldKey, die Spec schrieb field
+    # params: the API expects fieldKey, the spec said field
     names = [p["name"] for p in spec["paths"]["/invoices/distinctValues"]["get"]["parameters"]]
     assert names == ["fieldKey"]
-    # params: das sort-Beispiel der Spec ("name:1") quittiert die API mit 400
+    # params: the spec's sort example ("name:1") earns a 400 from the API
     sort = next(p for p in spec["paths"]["/invoices/"]["get"]["parameters"]
                 if p["name"] == "sort")
     assert '{"by"' in sort["description"]
-    # paths: undokumentierte Ressource
+    # paths: undocumented resource
     assert spec["paths"]["/payTypeTemplates/"]["get"]["tags"] == ["Pay Type Templates"]
 
 
 def test_overlay_is_a_pure_correction_layer():
-    """Jeder Overlay-Eintrag muss die echte Spec treffen.
+    """Every overlay entry must still match the real spec.
 
-    Fixt pland.app einen Punkt upstream, schlägt das hier fehl statt still
-    ins Leere zu laufen — genau dann gehört der Eintrag gelöscht.
+    Once pland.app fixes a point upstream this fails instead of quietly doing
+    nothing — which is exactly when the entry should be deleted.
     """
     root = Path(__file__).resolve().parents[1]
     raw = load_spec(root / "openapi.yaml")
     overlay = yaml.safe_load((root / "openapi.overlay.yaml").read_text(encoding="utf-8"))
 
     for path, methods in overlay["remove"].items():
-        assert path in raw["paths"], f"remove: {path} gibt es upstream nicht mehr"
+        assert path in raw["paths"], f"remove: {path} no longer exists upstream"
         for method in methods:
-            assert method in raw["paths"][path], f"remove: {method} {path} ist weg"
+            assert method in raw["paths"][path], f"remove: {method} {path} is gone"
 
     for path in overlay["paths"]:
-        assert path not in raw["paths"], f"paths: {path} ist upstream dokumentiert"
+        assert path not in raw["paths"], f"paths: {path} is documented upstream"
 
 
 def test_overlay_params_still_apply():
-    """Die Parameter-Korrekturen greifen genau so oft wie dokumentiert.
+    """The parameter corrections apply exactly as often as documented.
 
-    ``expect`` sichert die namensbasierten Regeln gegen stille Ausweitung ab:
-    fuehrt upstream denselben Parameternamen anderswo ein oder korrigiert die
-    Stellen, weicht die Trefferzahl ab und der Eintrag will neu bewertet werden.
+    ``expect`` guards the name-based rules against silent creep: if upstream
+    introduces the same parameter name elsewhere, or fixes these call sites, the
+    count shifts and the entry wants reassessing.
     """
     root = Path(__file__).resolve().parents[1]
     raw = load_spec(root / "openapi.yaml")
@@ -144,5 +144,5 @@ def test_overlay_params_still_apply():
 
     for name, fix in overlay["params"].items():
         assert counts.get(name) == fix["expect"], (
-            f"params: {name} kommt {counts.get(name)}x vor, erwartet {fix['expect']}"
+            f"params: {name} occurs {counts.get(name)}x, expected {fix['expect']}"
         )

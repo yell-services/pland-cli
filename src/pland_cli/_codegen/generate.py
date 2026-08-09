@@ -25,7 +25,7 @@ def generate_modules(spec: dict, out_dir: Path) -> list[Path]:
         by_group[op.group].append(op)
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    # Idempotent: vorhandene generierte Module zuerst entfernen, sonst bleiben
+    # Idempotent: drop the previously generated modules first, otherwise
     # bei umbenannten/entfernten Gruppen verwaiste *.py-Dateien liegen.
     for stale in out_dir.glob("*.py"):
         stale.unlink()
@@ -53,7 +53,7 @@ def main() -> None:
     out_dir = Path(__file__).resolve().parents[1] / "commands"
     written = generate_modules(load_spec(), out_dir)
     (out_dir / "__init__.py").write_text('"""Auto-generierte Command-Module."""\n', encoding="utf-8")
-    print(f"{len(written)} Module nach {out_dir} geschrieben")
+    print(f"wrote {len(written)} modules to {out_dir}")
 
 
 if __name__ == "__main__":

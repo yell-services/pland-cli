@@ -11,7 +11,7 @@ from pland_cli.utils import output as out_mod
 @click.argument("PAY_TYPE_ID")
 @click.pass_context
 def pay_type_wage(ctx: click.Context, pay_type_id: str) -> None:
-    """Stundenlohn (wage) einer Lohnart auflösen."""
+    """Resolve the hourly wage of a pay type."""
     out_mod.set_json(ctx.obj.get("as_json", False))
     client = get_client(ctx)
     pt = client.get(f"/payTypes/{pay_type_id}")

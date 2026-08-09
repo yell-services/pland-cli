@@ -18,7 +18,7 @@ def _mk(handler):
 def test_for_object_filters_clientside(monkeypatch):
     rows = [
         {"_id": "s1", "from": 1713175200000, "workingTime": 28800},  # 2024-04-15
-        {"_id": "s2", "from": 1715767200000, "workingTime": 14400},  # 2024-05-15 (außerhalb)
+        {"_id": "s2", "from": 1715767200000, "workingTime": 14400},  # 2024-05-15 (out of range)
     ]
 
     def handler(request: httpx.Request) -> httpx.Response:

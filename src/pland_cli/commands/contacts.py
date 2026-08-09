@@ -18,8 +18,8 @@ def contacts_group():
 @click.option("--name", "name", default=None, help="")
 @click.option("--showInApp", "showInApp", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_contacts_list(ctx, limit, offset, sort, objectIds, customerId, name, showInApp, generalField, fetch_all, extra_params):
     """List contacts"""
@@ -32,10 +32,10 @@ def _cmd_contacts_list(ctx, limit, offset, sort, objectIds, customerId, name, sh
     )
 
 @contacts_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_contacts_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create contact"""
@@ -49,7 +49,7 @@ def _cmd_contacts_create(ctx, data, dry_run, assume_yes, extra_params):
 
 @contacts_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_contacts_get(ctx, id, extra_params):
     """Get contact"""
@@ -63,9 +63,9 @@ def _cmd_contacts_get(ctx, id, extra_params):
 
 @contacts_group.command("delete", short_help="🟡 Delete contact")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_contacts_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete contact"""
@@ -79,10 +79,10 @@ def _cmd_contacts_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @contacts_group.command("update", short_help="🟡 Update contact")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_contacts_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update contact"""
@@ -96,8 +96,8 @@ def _cmd_contacts_update(ctx, id, data, dry_run, assume_yes, extra_params):
 
 @contacts_group.command("get-distinct-values")
 @click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for (e.g. position, salutation, email)")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_contacts_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     """Get distinct values"""
@@ -110,10 +110,10 @@ def _cmd_contacts_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     )
 
 @contacts_group.command("update-many", short_help="🟡 Batch update contacts")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_contacts_update_many(ctx, data, dry_run, assume_yes, extra_params):
     """Batch update contacts"""
@@ -127,7 +127,7 @@ def _cmd_contacts_update_many(ctx, data, dry_run, assume_yes, extra_params):
 
 @contacts_group.command("list-for-object")
 @click.argument("OBJECTID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_contacts_list_for_object(ctx, objectId, extra_params):
     """List contacts for object"""
@@ -141,7 +141,7 @@ def _cmd_contacts_list_for_object(ctx, objectId, extra_params):
 
 @contacts_group.command("list-job")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_contacts_list_job(ctx, id, extra_params):
     """List job contacts"""

@@ -17,8 +17,8 @@ def suppliers_group():
 @click.option("--status", "status", default=None, help="")
 @click.option("--ids", "ids", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_suppliers_list(ctx, limit, offset, sort, name, status, ids, generalField, fetch_all, extra_params):
     """List suppliers"""
@@ -31,10 +31,10 @@ def _cmd_suppliers_list(ctx, limit, offset, sort, name, status, ids, generalFiel
     )
 
 @suppliers_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_suppliers_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create supplier"""
@@ -48,7 +48,7 @@ def _cmd_suppliers_create(ctx, data, dry_run, assume_yes, extra_params):
 
 @suppliers_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_suppliers_get(ctx, id, extra_params):
     """Get supplier"""
@@ -62,9 +62,9 @@ def _cmd_suppliers_get(ctx, id, extra_params):
 
 @suppliers_group.command("delete", short_help="🟡 Delete supplier")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_suppliers_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete supplier"""
@@ -78,10 +78,10 @@ def _cmd_suppliers_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @suppliers_group.command("update", short_help="🟡 Update supplier")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_suppliers_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update supplier"""
@@ -94,8 +94,8 @@ def _cmd_suppliers_update(ctx, id, data, dry_run, assume_yes, extra_params):
     )
 
 @suppliers_group.command("get-last-number")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_suppliers_get_last_number(ctx, fetch_all, extra_params):
     """Get last supplier number"""

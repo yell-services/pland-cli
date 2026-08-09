@@ -12,7 +12,7 @@ _MAX_RETRIES = 5
 
 
 class PlandAuthError(Exception):
-    """Kein API-Key verfügbar."""
+    """No API key available."""
 
 
 class PlandError(Exception):
@@ -25,12 +25,12 @@ class PlandError(Exception):
 
 
 def _handle_response(resp: httpx.Response) -> Any:
-    """Erfolg → JSON (oder Bytes bei Binär); Fehler → PlandError im pland-Format."""
+    """Success → JSON (or bytes for binary); failure → PlandError in pland's format."""
     if resp.is_success:
         ctype = resp.headers.get("content-type", "")
         if "application/json" in ctype:
             return resp.json()
-        return resp.content  # binär (PDF/ZIP/…)
+        return resp.content  # binary (PDF/ZIP/…)
     try:
         body = resp.json()
     except ValueError:
@@ -48,11 +48,11 @@ def bootstrap_api_key(
     *,
     transport: httpx.BaseTransport | None = None,
 ) -> str:
-    """Loggt sich mit Login-ID/Passwort ein und erzeugt einen neuen API-Key.
+    """Log in with login ID and password, then create a new API key.
 
-    Führt ``POST /auth/login`` (→ Bearer-Token) und damit ``POST /api_key/`` aus
-    und gibt den Key (``<id>:<secret>``) zurück. Die Login-ID (Nummer) und das
-    Passwort werden **ausschließlich für den Login verwendet und nirgends
+    Runs ``POST /auth/login`` (→ bearer token) and with it ``POST /api_key/``,
+    returning the key as ``<id>:<secret>``. The login ID (a number) and the
+    password are **used for the login only and never
     gespeichert** — nur der Aufrufer entscheidet, was mit dem Key geschieht.
     """
     with httpx.Client(base_url=base_url, timeout=_TIMEOUT, transport=transport) as c:
@@ -64,14 +64,14 @@ def bootstrap_api_key(
         )
         token = login.get("token") if isinstance(login, dict) else None
         if not token:
-            raise PlandError(500, "Login ohne Token", "Antwort enthielt kein 'token'.", {})
+            raise PlandError(500, "Login returned no token", "Response contained no 'token'.", {})
         auth = token if token.lower().startswith("bearer ") else f"Bearer {token}"
         created = _handle_response(
             c.post("/api_key/", json={"name": name}, headers={"Authorization": auth})
         )
         key = created.get("key") if isinstance(created, dict) else None
         if not key:
-            raise PlandError(500, "Key-Erstellung fehlgeschlagen", "Antwort enthielt kein 'key'.", {})
+            raise PlandError(500, "Key creation failed", "Response contained no 'key'.", {})
         return key
 
 
@@ -79,7 +79,7 @@ class PlandClient:
     def __init__(self, config: Config, transport: httpx.BaseTransport | None = None):
         if not config.api_key:
             raise PlandAuthError(
-                "Kein API-Key gesetzt. Setze PLAND_API_KEY oder nutze `pland auth set-key`."
+                "No API key set. Set PLAND_API_KEY or run `pland auth set-key`."
             )
         self._client = httpx.Client(
             base_url=config.base_url,

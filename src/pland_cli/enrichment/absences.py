@@ -15,7 +15,7 @@ from pland_cli.utils.timestamps import parse_date, to_ms
 @click.option("--approved-only", is_flag=True, help="Nur genehmigte (approvedBy gesetzt).")
 @click.pass_context
 def absences_in_range(ctx: click.Context, frm: str, to: str, approved_only: bool) -> None:
-    """Abwesenheiten im Zeitraum (clientseitig nach dtStart gefiltert)."""
+    """Absences in a date range, filtered client-side on dtStart."""
     out_mod.set_json(ctx.obj.get("as_json", False))
     client = get_client(ctx)
     from_ms = to_ms(parse_date(frm))

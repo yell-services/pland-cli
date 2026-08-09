@@ -44,8 +44,8 @@ def render_command(op: Operation) -> str:
         opt = p["name"]
         flag = "--" + opt.replace("_", "-")
         schema = p.get("schema", {})
-        # json.dumps liefert das Literal inkl. Quotes und escapt " korrekt —
-        # ein blindes " -> ' würde JSON-Beispiele im Hilfetext unbrauchbar machen.
+        # json.dumps emits the literal including quotes and escapes " properly —
+        # a blind " -> ' swap would make JSON examples in help text unusable.
         help_txt = json.dumps((p.get("description") or "")[:120], ensure_ascii=False)
         extra = ""
         if "enum" in schema:
@@ -59,28 +59,28 @@ def render_command(op: Operation) -> str:
         sig_params.append(_ident(opt))
 
     if op.is_multipart:
-        lines.append('@click.option("--file", "file_", type=click.Path(exists=True), help="Datei (multipart).")')
+        lines.append('@click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")')
         sig_params.append("file_")
     elif op.has_json_body:
-        lines.append('@click.option("--data", default=None, help="Request-Body als JSON-String.")')
+        lines.append('@click.option("--data", default=None, help="Request body as a JSON string.")')
         sig_params.append("data")
 
     if op.returns_binary:
-        lines.append('@click.option("--output", type=click.Path(), help="Antwort in Datei schreiben.")')
+        lines.append('@click.option("--output", type=click.Path(), help="Write the response to a file.")')
         sig_params.append("output")
 
     if op.method != "get":
-        lines.append('@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")')
+        lines.append('@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")')
         sig_params.append("dry_run")
-        lines.append('@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")')
+        lines.append('@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")')
         sig_params.append("assume_yes")
 
     is_list_get = op.method == "get" and not op.path_params and not op.returns_binary
     if is_list_get:
-        lines.append('@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")')
+        lines.append('@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")')
         sig_params.append("fetch_all")
 
-    lines.append('@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")')
+    lines.append('@click.option("--extra-params", default=None, help="Additional query params as JSON.")')
     sig_params.append("extra_params")
     lines.append("@click.pass_context")
 

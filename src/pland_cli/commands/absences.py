@@ -32,8 +32,8 @@ def absences_group():
 @click.option("--employmentUserIds", "employmentUserIds", default=None, help="")
 @click.option("--userIdsByTag", "userIdsByTag", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_list(ctx, limit, offset, sort, status, ids, user, userIds, objectManagers, notFinished, assigned, object, end, dtEndFrom, dtEndTo, dtStartTo, absencePayType, userIdsByName, absenceType, affectedObjectIds, employmentUserIds, userIdsByTag, generalField, fetch_all, extra_params):
     """List absences"""
@@ -46,10 +46,10 @@ def _cmd_absences_list(ctx, limit, offset, sort, status, ids, user, userIds, obj
     )
 
 @absences_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create new absence"""
@@ -63,7 +63,7 @@ def _cmd_absences_create(ctx, data, dry_run, assume_yes, extra_params):
 
 @absences_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_get(ctx, id, extra_params):
     """Get absence by ID"""
@@ -77,10 +77,10 @@ def _cmd_absences_get(ctx, id, extra_params):
 
 @absences_group.command("update-full", short_help="🟡 Update absence (full)")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_update_full(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update absence (full)"""
@@ -94,9 +94,9 @@ def _cmd_absences_update_full(ctx, id, data, dry_run, assume_yes, extra_params):
 
 @absences_group.command("delete", short_help="🟡 Delete absence")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete absence"""
@@ -110,10 +110,10 @@ def _cmd_absences_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @absences_group.command("update", short_help="🟡 Update absence")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update absence"""
@@ -137,8 +137,8 @@ def _cmd_absences_update(ctx, id, data, dry_run, assume_yes, extra_params):
 @click.option("--dtEndTo", "dtEndTo", default=None, help="")
 @click.option("--dtStartTo", "dtStartTo", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_list_personal(ctx, limit, offset, sort, status, ids, absencePayType, absenceType, dtEndFrom, dtEndTo, dtStartTo, generalField, fetch_all, extra_params):
     """List personal absences"""
@@ -152,9 +152,9 @@ def _cmd_absences_list_personal(ctx, limit, offset, sort, status, ids, absencePa
 
 @absences_group.command("approve", short_help="🟡 Approve absence")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_approve(ctx, id, dry_run, assume_yes, extra_params):
     """Approve absence"""
@@ -167,10 +167,10 @@ def _cmd_absences_approve(ctx, id, dry_run, assume_yes, extra_params):
     )
 
 @absences_group.command("approve-multiple", short_help="🟡 Approve multiple absences")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_approve_multiple(ctx, data, dry_run, assume_yes, extra_params):
     """Approve multiple absences"""
@@ -184,10 +184,10 @@ def _cmd_absences_approve_multiple(ctx, data, dry_run, assume_yes, extra_params)
 
 @absences_group.command("decline", short_help="🟡 Decline absence")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_decline(ctx, id, data, dry_run, assume_yes, extra_params):
     """Decline absence"""
@@ -201,10 +201,10 @@ def _cmd_absences_decline(ctx, id, data, dry_run, assume_yes, extra_params):
 
 @absences_group.command("cancel", short_help="🟡 Cancel absence")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_cancel(ctx, id, data, dry_run, assume_yes, extra_params):
     """Cancel absence"""
@@ -218,10 +218,10 @@ def _cmd_absences_cancel(ctx, id, data, dry_run, assume_yes, extra_params):
 
 @absences_group.command("assign-replacements", short_help="🟡 Assign absence replacements")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_assign_replacements(ctx, id, data, dry_run, assume_yes, extra_params):
     """Assign absence replacements"""
@@ -237,7 +237,7 @@ def _cmd_absences_assign_replacements(ctx, id, data, dry_run, assume_yes, extra_
 @click.argument("USERID")
 @click.option("--from", "from_", default=None, help="Start date for the calculation period (UTC timestamp)")
 @click.option("--to", "to", default=None, help="End date for the calculation period (UTC timestamp)")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_get_user_vacation_days(ctx, userId, from_, to, extra_params):
     """Get user vacation days"""
@@ -253,7 +253,7 @@ def _cmd_absences_get_user_vacation_days(ctx, userId, from_, to, extra_params):
 @click.argument("USERID")
 @click.option("--from", "from_", default=None, help="Start date for the absence period (UTC timestamp)")
 @click.option("--to", "to", default=None, help="End date for the absence period (UTC timestamp)")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_get_user_days_absent(ctx, userId, from_, to, extra_params):
     """Get user days absent"""
@@ -266,8 +266,8 @@ def _cmd_absences_get_user_days_absent(ctx, userId, from_, to, extra_params):
     )
 
 @absences_group.command("count")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_count(ctx, fetch_all, extra_params):
     """Count absences"""
@@ -280,8 +280,8 @@ def _cmd_absences_count(ctx, fetch_all, extra_params):
     )
 
 @absences_group.command("count-new")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_absences_count_new(ctx, fetch_all, extra_params):
     """Count new absences"""

@@ -81,8 +81,8 @@ def classify(method: str, path: str, tag: str) -> str:
     if p == "/invoices/settocanceled":
         return "critical"
 
-    # 9b) Dokumente: Loeschen/Aendern -> critical (kein --yes-Bypass). Ein realer
-    # Agent-Test zeigte, dass die confirm-Stufe per --yes umgangen wird; Dokumente
+    # 9b) Documents: delete/modify -> critical (no --yes bypass). A real agent
+    # test showed the confirm tier gets bypassed via --yes, and documents
     # (Lohn-/SV-Abrechnungen u.a.) brauchen den harten, nur-Mensch-Schutz.
     # Hochladen/Hinzufuegen (POST/upload) bleibt bewusst frei (additiv, harmlos).
     if tag == "Documents" and m in ("delete", "patch"):
@@ -121,7 +121,7 @@ def classify(method: str, path: str, tag: str) -> str:
     if m in ("delete", "patch", "put"):
         return "confirm"
 
-    # 18) Rest-POST: additive Sub-Aktionen -> free, sonst confirm (fail-safe)
+    # 18) Remaining POSTs: additive sub-actions -> free, otherwise confirm (fail-safe)
     if m == "post":
         if last in ("location", "profileimage", "companylogo", "members",
                     "removemembers", "subscribe", "unsubscribe", "addmaterial",
@@ -135,8 +135,8 @@ def classify(method: str, path: str, tag: str) -> str:
 
 
 def draftable_for(method: str, path: str, tag: str) -> str | None:
-    """Tag-Key fuer den Entwurf-Lookup, falls dies ein DELETE auf eine
-    draftfaehige Ressource ist; sonst None."""
+    """Tag key for the draft lookup when this is a DELETE on a draftable
+    resource; None otherwise."""
     if method.lower() == "delete" and tag in DRAFTABLE_TAGS and path.rstrip("/").endswith("}"):
         return tag
     return None

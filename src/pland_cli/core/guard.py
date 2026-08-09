@@ -1,7 +1,7 @@
-"""Laufzeit-Schutzlayer fuer schreibende Operationen.
+"""Runtime guard layer for write operations.
 
-`enforce()` setzt die Risiko-Stufe durch (Bestaetigung/fail-closed); `audit()`
-schreibt eine Append-only-Spur. Siehe Spec 2026-06-01-...-destructive-guard.
+`enforce()` applies the risk tier (confirmation, fail-closed); `audit()`
+writes an append-only trail. See spec 2026-06-01-...-destructive-guard.
 """
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ def _audit_path() -> Path:
 
 
 def audit(entry: dict[str, Any]) -> None:
-    """Haengt einen Eintrag (best effort) ans Audit-Log. Wirft nie."""
+    """Append an entry to the audit log, best effort. Never raises."""
     try:
         rec = {"ts": int(time.time()), **entry}
         path = _audit_path()
@@ -39,21 +39,21 @@ def audit(entry: dict[str, Any]) -> None:
 
 
 def _is_id_segment(seg: str) -> bool:
-    """True, wenn das Segment wie eine Objekt-ID aussieht (Platzhalter/Zahl/Opaque-ID)."""
+    """True when the segment looks like an object ID (placeholder, number, opaque ID)."""
     if seg.startswith("{"):
         return True
     if seg.isdigit():
         return True
-    # Mongo-/Hex-aehnliche oder lange opake IDs (>=12 Zeichen, keine echten Worte)
+    # Mongo/hex-like or long opaque IDs (>=12 chars, not actual words)
     if len(seg) >= 12 and all(c in "0123456789abcdefABCDEF-" for c in seg):
         return True
     return False
 
 
 def _resource_token(path: str) -> str:
-    """Bestaetigungs-Token fuer 🔴: der Ressourcenname (Segment vor der ID)."""
+    """Confirmation token for 🔴: the resource name, i.e. the segment before the ID."""
     parts = [s for s in path.strip("/").split("/") if s]
-    # Trailing ID-Segment(e) wegwerfen -> der Ressourcenname bleibt.
+    # Drop trailing ID segments -> the resource name remains.
     while parts and _is_id_segment(parts[-1]):
         parts.pop()
     return parts[-1] if parts else "confirm"
@@ -77,23 +77,23 @@ def enforce(
     confirmer: Callable[[str], bool] | None = None,
     tokener: Callable[[str], str] | None = None,
 ) -> None:
-    """Setzt die Risiko-Stufe durch. Kehrt zurueck = darf ausgefuehrt werden;
-    wirft SystemExit(2) = abgebrochen/blockiert."""
+    """Enforce the risk tier. Returning means the call may proceed;
+    raising SystemExit(2) means aborted or blocked."""
     isatty = isatty or sys.stdin.isatty
     confirmer = confirmer or (lambda prompt: click.confirm(prompt, default=False))
     tokener = tokener or (lambda prompt: click.prompt(prompt, default="", show_default=False))
 
     # Zustandsabhaengig: draftfaehige DELETE -> NUR bei einem echten Entwurf-Objekt
     # auf free herabstufen. Ein leeres/unerwartetes Lookup-Ergebnis ({}, Liste,
-    # Fehler) bleibt bewusst confirm (fail-safe) — die Herabstufung darf nicht an
-    # einer ungeprueften API-Antwortform haengen.
+    # error) deliberately stays confirm (fail-safe) — the downgrade must not
+    # hinge on an unverified API response shape.
     if draftable and lookup is not None:
         try:
             obj = lookup()
             if isinstance(obj, dict) and obj.get("_id") and not obj.get("fixDate"):
                 risk = "free"
         except Exception:
-            pass  # fail-safe: bleibt confirm
+            pass  # fail-safe: stays confirm
 
     if risk == "free":
         audit({"method": method.upper(), "path": path, "risk": "free", "decision": "auto"})
@@ -104,12 +104,12 @@ def enforce(
     if risk == "critical":
         if not isatty():
             _abort(method, path, risk, "blocked_no_tty",
-                   f"🔴 Kritische Operation {label} braucht eine Bestaetigung am Terminal "
-                   f"(kein interaktives TTY). Kein Flag-Bypass moeglich.")
+                   f"🔴 Critical operation {label} needs confirmation at the terminal "
+                   f"(no interactive TTY). No flag can bypass this.")
         token = _resource_token(path)
-        entered = tokener(f"🔴 KRITISCH: {label}. Tippe '{token}' zur Bestaetigung")
+        entered = tokener(f"🔴 CRITICAL: {label}. Type '{token}' to confirm")
         if (entered or "").strip() != token:
-            _abort(method, path, risk, "aborted", "Abgebrochen (Token stimmt nicht).")
+            _abort(method, path, risk, "aborted", "Aborted (token did not match).")
         audit({"method": method.upper(), "path": path, "risk": "critical",
                "decision": "critical_confirmed"})
         return
@@ -120,9 +120,9 @@ def enforce(
         return
     if not isatty():
         _abort(method, path, risk, "blocked_no_tty",
-               f"🟡 {label} ist geschuetzt und braucht eine Bestaetigung. Kein interaktives "
+               f"🟡 {label} is protected and needs confirmation. No interactive "
                f"TTY — mit --yes bewusst freigeben.")
     if confirmer(f"🟡 {label} ausfuehren?"):
         audit({"method": method.upper(), "path": path, "risk": "confirm", "decision": "confirmed"})
         return
-    _abort(method, path, risk, "aborted", "Abgebrochen.")
+    _abort(method, path, risk, "aborted", "Aborted.")

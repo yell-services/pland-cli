@@ -6,24 +6,24 @@ from typing import Iterator
 from pland_cli.core.client import PlandError
 
 _PAGE_SIZE = 500
-# Backstop gegen einen Server, der den Offset deckelt und dieselbe Seite endlos
-# weiterreicht. Lieber ein Abbruch mit Fehler als ein still gekuerztes Ergebnis.
+# Backstop against a server that caps the offset and keeps handing back the same
+# page. An error beats a silently truncated result.
 _MAX_PAGES = 500
 
-# Ohne stabile, eindeutige Sortierung liefert die API Seiten in
-# nicht-deterministischer Reihenfolge: bei Pagination entstehen Duplikate
-# und Datensaetze gehen still verloren (bei /invoices/ fehlten 506 von 1705).
+# Without a stable, unique sort the API returns pages in non-deterministic
+# order: pagination then produces duplicates and silently drops records
+# (506 of 1705 were missing on /invoices/).
 _STABLE_SORT = json.dumps({"by": "_id", "direction": 1})
 
 
 def paginate(client, path: str, params: dict | None = None,
              page_size: int = _PAGE_SIZE) -> Iterator[dict]:
-    """Alle Items eines paginierten Endpoints, in stabiler _id-Sortierung.
+    """Every item of a paginated endpoint, in stable _id order.
 
-    Injiziert sort={"by":"_id","direction":1}, sofern der Aufrufer keine
-    eigene Sortierung mitgibt. Lehnt ein Endpoint den sort-Param ab (400),
-    wird einmal ohne sort neu gestartet; die _id-Deduplizierung bleibt dann
-    als Backstop gegen den Overlap-Bug aktiv.
+    Injects sort={"by":"_id","direction":1} unless the caller supplies its own
+    sort. If an endpoint rejects the sort parameter (400), the walk restarts
+    once without it; _id deduplication then stays on as a backstop against the
+    overlap bug.
     """
     base = dict(params or {})
     injected_sort = "sort" not in base
@@ -36,9 +36,9 @@ def paginate(client, path: str, params: dict | None = None,
         try:
             batch = client.get(path, params=page_params)
         except PlandError as exc:
-            # Nur 400 heisst "Endpoint kennt sort nicht". Bei 401/403/500 ohne
-            # sort weiterzulaufen wuerde die stabile Sortierung still aufgeben —
-            # also genau den Bug zurueckholen, den die Injektion verhindert.
+            # Only a 400 means "this endpoint does not know sort". Continuing
+            # without sort on 401/403/500 would silently abandon the stable
+            # order — reintroducing the very bug the injection prevents.
             if exc.status == 400 and injected_sort and offset == 0:
                 injected_sort = False
                 base.pop("sort", None)
@@ -57,19 +57,19 @@ def paginate(client, path: str, params: dict | None = None,
                 seen.add(_id)
             new += 1
             yield item
-        # Sortiert heisst: eine Seite aus lauter Bekanntem ist das Ende.
-        # Unsortiert kann sie echt sein (die Zeilen haben sich zwischen den
-        # Seiten verschoben) — dort greift nur die Seitenobergrenze.
+        # When sorted, a page of nothing but known rows means the end. When
+        # unsorted it can be genuine (rows shifted between pages), so only the
+        # page ceiling applies there.
         if new == 0 and "sort" in base:
             break
-        # Um die *gelieferte* Zeilenzahl weiter, nicht um die angeforderte:
-        # manche Endpoints deckeln serverseitig unabhaengig vom limit
-        # (/salaries/ bei 200). Mit page_size 500 uebersprang jede Runde 300
-        # Zeilen — gemessen 9800 statt 24483 Datensaetzen, 60 % Verlust.
+        # Advance by the number of rows *delivered*, not the number requested:
+        # some endpoints cap server-side regardless of limit (/salaries/ at 200).
+        # With page_size 500 every round skipped 300 rows — measured 9800
+        # instead of 24483 records, a 60 % loss.
         offset += len(batch)
     else:
         raise RuntimeError(
-            f"{path}: nach {_MAX_PAGES} Seiten kein Ende — die Paginierung dreht sich im Kreis."
+            f"{path}: no end after {_MAX_PAGES} pages — pagination is going in circles."
         )
 
 

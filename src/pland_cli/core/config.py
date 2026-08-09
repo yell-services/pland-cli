@@ -85,9 +85,9 @@ def save_api_key(api_key: str, profile: str = DEFAULT_PROFILE, path: Path | None
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("wb") as fh:
         tomli_w.dump(cfg, fh)
-    # POSIX: Key nur für den User lesbar machen. Auf Windows kennt chmod keine
+    # POSIX: make the key readable by the owner only. On Windows chmod has no
     # echten POSIX-Bits (no-op/Read-only) — dort ist PLAND_API_KEY der sichere
-    # Weg. Fehler hier dürfen das Speichern nie verhindern.
+    # route. A failure here must never prevent the key from being saved.
     try:
         path.chmod(0o600)
     except (OSError, NotImplementedError):

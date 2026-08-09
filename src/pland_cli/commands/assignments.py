@@ -10,10 +10,10 @@ def assignments_group():
     pass
 
 @assignments_group.command("duplicate")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_duplicate(ctx, data, dry_run, assume_yes, extra_params):
     """Duplicate assignments"""
@@ -43,8 +43,8 @@ def _cmd_assignments_duplicate(ctx, data, dry_run, assume_yes, extra_params):
 @click.option("--assignmentsWithProductIds", "assignmentsWithProductIds", default=None, help="")
 @click.option("--customer", "customer", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_list(ctx, limit, offset, sort, status, ids, type, objectIds, objectIdsByTag, name, activityTypeId, assignmentBillingTypes, assignmentSearch, assignmentBillingType, assignmentStatus, assignmentsWithProductIds, customer, generalField, fetch_all, extra_params):
     """List assignments"""
@@ -57,8 +57,8 @@ def _cmd_assignments_list(ctx, limit, offset, sort, status, ids, type, objectIds
     )
 
 @assignments_group.command("get-last-number")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_get_last_number(ctx, fetch_all, extra_params):
     """Get last assignment number"""
@@ -86,8 +86,8 @@ def _cmd_assignments_get_last_number(ctx, fetch_all, extra_params):
 @click.option("--assignmentsWithProductIds", "assignmentsWithProductIds", default=None, help="")
 @click.option("--customer", "customer", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_get_distinct_field_values(ctx, fieldKey, status, ids, type, objectIds, objectIdsByTag, name, activityTypeId, assignmentBillingTypes, assignmentSearch, assignmentBillingType, assignmentStatus, assignmentsWithProductIds, customer, generalField, fetch_all, extra_params):
     """Get distinct field values"""
@@ -114,8 +114,8 @@ def _cmd_assignments_get_distinct_field_values(ctx, fieldKey, status, ids, type,
 @click.option("--assignmentsWithProductIds", "assignmentsWithProductIds", default=None, help="")
 @click.option("--customer", "customer", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_count_with_filter(ctx, status, ids, type, objectIds, objectIdsByTag, name, activityTypeId, assignmentBillingTypes, assignmentSearch, assignmentBillingType, assignmentStatus, assignmentsWithProductIds, customer, generalField, fetch_all, extra_params):
     """Count assignments with filter"""
@@ -128,10 +128,10 @@ def _cmd_assignments_count_with_filter(ctx, status, ids, type, objectIds, object
     )
 
 @assignments_group.command("update-many", short_help="🟡 Update multiple assignments")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_update_many(ctx, data, dry_run, assume_yes, extra_params):
     """Update multiple assignments"""
@@ -145,7 +145,7 @@ def _cmd_assignments_update_many(ctx, data, dry_run, assume_yes, extra_params):
 
 @assignments_group.command("view")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_view(ctx, id, extra_params):
     """Get assignment by ID"""
@@ -159,9 +159,9 @@ def _cmd_assignments_view(ctx, id, extra_params):
 
 @assignments_group.command("delete", short_help="🟡 Delete assignment")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete assignment"""
@@ -175,10 +175,10 @@ def _cmd_assignments_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @assignments_group.command("update", short_help="🟡 Update assignment")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update assignment"""
@@ -192,9 +192,9 @@ def _cmd_assignments_update(ctx, id, data, dry_run, assume_yes, extra_params):
 
 @assignments_group.command("get-or-create-chat")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_params):
     """Get or create assignment chat"""
@@ -208,10 +208,10 @@ def _cmd_assignments_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_para
 
 @assignments_group.command("set-end-date", short_help="🔴 Set assignment and jobs end date")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_set_end_date(ctx, id, data, dry_run, assume_yes, extra_params):
     """Set assignment and jobs end date"""
@@ -225,7 +225,7 @@ def _cmd_assignments_set_end_date(ctx, id, data, dry_run, assume_yes, extra_para
 
 @assignments_group.command("get-user")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_get_user(ctx, id, extra_params):
     """Get user assignments"""
@@ -238,9 +238,9 @@ def _cmd_assignments_get_user(ctx, id, extra_params):
     )
 
 @assignments_group.command("generate-recurring-invoices", short_help="🟡 Generate recurring invoices (Debug)")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_generate_recurring_invoices(ctx, dry_run, assume_yes, extra_params):
     """Generate recurring invoices (Debug)"""
@@ -253,10 +253,10 @@ def _cmd_assignments_generate_recurring_invoices(ctx, dry_run, assume_yes, extra
     )
 
 @assignments_group.command("create-invoices-for", short_help="🟡 Create invoices for assignments")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_create_invoices_for(ctx, data, dry_run, assume_yes, extra_params):
     """Create invoices for assignments"""
@@ -269,10 +269,10 @@ def _cmd_assignments_create_invoices_for(ctx, data, dry_run, assume_yes, extra_p
     )
 
 @assignments_group.command("create-service-reports-for", short_help="🟡 Create service reports for assignments")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_create_service_reports_for(ctx, data, dry_run, assume_yes, extra_params):
     """Create service reports for assignments"""
@@ -286,10 +286,10 @@ def _cmd_assignments_create_service_reports_for(ctx, data, dry_run, assume_yes, 
 
 @assignments_group.command("realize-dynamic-positions", short_help="🟡 Realize dynamic positions")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_realize_dynamic_positions(ctx, id, data, dry_run, assume_yes, extra_params):
     """Realize dynamic positions"""
@@ -303,7 +303,7 @@ def _cmd_assignments_realize_dynamic_positions(ctx, id, data, dry_run, assume_ye
 
 @assignments_group.command("get-partial-invoices-for")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_get_partial_invoices_for(ctx, id, extra_params):
     """Get partial invoices for assignment"""
@@ -316,10 +316,10 @@ def _cmd_assignments_get_partial_invoices_for(ctx, id, extra_params):
     )
 
 @assignments_group.command("get-next-invoice-date-preview")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_get_next_invoice_date_preview(ctx, data, dry_run, assume_yes, extra_params):
     """Preview next invoice dates"""
@@ -332,10 +332,10 @@ def _cmd_assignments_get_next_invoice_date_preview(ctx, data, dry_run, assume_ye
     )
 
 @assignments_group.command("calculate-capacities")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_calculate_capacities(ctx, data, dry_run, assume_yes, extra_params):
     """Calculate assignment capacities"""
@@ -348,10 +348,10 @@ def _cmd_assignments_calculate_capacities(ctx, data, dry_run, assume_yes, extra_
     )
 
 @assignments_group.command("calculate-covers")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_calculate_covers(ctx, data, dry_run, assume_yes, extra_params):
     """Calculate assignment coverage"""
@@ -364,10 +364,10 @@ def _cmd_assignments_calculate_covers(ctx, data, dry_run, assume_yes, extra_para
     )
 
 @assignments_group.command("update-product-prices", short_help="🟡 Update product prices")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignments_update_product_prices(ctx, data, dry_run, assume_yes, extra_params):
     """Update product prices"""

@@ -17,7 +17,7 @@ from pland_cli.utils.timestamps import parse_date, to_ms
 @click.option("--to", "to", required=True, help="Enddatum YYYY-MM-DD (inklusive).")
 @click.pass_context
 def salaries_for_object(ctx: click.Context, object_id: str, frm: str, to: str) -> None:
-    """Abgerechnete Zeiteinträge eines Objekts im Zeitraum (clientseitig gefiltert)."""
+    """Billed time entries of one customer object in a range, filtered client-side."""
     out_mod.set_json(ctx.obj.get("as_json", False))
     client = get_client(ctx)
     from_ms = to_ms(parse_date(frm))
@@ -36,7 +36,7 @@ def salaries_for_object(ctx: click.Context, object_id: str, frm: str, to: str) -
 @click.option("--month", type=int, required=True, help="Monat 1-12.")
 @click.pass_context
 def salaries_monthly_report(ctx: click.Context, object_id: str, year: int, month: int) -> None:
-    """Aggregiert Arbeitsstunden eines Objekts für einen Monat."""
+    """Aggregate the working hours of one customer object for a month."""
     out_mod.set_json(ctx.obj.get("as_json", False))
     client = get_client(ctx)
     last_day = calendar.monthrange(year, month)[1]

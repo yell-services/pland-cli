@@ -21,4 +21,4 @@ def test_missing_key_gives_clear_error(monkeypatch, tmp_path):
     monkeypatch.setattr("pland_cli.core.config.CONFIG_PATH", tmp_path / "none.toml")
     result = CliRunner().invoke(main, ["users", "list"])
     assert result.exit_code == 3
-    assert "API-Key" in result.output
+    assert "API key" in result.output

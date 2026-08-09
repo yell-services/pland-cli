@@ -19,8 +19,8 @@ def banking_transactions_group():
 @click.option("--transactions", "transactions", default=None, help="")
 @click.option("--senderId", "senderId", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_banking_transactions_list(ctx, limit, offset, sort, bookingDateFrom, bookingDateTo, transactionTypeOf, transactions, senderId, generalField, fetch_all, extra_params):
     """List banking transactions"""
@@ -33,10 +33,10 @@ def _cmd_banking_transactions_list(ctx, limit, offset, sort, bookingDateFrom, bo
     )
 
 @banking_transactions_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_banking_transactions_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create banking transaction"""
@@ -50,8 +50,8 @@ def _cmd_banking_transactions_create(ctx, data, dry_run, assume_yes, extra_param
 
 @banking_transactions_group.command("get-distinct-values")
 @click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_banking_transactions_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     """Get distinct values"""
@@ -65,9 +65,9 @@ def _cmd_banking_transactions_get_distinct_values(ctx, fieldKey, fetch_all, extr
 
 @banking_transactions_group.command("delete", short_help="🟡 Delete banking transaction")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_banking_transactions_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete banking transaction"""
@@ -83,8 +83,8 @@ def _cmd_banking_transactions_delete(ctx, id, dry_run, assume_yes, extra_params)
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
 @click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_banking_transactions_list_senders(ctx, limit, offset, sort, fetch_all, extra_params):
     """List transaction senders"""
@@ -98,10 +98,10 @@ def _cmd_banking_transactions_list_senders(ctx, limit, offset, sort, fetch_all, 
 
 @banking_transactions_group.command("match-to-invoices", short_help="🟡 Match transaction to invoices")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_banking_transactions_match_to_invoices(ctx, id, data, dry_run, assume_yes, extra_params):
     """Match transaction to invoices"""
@@ -115,9 +115,9 @@ def _cmd_banking_transactions_match_to_invoices(ctx, id, data, dry_run, assume_y
 
 @banking_transactions_group.command("unmatch", short_help="🟡 Unmatch transaction from invoices")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_banking_transactions_unmatch(ctx, id, dry_run, assume_yes, extra_params):
     """Unmatch transaction from invoices"""
@@ -130,10 +130,10 @@ def _cmd_banking_transactions_unmatch(ctx, id, dry_run, assume_yes, extra_params
     )
 
 @banking_transactions_group.command("delete-many", short_help="🔴 Delete multiple transactions")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_banking_transactions_delete_many(ctx, data, dry_run, assume_yes, extra_params):
     """Delete multiple transactions"""
@@ -147,7 +147,7 @@ def _cmd_banking_transactions_delete_many(ctx, data, dry_run, assume_yes, extra_
 
 @banking_transactions_group.command("get-matching-invoices")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_banking_transactions_get_matching_invoices(ctx, id, extra_params):
     """Get matching invoices for transaction"""
@@ -160,10 +160,10 @@ def _cmd_banking_transactions_get_matching_invoices(ctx, id, extra_params):
     )
 
 @banking_transactions_group.command("ignore", short_help="🟡 Ignore/unignore transactions")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_banking_transactions_ignore(ctx, data, dry_run, assume_yes, extra_params):
     """Ignore/unignore transactions"""

@@ -10,10 +10,10 @@ def signing_group():
     pass
 
 @signing_group.command("create")
-@click.option("--file", "file_", type=click.Path(exists=True), help="Datei (multipart).")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_signing_create(ctx, file_, dry_run, assume_yes, extra_params):
     """Create a new signing"""
@@ -27,7 +27,7 @@ def _cmd_signing_create(ctx, file_, dry_run, assume_yes, extra_params):
 
 @signing_group.command("list-for-assignment")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_signing_list_for_assignment(ctx, id, extra_params):
     """List signings for an assignment"""
@@ -41,7 +41,7 @@ def _cmd_signing_list_for_assignment(ctx, id, extra_params):
 
 @signing_group.command("list-for-job")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_signing_list_for_job(ctx, id, extra_params):
     """List signings for a job"""

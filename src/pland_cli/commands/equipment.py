@@ -21,8 +21,8 @@ def equipment_group():
 @click.option("--status", "status", default=None, help="")
 @click.option("--name", "name", default=None, help="")
 @click.option("--ids", "ids", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_equipment_list(ctx, limit, offset, sort, equipmentBySerialNumberOrName, objectIds, equipmentByCategory, tags, generalField, status, name, ids, fetch_all, extra_params):
     """List equipment"""
@@ -35,10 +35,10 @@ def _cmd_equipment_list(ctx, limit, offset, sort, equipmentBySerialNumberOrName,
     )
 
 @equipment_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_equipment_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create equipment"""
@@ -52,7 +52,7 @@ def _cmd_equipment_create(ctx, data, dry_run, assume_yes, extra_params):
 
 @equipment_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_equipment_get(ctx, id, extra_params):
     """Get equipment"""
@@ -66,9 +66,9 @@ def _cmd_equipment_get(ctx, id, extra_params):
 
 @equipment_group.command("delete", short_help="🟡 Delete equipment")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_equipment_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete equipment"""
@@ -82,10 +82,10 @@ def _cmd_equipment_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @equipment_group.command("update", short_help="🟡 Update equipment")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_equipment_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update equipment"""
@@ -99,8 +99,8 @@ def _cmd_equipment_update(ctx, id, data, dry_run, assume_yes, extra_params):
 
 @equipment_group.command("get-distinct-values")
 @click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for (e.g. serialNumber, category, tags)")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_equipment_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     """Get distinct values"""
@@ -113,10 +113,10 @@ def _cmd_equipment_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     )
 
 @equipment_group.command("update-many", short_help="🟡 Batch update equipment")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_equipment_update_many(ctx, data, dry_run, assume_yes, extra_params):
     """Batch update equipment"""
@@ -130,9 +130,9 @@ def _cmd_equipment_update_many(ctx, data, dry_run, assume_yes, extra_params):
 
 @equipment_group.command("get-or-create-chat")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_equipment_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_params):
     """Get/create equipment chat"""

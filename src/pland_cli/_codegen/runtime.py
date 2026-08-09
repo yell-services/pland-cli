@@ -16,7 +16,7 @@ def _build_params(query: dict, extra_params: str | None) -> dict | None:
         try:
             params.update(json.loads(extra_params))
         except json.JSONDecodeError as e:
-            raise click.BadParameter(f"--extra-params ist kein gültiges JSON: {e}") from e
+            raise click.BadParameter(f"--extra-params is not valid JSON: {e}") from e
     return params or None
 
 
@@ -31,7 +31,7 @@ def run_operation(ctx: click.Context, *, method: str, path: str, query: dict,
     try:
         body: Any = json.loads(data) if data else None
     except json.JSONDecodeError as e:
-        raise click.BadParameter(f"--data ist kein gültiges JSON: {e}") from e
+        raise click.BadParameter(f"--data is not valid JSON: {e}") from e
 
     if dry_run:
         out_mod.out({"method": method.upper(), "path": path, "params": params, "body": body})

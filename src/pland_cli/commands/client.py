@@ -10,10 +10,10 @@ def client_group():
     pass
 
 @client_group.command("create-unauthorized-complain", short_help="🟡 Create complaint")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_create_unauthorized_complain(ctx, data, dry_run, assume_yes, extra_params):
     """Create complaint"""
@@ -27,10 +27,10 @@ def _cmd_client_create_unauthorized_complain(ctx, data, dry_run, assume_yes, ext
 
 @client_group.command("upload-to-complaint")
 @click.argument("OBJECTID")
-@click.option("--file", "file_", type=click.Path(exists=True), help="Datei (multipart).")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_upload_to_complaint(ctx, objectId, file_, dry_run, assume_yes, extra_params):
     """Upload complaint image"""
@@ -44,10 +44,10 @@ def _cmd_client_upload_to_complaint(ctx, objectId, file_, dry_run, assume_yes, e
 
 @client_group.command("upload-documents")
 @click.argument("OBJECTID")
-@click.option("--file", "file_", type=click.Path(exists=True), help="Datei (multipart).")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_upload_documents(ctx, objectId, file_, dry_run, assume_yes, extra_params):
     """Upload documents"""
@@ -61,7 +61,7 @@ def _cmd_client_upload_documents(ctx, objectId, file_, dry_run, assume_yes, extr
 
 @client_group.command("get-object-documentation")
 @click.argument("OBJECTID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_get_object_documentation(ctx, objectId, extra_params):
     """Get object documentation"""
@@ -75,7 +75,7 @@ def _cmd_client_get_object_documentation(ctx, objectId, extra_params):
 
 @client_group.command("get-company-info-unauthorized")
 @click.argument("OBJECTID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_get_company_info_unauthorized(ctx, objectId, extra_params):
     """Get company info"""
@@ -90,7 +90,7 @@ def _cmd_client_get_company_info_unauthorized(ctx, objectId, extra_params):
 @client_group.command("get-offer")
 @click.argument("ID")
 @click.option("--zipCode", "zipCode", default=None, help="ZIP code of the customer for verification")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_get_offer(ctx, id, zipCode, extra_params):
     """Get offer document"""
@@ -105,7 +105,7 @@ def _cmd_client_get_offer(ctx, id, zipCode, extra_params):
 @client_group.command("get-invoice")
 @click.argument("ID")
 @click.option("--zipCode", "zipCode", default=None, help="ZIP code of the customer for verification")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_get_invoice(ctx, id, zipCode, extra_params):
     """Get invoice document"""
@@ -120,7 +120,7 @@ def _cmd_client_get_invoice(ctx, id, zipCode, extra_params):
 @client_group.command("get-credit")
 @click.argument("ID")
 @click.option("--zipCode", "zipCode", default=None, help="ZIP code of the customer for verification")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_get_credit(ctx, id, zipCode, extra_params):
     """Get credit document"""
@@ -135,7 +135,7 @@ def _cmd_client_get_credit(ctx, id, zipCode, extra_params):
 @client_group.command("accept-offer")
 @click.argument("ID")
 @click.option("--zipCode", "zipCode", default=None, help="ZIP code of the customer for verification")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_accept_offer(ctx, id, zipCode, extra_params):
     """Accept offer"""
@@ -150,7 +150,7 @@ def _cmd_client_accept_offer(ctx, id, zipCode, extra_params):
 @client_group.command("decline-offer")
 @click.argument("ID")
 @click.option("--zipCode", "zipCode", default=None, help="ZIP code of the customer for verification")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_decline_offer(ctx, id, zipCode, extra_params):
     """Decline offer"""
@@ -164,10 +164,10 @@ def _cmd_client_decline_offer(ctx, id, zipCode, extra_params):
 
 @client_group.command("create-user-unauthorized")
 @click.argument("COMPANYID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_create_user_unauthorized(ctx, companyId, data, dry_run, assume_yes, extra_params):
     """Create user (unauthorized)"""
@@ -182,10 +182,10 @@ def _cmd_client_create_user_unauthorized(ctx, companyId, data, dry_run, assume_y
 @client_group.command("update-user-unauthorized", short_help="🟡 Update user (unauthorized)")
 @click.argument("COMPANYID")
 @click.argument("USERID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_update_user_unauthorized(ctx, companyId, userId, data, dry_run, assume_yes, extra_params):
     """Update user (unauthorized)"""
@@ -198,10 +198,10 @@ def _cmd_client_update_user_unauthorized(ctx, companyId, userId, data, dry_run, 
     )
 
 @client_group.command("create-unauthorized-task", short_help="🟡 Create task")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_client_create_unauthorized_task(ctx, data, dry_run, assume_yes, extra_params):
     """Create task"""

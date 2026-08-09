@@ -11,7 +11,7 @@ def assignment_confirmations_group():
 
 @assignment_confirmations_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignment_confirmations_get(ctx, id, extra_params):
     """Get assignment confirmation by ID"""
@@ -25,9 +25,9 @@ def _cmd_assignment_confirmations_get(ctx, id, extra_params):
 
 @assignment_confirmations_group.command("delete", short_help="🟡 Delete assignment confirmation")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignment_confirmations_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete assignment confirmation"""
@@ -40,11 +40,11 @@ def _cmd_assignment_confirmations_delete(ctx, id, dry_run, assume_yes, extra_par
     )
 
 @assignment_confirmations_group.command("generate-combined-pdf")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--output", type=click.Path(), help="Antwort in Datei schreiben.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--output", type=click.Path(), help="Write the response to a file.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignment_confirmations_generate_combined_pdf(ctx, data, output, dry_run, assume_yes, extra_params):
     """Generate combined PDF"""
@@ -57,10 +57,10 @@ def _cmd_assignment_confirmations_generate_combined_pdf(ctx, data, output, dry_r
     )
 
 @assignment_confirmations_group.command("create-preview")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignment_confirmations_create_preview(ctx, data, dry_run, assume_yes, extra_params):
     """Create assignment confirmation preview"""
@@ -73,10 +73,10 @@ def _cmd_assignment_confirmations_create_preview(ctx, data, dry_run, assume_yes,
     )
 
 @assignment_confirmations_group.command("send", short_help="🟡 Send assignment confirmations")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignment_confirmations_send(ctx, data, dry_run, assume_yes, extra_params):
     """Send assignment confirmations"""
@@ -90,11 +90,11 @@ def _cmd_assignment_confirmations_send(ctx, data, dry_run, assume_yes, extra_par
 
 @assignment_confirmations_group.command("generate-single-pdf")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--output", type=click.Path(), help="Antwort in Datei schreiben.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--output", type=click.Path(), help="Write the response to a file.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignment_confirmations_generate_single_pdf(ctx, id, data, output, dry_run, assume_yes, extra_params):
     """Generate PDF for assignment confirmation"""
@@ -108,7 +108,7 @@ def _cmd_assignment_confirmations_generate_single_pdf(ctx, id, data, output, dry
 
 @assignment_confirmations_group.command("list-referenced-documents")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignment_confirmations_list_referenced_documents(ctx, id, extra_params):
     """List referenced documents"""
@@ -122,10 +122,10 @@ def _cmd_assignment_confirmations_list_referenced_documents(ctx, id, extra_param
 
 @assignment_confirmations_group.command("attach-documents-to")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignment_confirmations_attach_documents_to(ctx, id, data, dry_run, assume_yes, extra_params):
     """Attach documents"""
@@ -139,10 +139,10 @@ def _cmd_assignment_confirmations_attach_documents_to(ctx, id, data, dry_run, as
 
 @assignment_confirmations_group.command("add-documents-to")
 @click.argument("ID")
-@click.option("--file", "file_", type=click.Path(exists=True), help="Datei (multipart).")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assignment_confirmations_add_documents_to(ctx, id, file_, dry_run, assume_yes, extra_params):
     """Add new documents"""

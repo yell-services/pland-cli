@@ -18,7 +18,7 @@ def _mk(handler):
 def test_in_range_filters_by_jobdate(monkeypatch):
     rows = [
         {"_id": "t1", "trackingJobDate": 1713175200000, "approved": False},  # 2024-04-15
-        {"_id": "t2", "trackingJobDate": 1715767200000, "approved": False},  # 2024-05-15 (außerhalb)
+        {"_id": "t2", "trackingJobDate": 1715767200000, "approved": False},  # 2024-05-15 (out of range)
     ]
 
     def handler(request: httpx.Request) -> httpx.Response:

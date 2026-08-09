@@ -16,8 +16,8 @@ def notifications_group():
 @click.option("--from", "from_", default=None, help="")
 @click.option("--to", "to", default=None, help="")
 @click.option("--wasRead", "wasRead", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_notifications_get_all(ctx, limit, offset, sort, from_, to, wasRead, fetch_all, extra_params):
     """Get all notifications"""
@@ -30,8 +30,8 @@ def _cmd_notifications_get_all(ctx, limit, offset, sort, from_, to, wasRead, fet
     )
 
 @notifications_group.command("count-user")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_notifications_count_user(ctx, fetch_all, extra_params):
     """Count new notifications"""
@@ -44,8 +44,8 @@ def _cmd_notifications_count_user(ctx, fetch_all, extra_params):
     )
 
 @notifications_group.command("all-entities-count")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_notifications_all_entities_count(ctx, fetch_all, extra_params):
     """Count all entity types"""
@@ -59,9 +59,9 @@ def _cmd_notifications_all_entities_count(ctx, fetch_all, extra_params):
 
 @notifications_group.command("mark-as-checked")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_notifications_mark_as_checked(ctx, id, dry_run, assume_yes, extra_params):
     """Mark notification as checked"""
@@ -75,9 +75,9 @@ def _cmd_notifications_mark_as_checked(ctx, id, dry_run, assume_yes, extra_param
 
 @notifications_group.command("mark-as-read")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_notifications_mark_as_read(ctx, id, dry_run, assume_yes, extra_params):
     """Mark notification as read"""
@@ -91,9 +91,9 @@ def _cmd_notifications_mark_as_read(ctx, id, dry_run, assume_yes, extra_params):
 
 @notifications_group.command("mark-as-un-read")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_notifications_mark_as_un_read(ctx, id, dry_run, assume_yes, extra_params):
     """Mark notification as unread"""

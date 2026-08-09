@@ -11,8 +11,8 @@ def assets_group():
 
 @assets_group.command("redirect-to-secure")
 @click.option("--url", "url", default=None, help="Original asset URL to be secured")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_assets_redirect_to_secure(ctx, url, fetch_all, extra_params):
     """Get secure asset URL"""

@@ -10,9 +10,9 @@ OVERRIDES: list[tuple[str, str, bool]] = []
 
 
 def enrich(group: str, command: str, *, new: bool = False):
-    """Registriert einen Click-Command als Overlay für (group, command).
+    """Register a Click command as an overlay for (group, command).
 
-    new=False ersetzt den gleichnamigen generierten Command, new=True ergänzt einen.
+    new=False replaces the generated command of that name, new=True adds one.
     """
     def deco(cmd: click.Command) -> click.Command:
         cmd.name = command
@@ -36,8 +36,8 @@ _MARKER = "(enriched)"
 def _mark_enriched(cmd: click.Command) -> None:
     """Markiert die Kurz-Hilfe sichtbar mit '(enriched)' (idempotent).
 
-    Der Marker steht vorne, damit er auch bei schmalen Terminals (Click kürzt
-    short_help auf die Spaltenbreite) nicht abgeschnitten wird.
+    The marker goes first so it survives narrow terminals, where Click truncates
+    short_help to the column width.
     """
     if cmd.short_help:
         base = cmd.short_help
@@ -53,19 +53,19 @@ def _mark_enriched(cmd: click.Command) -> None:
 def apply_enrichment(group_name: str, group_cmd: click.Group) -> None:
     for name, cmd in _REGISTRY.get(group_name, {}).items():
         _mark_enriched(cmd)
-        group_cmd.add_command(cmd, name)  # ersetzt gleichnamigen oder ergänzt
+        group_cmd.add_command(cmd, name)  # replaces one of the same name, or adds it
 
 
 def validate_overrides(root: click.Group) -> None:
-    """Bricht ab, wenn ein @enrich auf eine nicht-existente Gruppe zeigt (Tippfehler)."""
+    """Fail when an @enrich points at a group that does not exist (a typo)."""
     existing = set(root.commands)
     bad = sorted({g for (g, _c, _n) in OVERRIDES if g not in existing})
     if bad:
-        raise RuntimeError(f"Enrichment für unbekannte Gruppe(n): {bad}")
+        raise RuntimeError(f"Enrichment for unknown group(s): {bad}")
 
 
 def get_client(ctx: click.Context):
-    """Holt den lazy Client (Exit 3 ohne Key) — für Enrichment-Commands."""
+    """Get the lazy client (exit 3 without a key) — for enrichment commands."""
     from pland_cli.cli import _attach_client
 
     _attach_client(ctx)

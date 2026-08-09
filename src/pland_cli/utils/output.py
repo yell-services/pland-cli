@@ -21,7 +21,7 @@ def _dumps(data: Any) -> str:
 
 
 def out(data: Any) -> None:
-    """Erfolgs-Ausgabe. --json: rohes JSON; sonst rich-gehighlightetes JSON."""
+    """Success output. With --json raw JSON, otherwise rich-highlighted JSON."""
     if USE_JSON:
         print(_dumps(data))
     else:

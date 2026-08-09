@@ -19,28 +19,28 @@ def auth_group() -> None:
 def set_key(profile: str, key: str) -> None:
     """Speichert den API-Key in ~/.config/pland/config.toml (chmod 600)."""
     path = save_api_key(key, profile=profile, path=config_mod.CONFIG_PATH)
-    click.echo(f"Key für Profil '{profile}' gespeichert → {path}")
+    click.echo(f"Key for profile '{profile}' saved → {path}")
 
 
 @auth_group.command("bootstrap")
 @click.option("--profile", default=None, help="Ziel-Profil (Default: aktuelles bzw. prod).")
 @click.option(
     "--login-id", "login_id", prompt="pland Login-ID (Nummer)",
-    help="Login-ID/Nummer (wird NICHT gespeichert).",
+    help="Login ID / number (NOT stored).",
 )
 @click.password_option(
     "--password", prompt="pland Passwort", confirmation_prompt=False,
-    help="Login-Passwort (wird NICHT gespeichert).",
+    help="Login password (NOT stored).",
 )
 @click.option("--name", default="pland-cli", help="Name des neuen API-Keys.")
 @click.pass_context
 def bootstrap(ctx: click.Context, profile: str | None, login_id: str, password: str, name: str) -> None:
-    """Erzeugt per Login einen neuen API-Key und speichert nur diesen.
+    """Create a new API key via login and store only that key.
 
-    Login-ID (Nummer) und Passwort werden ausschließlich für den einmaligen
-    Login verwendet und NIRGENDS gespeichert — nur der erzeugte API-Key landet
+    The login ID (a number) and the password are used for the one-off login
+    ONLY and are stored NOWHERE — just the resulting API key ends up
     in der Config. Tipp: Lass den Menschen die Eingabe machen (interaktiver
-    Prompt), statt die Zugangsdaten als Flags über die Shell-History zu reichen.
+    prompt) rather than passing credentials as flags through the shell history.
     """
     out_mod.set_json(ctx.obj.get("as_json", False))
     profile = profile or ctx.obj.get("profile") or DEFAULT_PROFILE
@@ -55,14 +55,14 @@ def bootstrap(ctx: click.Context, profile: str | None, login_id: str, password: 
         click.echo(f"Bootstrap fehlgeschlagen: {e}", err=True)
         ctx.exit(1)
     path = save_api_key(key, profile=profile, path=config_mod.CONFIG_PATH)
-    # Den Key selbst NIE ausgeben — nur bestätigen.
+    # NEVER print the key itself — only confirm.
     out_mod.out({"profile": profile, "saved_to": str(path), "key_created": True})
 
 
 @auth_group.command("status")
 @click.pass_context
 def status(ctx: click.Context) -> None:
-    """Zeigt Profil, Base-URL und ob ein Key vorliegt (ohne ihn auszugeben)."""
+    """Show profile, base URL and whether a key is present, without printing it."""
     out_mod.set_json(ctx.obj.get("as_json", False))
     try:
         cfg = resolve_config(profile=ctx.obj.get("profile"))

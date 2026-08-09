@@ -19,7 +19,7 @@ def test_in_range_filters_by_dtstart_and_status(monkeypatch):
     rows = [
         {"_id": "a1", "dtStart": 1713175200000, "approvedBy": "mgr"},   # 2024-04-15, approved
         {"_id": "a2", "dtStart": 1713607200000, "approvedBy": None},    # 2024-04-20, not approved
-        {"_id": "a3", "dtStart": 1715767200000, "approvedBy": "mgr"},   # 2024-05-15 (außerhalb)
+        {"_id": "a3", "dtStart": 1715767200000, "approvedBy": "mgr"},   # 2024-05-15 (out of range)
     ]
 
     def handler(request: httpx.Request) -> httpx.Response:
@@ -42,7 +42,7 @@ def test_in_range_without_approved_only_keeps_all_in_window(monkeypatch):
     rows = [
         {"_id": "a1", "dtStart": 1713175200000, "approvedBy": "mgr"},   # 2024-04-15
         {"_id": "a2", "dtStart": 1713607200000, "approvedBy": None},    # 2024-04-20
-        {"_id": "a3", "dtStart": 1715767200000, "approvedBy": "mgr"},   # 2024-05-15 (außerhalb)
+        {"_id": "a3", "dtStart": 1715767200000, "approvedBy": "mgr"},   # 2024-05-15 (out of range)
     ]
 
     def handler(request: httpx.Request) -> httpx.Response:

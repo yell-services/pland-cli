@@ -1,1 +1,1 @@
-"""Handkuratiertes Overlay über den generierten Commands."""
+"""Hand-curated overlay on top of the generated commands."""

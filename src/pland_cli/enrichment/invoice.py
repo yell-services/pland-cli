@@ -20,7 +20,7 @@ def strip_readonly(invoice: dict) -> dict:
 @click.option("--object-id", required=True, help="Objekt-ID (clientseitig gefiltert).")
 @click.pass_context
 def invoice_drafts(ctx: click.Context, object_id: str) -> None:
-    """Entwurfs-Rechnungen (ohne fixDate) eines Objekts.
+    """Draft invoices (those without a fixDate) for one customer object.
 
     pland ignoriert den objectId-Query-Param → wir filtern clientseitig.
     """

@@ -28,8 +28,8 @@ def jobs_group():
 @click.option("--liveJobs", "liveJobs", default=None, help="")
 @click.option("--assignmentIds", "assignmentIds", default=None, help="")
 @click.option("--tags", "tags", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_list(ctx, limit, offset, sort, status, ids, jobTemplateId, originalId, absenceId, notAccepted, objectId, objectIds, teamId, userIds, activityTypeId, currentlyWorking, liveJobs, assignmentIds, tags, fetch_all, extra_params):
     """List all jobs"""
@@ -43,7 +43,7 @@ def _cmd_jobs_list(ctx, limit, offset, sort, status, ids, jobTemplateId, origina
 
 @jobs_group.command("list-by-assignment")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_list_by_assignment(ctx, id, extra_params):
     """List jobs by assignment"""
@@ -57,7 +57,7 @@ def _cmd_jobs_list_by_assignment(ctx, id, extra_params):
 
 @jobs_group.command("list-for-user")
 @click.argument("USERID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_list_for_user(ctx, userId, extra_params):
     """List jobs for user"""
@@ -70,10 +70,10 @@ def _cmd_jobs_list_for_user(ctx, userId, extra_params):
     )
 
 @jobs_group.command("check-user-capacity")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_check_user_capacity(ctx, data, dry_run, assume_yes, extra_params):
     """Check user job capacity"""
@@ -87,7 +87,7 @@ def _cmd_jobs_check_user_capacity(ctx, data, dry_run, assume_yes, extra_params):
 
 @jobs_group.command("list-for-object")
 @click.argument("OBJECTID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_list_for_object(ctx, objectId, extra_params):
     """List jobs for object"""
@@ -100,10 +100,10 @@ def _cmd_jobs_list_for_object(ctx, objectId, extra_params):
     )
 
 @jobs_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create a job"""
@@ -117,7 +117,7 @@ def _cmd_jobs_create(ctx, data, dry_run, assume_yes, extra_params):
 
 @jobs_group.command("view")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_view(ctx, id, extra_params):
     """Get job by ID"""
@@ -134,9 +134,9 @@ def _cmd_jobs_view(ctx, id, extra_params):
 @click.option("--splitDate", "splitDate", default=None, help="Split date for deletion")
 @click.option("--type", "type", default=None, help="Delete type")
 @click.option("--teamId", "teamId", default=None, help="Team ID (optional, for team job deletion)")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_delete(ctx, id, splitDate, type, teamId, dry_run, assume_yes, extra_params):
     """Delete a job"""
@@ -150,10 +150,10 @@ def _cmd_jobs_delete(ctx, id, splitDate, type, teamId, dry_run, assume_yes, extr
 
 @jobs_group.command("patch-old", short_help="🟡 Update a job (legacy)")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_patch_old(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update a job (legacy)"""
@@ -167,10 +167,10 @@ def _cmd_jobs_patch_old(ctx, id, data, dry_run, assume_yes, extra_params):
 
 @jobs_group.command("patch", short_help="🟡 Update a job")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_patch(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update a job"""
@@ -183,10 +183,10 @@ def _cmd_jobs_patch(ctx, id, data, dry_run, assume_yes, extra_params):
     )
 
 @jobs_group.command("load-resources-and-calendar-data")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_load_resources_and_calendar_data(ctx, data, dry_run, assume_yes, extra_params):
     """Load resources and calendar data"""
@@ -199,10 +199,10 @@ def _cmd_jobs_load_resources_and_calendar_data(ctx, data, dry_run, assume_yes, e
     )
 
 @jobs_group.command("load-calendar-data")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_load_calendar_data(ctx, data, dry_run, assume_yes, extra_params):
     """Load calendar data"""
@@ -215,10 +215,10 @@ def _cmd_jobs_load_calendar_data(ctx, data, dry_run, assume_yes, extra_params):
     )
 
 @jobs_group.command("in-time-frame")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_in_time_frame(ctx, data, dry_run, assume_yes, extra_params):
     """Get jobs in a specific time frame"""
@@ -233,9 +233,9 @@ def _cmd_jobs_in_time_frame(ctx, data, dry_run, assume_yes, extra_params):
 @jobs_group.command("change-accepted-status", short_help="🟡 Change job accepted status")
 @click.argument("ID")
 @click.argument("TYPE")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_change_accepted_status(ctx, id, type, dry_run, assume_yes, extra_params):
     """Change job accepted status"""
@@ -249,9 +249,9 @@ def _cmd_jobs_change_accepted_status(ctx, id, type, dry_run, assume_yes, extra_p
 
 @jobs_group.command("mark-as-started")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_mark_as_started(ctx, id, dry_run, assume_yes, extra_params):
     """Mark job as started"""
@@ -266,8 +266,8 @@ def _cmd_jobs_mark_as_started(ctx, id, dry_run, assume_yes, extra_params):
 @jobs_group.command("get-open")
 @click.option("--from", "from_", default=None, help="Start of the time frame")
 @click.option("--to", "to", default=None, help="End of the time frame")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_get_open(ctx, from_, to, fetch_all, extra_params):
     """Get open jobs"""
@@ -281,7 +281,7 @@ def _cmd_jobs_get_open(ctx, from_, to, fetch_all, extra_params):
 
 @jobs_group.command("get-status-list-for")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_get_status_list_for(ctx, id, extra_params):
     """Get job status list"""
@@ -297,7 +297,7 @@ def _cmd_jobs_get_status_list_for(ctx, id, extra_params):
 @click.argument("OBJECTID")
 @click.option("--from", "from_", default=None, help="Start of the time frame")
 @click.option("--to", "to", default=None, help="End of the time frame")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_get_status_list_for_object(ctx, objectId, from_, to, extra_params):
     """Get job status list for object"""
@@ -310,10 +310,10 @@ def _cmd_jobs_get_status_list_for_object(ctx, objectId, from_, to, extra_params)
     )
 
 @jobs_group.command("calculate-target-times-and-allowed-times-for-user-ids")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_calculate_target_times_and_allowed_times_for_user_ids(ctx, data, dry_run, assume_yes, extra_params):
     """Calculate user target and allowed times"""
@@ -327,7 +327,7 @@ def _cmd_jobs_calculate_target_times_and_allowed_times_for_user_ids(ctx, data, d
 
 @jobs_group.command("get-time-tracking-for")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_jobs_get_time_tracking_for(ctx, id, extra_params):
     """Get time tracking entries for a job"""

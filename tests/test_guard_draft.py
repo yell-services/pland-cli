@@ -13,8 +13,8 @@ def _run(monkeypatch, tmp_path, lookup, confirmer):
 
 
 def test_draft_invoice_runs_without_confirm(monkeypatch, tmp_path):
-    _run(monkeypatch, tmp_path, lookup=lambda: {"_id": "1"},  # kein fixDate -> Entwurf
-         confirmer=lambda p: pytest.fail("Entwurf darf nicht nachfragen"))
+    _run(monkeypatch, tmp_path, lookup=lambda: {"_id": "1"},  # no fixDate -> draft
+         confirmer=lambda p: pytest.fail("a draft must not prompt"))
 
 
 def test_fixed_invoice_requires_confirm(monkeypatch, tmp_path):
@@ -43,8 +43,8 @@ def test_lookup_failure_falls_back_to_confirm(monkeypatch, tmp_path):
 
 
 def test_empty_lookup_result_stays_confirm(monkeypatch, tmp_path):
-    # fail-safe: ein leeres dict ({}) hat kein fixDate, darf aber NICHT als
-    # Entwurf (free) durchgehen — sonst fail-open bei unerwarteter API-Antwort.
+    # fail-safe: an empty dict ({}) has no fixDate but must NOT pass as a draft
+    # (free) — that would fail open on an unexpected API response.
     called = {"n": 0}
 
     def conf(p):
@@ -56,7 +56,7 @@ def test_empty_lookup_result_stays_confirm(monkeypatch, tmp_path):
 
 
 def test_object_without_id_stays_confirm(monkeypatch, tmp_path):
-    # Ein dict ohne _id ist kein erkanntes Entwurf-Objekt -> fail-safe confirm.
+    # A dict without _id is not a recognised draft object -> fail-safe confirm.
     called = {"n": 0}
 
     def conf(p):

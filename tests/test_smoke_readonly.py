@@ -11,7 +11,7 @@ pytestmark = pytest.mark.live
 @pytest.fixture(autouse=True)
 def _require_key():
     if not os.environ.get("PLAND_API_KEY"):
-        pytest.skip("PLAND_API_KEY nicht gesetzt — Live-Test übersprungen")
+        pytest.skip("PLAND_API_KEY not set — live test skipped")
 
 
 def test_users_list_live():

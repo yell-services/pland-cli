@@ -1,6 +1,6 @@
-"""Exit-Code 2 (Usage/Input-Fehler) ohne Python-Traceback.
+"""Exit code 2 (usage/input errors) without a Python traceback.
 
-Spec: Eingabe-/Usage-Fehler → sauberer Hinweis + Exit-Code 2, kein Traceback.
+Spec: input/usage errors produce a clean message and exit code 2, no traceback.
 """
 from click.testing import CliRunner
 
@@ -13,7 +13,7 @@ def _no_traceback(result) -> bool:
 
 
 def test_bad_data_json_exits_2_without_traceback(monkeypatch):
-    monkeypatch.setenv("PLAND_API_KEY", "k")  # Auth darf nicht vorher greifen
+    monkeypatch.setenv("PLAND_API_KEY", "k")  # auth must not fire first
     result = CliRunner().invoke(main, ["absences", "create", "--data", "{not json}"])
     assert result.exit_code == 2
     assert _no_traceback(result)
@@ -31,7 +31,7 @@ def test_bad_extra_params_json_exits_2_without_traceback(monkeypatch):
 
 
 def test_unknown_profile_exits_2_with_clear_message(monkeypatch, tmp_path):
-    # Kein echtes Config-File soll stören.
+    # Keep a real config file out of the way.
     monkeypatch.setattr(
         "pland_cli.core.config.CONFIG_PATH", tmp_path / "none.toml"
     )

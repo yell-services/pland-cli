@@ -47,11 +47,11 @@ def test_apply_enrichment_marks_short_help():
     @enrich("demo", "report", new=True)
     @click.command()
     def report():
-        """Tut etwas Nützliches."""
+        """Does something useful."""
 
     group = click.Group("demo")
     apply_enrichment("demo", group)
-    assert group.commands["report"].short_help == "(enriched) Tut etwas Nützliches."
+    assert group.commands["report"].short_help == "(enriched) Does something useful."
 
 
 def test_mark_enriched_is_idempotent():
@@ -65,7 +65,7 @@ def test_mark_enriched_is_idempotent():
 
     group = click.Group("demo")
     apply_enrichment("demo", group)
-    apply_enrichment("demo", group)  # zweiter Lauf darf nicht doppelt markieren
+    apply_enrichment("demo", group)  # a second run must not mark it twice
     assert group.commands["report"].short_help == "(enriched) Tut etwas."
 
 

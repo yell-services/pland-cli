@@ -20,9 +20,9 @@ def test_audit_appends_jsonl(tmp_path, monkeypatch):
 
 
 def test_audit_never_raises(monkeypatch):
-    # Selbst wenn der Pfad nicht schreibbar ist, darf audit() nie werfen.
+    # Even when the path is not writable, audit() must never raise.
     monkeypatch.setattr(guard, "_audit_path", lambda: (_ for _ in ()).throw(OSError("boom")))
-    guard.audit({"x": 1})  # darf nicht werfen
+    guard.audit({"x": 1})  # must not raise
 
 
 def _enforce(monkeypatch, tmp_path, **kw):
@@ -36,12 +36,12 @@ def _enforce(monkeypatch, tmp_path, **kw):
 
 
 def test_free_runs_through(monkeypatch, tmp_path):
-    _enforce(monkeypatch, tmp_path, risk="free")  # kein Abbruch
+    _enforce(monkeypatch, tmp_path, risk="free")  # no abort
 
 
 def test_confirm_yes_flag_overrides(monkeypatch, tmp_path):
     _enforce(monkeypatch, tmp_path, risk="confirm", assume_yes=True,
-             confirmer=lambda p: pytest.fail("darf nicht fragen"))
+             confirmer=lambda p: pytest.fail("must not prompt"))
 
 
 def test_confirm_tty_accepts(monkeypatch, tmp_path):
@@ -72,6 +72,6 @@ def test_critical_yes_flag_does_not_bypass(monkeypatch, tmp_path):
 
 
 def test_critical_correct_token_runs(monkeypatch, tmp_path):
-    # Token = letztes Pfadsegment-Eltern ("salaries") — siehe Implementierung
+    # Token = the parent of the last path segment ("salaries") — see the implementation
     _enforce(monkeypatch, tmp_path, risk="critical", path="/salaries/1",
              tokener=lambda p: "salaries")

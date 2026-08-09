@@ -10,10 +10,10 @@ def invoice_reminders_group():
     pass
 
 @invoice_reminders_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create invoice reminder"""
@@ -28,8 +28,8 @@ def _cmd_invoice_reminders_create(ctx, data, dry_run, assume_yes, extra_params):
 @invoice_reminders_group.command("get-distinct-values")
 @click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for")
 @click.option("--status", "status", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_get_distinct_values(ctx, fieldKey, status, fetch_all, extra_params):
     """Get distinct field values for invoice reminders"""
@@ -43,7 +43,7 @@ def _cmd_invoice_reminders_get_distinct_values(ctx, fieldKey, status, fetch_all,
 
 @invoice_reminders_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_get(ctx, id, extra_params):
     """Get invoice reminder"""
@@ -57,9 +57,9 @@ def _cmd_invoice_reminders_get(ctx, id, extra_params):
 
 @invoice_reminders_group.command("delete", short_help="🟡 Delete invoice reminder")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete invoice reminder"""
@@ -73,10 +73,10 @@ def _cmd_invoice_reminders_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @invoice_reminders_group.command("update", short_help="🟡 Update invoice reminder")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update invoice reminder"""
@@ -89,10 +89,10 @@ def _cmd_invoice_reminders_update(ctx, id, data, dry_run, assume_yes, extra_para
     )
 
 @invoice_reminders_group.command("generate-combined-pdf")
-@click.option("--output", type=click.Path(), help="Antwort in Datei schreiben.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--output", type=click.Path(), help="Write the response to a file.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_generate_combined_pdf(ctx, output, dry_run, assume_yes, extra_params):
     """Generate combined PDF for reminders"""
@@ -105,9 +105,9 @@ def _cmd_invoice_reminders_generate_combined_pdf(ctx, output, dry_run, assume_ye
     )
 
 @invoice_reminders_group.command("create-preview")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_create_preview(ctx, dry_run, assume_yes, extra_params):
     """Create reminder preview"""
@@ -120,9 +120,9 @@ def _cmd_invoice_reminders_create_preview(ctx, dry_run, assume_yes, extra_params
     )
 
 @invoice_reminders_group.command("send", short_help="🟡 Send reminders via email")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_send(ctx, dry_run, assume_yes, extra_params):
     """Send reminders via email"""
@@ -136,10 +136,10 @@ def _cmd_invoice_reminders_send(ctx, dry_run, assume_yes, extra_params):
 
 @invoice_reminders_group.command("generate-pdf")
 @click.argument("ID")
-@click.option("--output", type=click.Path(), help="Antwort in Datei schreiben.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--output", type=click.Path(), help="Write the response to a file.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_generate_pdf(ctx, id, output, dry_run, assume_yes, extra_params):
     """Generate reminder PDF"""
@@ -153,7 +153,7 @@ def _cmd_invoice_reminders_generate_pdf(ctx, id, output, dry_run, assume_yes, ex
 
 @invoice_reminders_group.command("list-referenced-faktura-documents-for")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_list_referenced_faktura_documents_for(ctx, id, extra_params):
     """List referenced documents"""
@@ -167,9 +167,9 @@ def _cmd_invoice_reminders_list_referenced_faktura_documents_for(ctx, id, extra_
 
 @invoice_reminders_group.command("attach-documents-to")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_attach_documents_to(ctx, id, dry_run, assume_yes, extra_params):
     """Attach documents to reminder"""
@@ -183,9 +183,9 @@ def _cmd_invoice_reminders_attach_documents_to(ctx, id, dry_run, assume_yes, ext
 
 @invoice_reminders_group.command("add-documents-to")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_add_documents_to(ctx, id, dry_run, assume_yes, extra_params):
     """Add documents to reminder"""
@@ -199,9 +199,9 @@ def _cmd_invoice_reminders_add_documents_to(ctx, id, dry_run, assume_yes, extra_
 
 @invoice_reminders_group.command("get-or-create-chat")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_params):
     """Get or create reminder chat"""
@@ -214,10 +214,10 @@ def _cmd_invoice_reminders_get_or_create_chat(ctx, id, dry_run, assume_yes, extr
     )
 
 @invoice_reminders_group.command("create-from", short_help="🟡 Create reminders from invoices")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_invoice_reminders_create_from(ctx, data, dry_run, assume_yes, extra_params):
     """Create reminders from invoices"""

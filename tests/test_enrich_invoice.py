@@ -10,7 +10,7 @@ def test_drafts_filtered_clientside_by_object(monkeypatch):
     rows = [
         {"_id": "i1", "objectId": "o1", "fixDate": None},
         {"_id": "i2", "objectId": "o2", "fixDate": None},
-        {"_id": "i3", "objectId": "o1", "fixDate": 1712000000000},  # fixiert → kein Entwurf
+        {"_id": "i3", "objectId": "o1", "fixDate": 1712000000000},  # fixed → not a draft
     ]
 
     def handler(request):

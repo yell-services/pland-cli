@@ -16,7 +16,7 @@ def load_fixture(name: str) -> object:
 
 @pytest.fixture
 def mock_client():
-    """Baut einen PlandClient, dessen Antworten ein Handler steuert."""
+    """Build a PlandClient whose responses are driven by a handler."""
 
     def _make(handler) -> PlandClient:
         cfg = Config(base_url="https://api.test/v2", api_key="k", profile="prod")
@@ -30,7 +30,7 @@ def pytest_addoption(parser):
         "--run-live",
         action="store_true",
         default=False,
-        help="Live-Tests gegen prod ausführen (nur GET).",
+        help="Run live tests against prod (GET only).",
     )
 
 

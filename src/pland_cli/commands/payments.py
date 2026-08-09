@@ -11,7 +11,7 @@ def payments_group():
 
 @payments_group.command("get-by-id")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_payments_get_by_id(ctx, id, extra_params):
     """Get payment details"""
@@ -25,9 +25,9 @@ def _cmd_payments_get_by_id(ctx, id, extra_params):
 
 @payments_group.command("delete", short_help="🟡 Delete payment")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_payments_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete payment"""
@@ -41,10 +41,10 @@ def _cmd_payments_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @payments_group.command("update", short_help="🟡 Update payment")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_payments_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update payment"""
@@ -63,8 +63,8 @@ def _cmd_payments_update(ctx, id, data, dry_run, assume_yes, extra_params):
 @click.option("--invoiceIds", "invoiceIds", default=None, help="Filter by invoice IDs (comma-separated)")
 @click.option("--paymentDateFrom", "paymentDateFrom", default=None, help="Filter payments from this date (YYYY-MM-DD)")
 @click.option("--paymentDateTo", "paymentDateTo", default=None, help="Filter payments to this date (YYYY-MM-DD)")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_payments_get(ctx, limit, offset, sort, invoiceIds, paymentDateFrom, paymentDateTo, fetch_all, extra_params):
     """List payments"""
@@ -78,10 +78,10 @@ def _cmd_payments_get(ctx, limit, offset, sort, invoiceIds, paymentDateFrom, pay
 
 @payments_group.command("create-invoice", short_help="🟡 Create payment for invoice")
 @click.argument("INVOICEID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_payments_create_invoice(ctx, invoiceId, data, dry_run, assume_yes, extra_params):
     """Create payment for invoice"""

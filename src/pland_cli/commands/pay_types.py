@@ -11,7 +11,7 @@ def pay_types_group():
 
 @pay_types_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_pay_types_get(ctx, id, extra_params):
     """Get pay type"""
@@ -25,9 +25,9 @@ def _cmd_pay_types_get(ctx, id, extra_params):
 
 @pay_types_group.command("delete", short_help="🟡 Delete pay type")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_pay_types_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete pay type"""
@@ -41,10 +41,10 @@ def _cmd_pay_types_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @pay_types_group.command("update", short_help="🟡 Update pay type")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_pay_types_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update pay type"""
@@ -64,8 +64,8 @@ def _cmd_pay_types_update(ctx, id, data, dry_run, assume_yes, extra_params):
 @click.option("--ids", "ids", default=None, help="")
 @click.option("--name", "name", default=None, help="")
 @click.option("--requestable", "requestable", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_pay_types_get_salaries(ctx, limit, offset, sort, status, ids, name, requestable, fetch_all, extra_params):
     """List salary pay types"""
@@ -78,10 +78,10 @@ def _cmd_pay_types_get_salaries(ctx, limit, offset, sort, status, ids, name, req
     )
 
 @pay_types_group.command("create-salary")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_pay_types_create_salary(ctx, data, dry_run, assume_yes, extra_params):
     """Create salary pay type"""
@@ -101,8 +101,8 @@ def _cmd_pay_types_create_salary(ctx, data, dry_run, assume_yes, extra_params):
 @click.option("--ids", "ids", default=None, help="")
 @click.option("--name", "name", default=None, help="")
 @click.option("--requestable", "requestable", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_pay_types_get_absences(ctx, limit, offset, sort, status, ids, name, requestable, fetch_all, extra_params):
     """List absence pay types"""
@@ -115,10 +115,10 @@ def _cmd_pay_types_get_absences(ctx, limit, offset, sort, status, ids, name, req
     )
 
 @pay_types_group.command("create-absence")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_pay_types_create_absence(ctx, data, dry_run, assume_yes, extra_params):
     """Create absence pay type"""

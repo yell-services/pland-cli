@@ -11,7 +11,7 @@ _METHODS = ("get", "post", "put", "patch", "delete")
 def _read(name: str) -> str | None:
     """Paket-Ressource lesen; im editable dev-tree Fallback auf das Repo-Root.
 
-    Beide YAMLs werden nur beim Wheel-Build ins Paket kopiert
+    Both YAMLs are copied into the package only on a wheel build
     (``[tool.hatch.build.targets.wheel.force-include]``).
     """
     res = resources.files("pland_cli").joinpath(name)
@@ -24,9 +24,9 @@ def _read(name: str) -> str | None:
 def apply_overlay(spec: dict, overlay: dict) -> dict:
     """Korrekturen aus openapi.overlay.yaml auf die Spec anwenden.
 
-    Drei Sektionen: ``remove`` (Operationen, die die API nicht hat),
-    ``rename_params`` (falsch benannte Query-Parameter) und ``paths``
-    (Endpoints, die die Spec nicht kennt). Siehe die Kommentare dort.
+    Three sections: ``remove`` (operations the API does not serve), ``params``
+    (misnamed or misdocumented query parameters) and ``paths`` (endpoints the
+    spec does not know about). See the comments in that file.
     """
     paths = spec.setdefault("paths", {})
 
@@ -53,17 +53,17 @@ def apply_overlay(spec: dict, overlay: dict) -> dict:
 
 
 def load_spec(path: Path | None = None) -> dict:
-    """Die Spec, gegen die generiert wird — inklusive Overlay.
+    """The spec used for generation, overlay included.
 
-    Ein explizit übergebener ``path`` wird roh geladen (Test-Fixtures und der
-    Vergleich gegen die unveränderte Upstream-Spec).
+    An explicitly passed ``path`` is loaded raw — for test fixtures and for
+    comparing against the untouched upstream spec.
     """
     if path is not None:
         return yaml.safe_load(Path(path).read_text(encoding="utf-8"))
     raw = _read("openapi.yaml")
     if raw is None:
         raise FileNotFoundError(
-            "openapi.yaml nicht gefunden — weder als Paket-Ressource noch im Repo-Root."
+            "openapi.yaml not found — neither as a package resource nor at the repo root."
         )
     spec = yaml.safe_load(raw)
     overlay = _read("openapi.overlay.yaml")

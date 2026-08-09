@@ -170,11 +170,11 @@ def test_render_free_has_no_risk_marker():
 
 
 def test_render_keeps_quotes_and_emoji_literal():
-    """Hilfetexte mit " müssen als gültiges JSON durchkommen, Emojis als UTF-8.
+    """Help texts containing " must survive as valid JSON, emojis as UTF-8.
 
     Ein blindes " -> ' machte JSON-Beispiele im Hilfetext unbrauchbar; ein
-    json.dumps ohne ensure_ascii=False escapt die Risiko-Emojis zu
-    Surrogatpaaren, die beim Schreiben der Datei mit UnicodeEncodeError knallen.
+    json.dumps without ensure_ascii=False escapes the risk emojis into surrogate
+    pairs, which blow up with UnicodeEncodeError when the file is written.
     """
     code = render_command(
         _op(method="get", path="/invoices/", tag="Invoice", command="list",

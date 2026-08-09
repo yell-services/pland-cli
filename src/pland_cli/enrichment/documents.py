@@ -9,7 +9,7 @@ from pland_cli.utils import output as out_mod
 
 
 def _doc_params(kind: str) -> dict:
-    """kind='faktura' → an Rechnung gemergt; sonst separater Anhang."""
+    """kind='faktura' merges into the invoice; anything else stays a separate attachment."""
     return {"type": "faktura"} if kind == "faktura" else {}
 
 

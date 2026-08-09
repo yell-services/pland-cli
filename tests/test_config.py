@@ -43,7 +43,7 @@ def test_save_and_load_key_roundtrip(monkeypatch, tmp_path):
     save_api_key("secret123", profile="prod", path=path)
     cfg = resolve_config(config_path=path)
     assert cfg.api_key == "secret123"
-    # POSIX-only: Windows kennt keine 0o600-Bits über chmod.
+    # POSIX only: Windows has no 0o600 bits via chmod.
     if os.name == "posix":
         assert oct(path.stat().st_mode)[-3:] == "600"
 
@@ -60,8 +60,8 @@ def test_config_path_respects_xdg(monkeypatch, tmp_path):
 
 
 def test_config_path_windows_uses_appdata(monkeypatch, tmp_path):
-    # _is_windows() patchen statt os.name — Letzteres würde pathlib zwingen,
-    # WindowsPath zu instanziieren (auf Nicht-Windows nicht möglich).
+    # Patch _is_windows() rather than os.name — the latter would force pathlib
+    # to instantiate WindowsPath, which is impossible off Windows.
     monkeypatch.delenv("PLAND_CONFIG", raising=False)
     monkeypatch.delenv("XDG_CONFIG_HOME", raising=False)
     monkeypatch.setattr(config_mod, "_is_windows", lambda: True)

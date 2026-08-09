@@ -12,7 +12,7 @@ def test_bootstrap_logs_in_then_creates_key():
     seen = {}
 
     def handler(request: httpx.Request) -> httpx.Response:
-        # base_url enthält /v2 → Pfad endet auf den Endpunkt, beginnt nicht damit.
+        # base_url carries /v2 → the path ends with the endpoint, it does not start with it.
         if request.url.path.endswith("/auth/login"):
             seen["login"] = request.content.decode()
             return httpx.Response(200, json={"token": "Bearer jwt-xyz"})
@@ -26,9 +26,9 @@ def test_bootstrap_logs_in_then_creates_key():
         "https://api.test/v2", "4711", "pw", name="pland-cli", transport=_transport(handler)
     )
     assert key == "12345678:abcdef"
-    # Login geht mit ID/Nummer im username-Feld, nicht mit E-Mail.
+    # Login uses the ID/number in the username field, not an email address.
     assert '"username":"4711"' in seen["login"]
-    # Bearer-Token korrekt weitergereicht (Prefix nicht verdoppelt).
+    # Bearer token passed through correctly, prefix not doubled.
     assert seen["auth"] == "Bearer jwt-xyz"
     # Credentials gehen NUR an /auth/login, niemals an /api_key/.
     assert "pw" not in seen["keybody"]

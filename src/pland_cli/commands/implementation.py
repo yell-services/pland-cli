@@ -17,8 +17,8 @@ def implementation_group():
 @click.option("--employment", "employment", default=None, help="")
 @click.option("--department", "department", default=None, help="")
 @click.option("--tags", "tags", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_implementation_get_progress(ctx, limit, offset, sort, userName, employment, department, tags, fetch_all, extra_params):
     """Get user implementation progress"""

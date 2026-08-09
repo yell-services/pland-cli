@@ -11,8 +11,8 @@ def search_group():
 
 @search_group.command("perform-global")
 @click.option("--searchTerm", "searchTerm", default=None, help="The term to search for")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_search_perform_global(ctx, searchTerm, fetch_all, extra_params):
     """Perform Global Search"""

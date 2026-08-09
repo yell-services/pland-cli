@@ -13,7 +13,7 @@ from pland_cli.core.config import resolve_config
 
 
 def _start_repl(ctx: click.Context) -> None:
-    click.echo("◆ pland REPL — 'help' für Befehle, 'quit' zum Beenden")
+    click.echo("◆ pland REPL — 'help' for commands, 'quit' to exit")
     _click_repl(ctx)
 
 
@@ -25,11 +25,11 @@ def repl_cmd(ctx: click.Context) -> None:
 
 
 def _attach_client(ctx: click.Context) -> None:
-    """Holt den PlandClient lazy in ctx.obj; Exit-Code 3 wenn kein Key vorliegt.
+    """Lazily place the PlandClient in ctx.obj; exit code 3 when no key is set.
 
-    Wird von run_operation (und bei Bedarf von Commands) aufgerufen — NICHT von
-    cli.py selbst, damit key-freie Commands (schema/describe/auth status/--help)
-    ohne API-Key laufen.
+    Called by run_operation (and by commands when needed), NOT by cli.py itself,
+    so that key-free commands (schema/describe/auth status/--help) run without
+    an API key.
     """
     if ctx.obj.get("client"):
         return
@@ -51,7 +51,7 @@ def _attach_client(ctx: click.Context) -> None:
 @click.version_option(__version__, "--version")
 @click.pass_context
 def main(ctx: click.Context, as_json: bool, profile: str | None) -> None:
-    """pland — CLI für die pland.app API."""
+    """pland — CLI for the pland.app API."""
     ctx.ensure_object(dict)
     ctx.obj["as_json"] = as_json
     ctx.obj["profile"] = profile

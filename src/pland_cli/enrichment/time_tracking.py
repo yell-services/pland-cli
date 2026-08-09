@@ -12,10 +12,10 @@ from pland_cli.utils.timestamps import parse_date, to_ms
 @click.command()
 @click.option("--from", "frm", required=True, help="Arbeitstag-Start YYYY-MM-DD.")
 @click.option("--to", "to", required=True, help="Arbeitstag-Ende YYYY-MM-DD.")
-@click.option("--unapproved", is_flag=True, help="Nur nicht freigegebene Einträge.")
+@click.option("--unapproved", is_flag=True, help="Only entries that are not approved.")
 @click.pass_context
 def timetracking_in_range(ctx: click.Context, frm: str, to: str, unapproved: bool) -> None:
-    """Zeiteinträge nach Arbeitstag (clientseitig nach trackingJobDate gefiltert)."""
+    """Time entries by working day, filtered client-side on trackingJobDate."""
     out_mod.set_json(ctx.obj.get("as_json", False))
     client = get_client(ctx)
     params = {"timeTrackingNotApproved": "true"} if unapproved else {}

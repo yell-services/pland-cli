@@ -14,8 +14,8 @@ def payment_terms_group():
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--sortKey", "sortKey", default=None, type=click.Choice(["paymentGoal", "description", "created", "updated"]), help="Field to sort by")
 @click.option("--sortDirection", "sortDirection", default=None, type=click.Choice(["asc", "desc"]), help="Sort direction")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_payment_terms_list(ctx, skip, limit, sortKey, sortDirection, fetch_all, extra_params):
     """List payment terms"""
@@ -28,10 +28,10 @@ def _cmd_payment_terms_list(ctx, skip, limit, sortKey, sortDirection, fetch_all,
     )
 
 @payment_terms_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_payment_terms_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create payment term"""
@@ -45,7 +45,7 @@ def _cmd_payment_terms_create(ctx, data, dry_run, assume_yes, extra_params):
 
 @payment_terms_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_payment_terms_get(ctx, id, extra_params):
     """Get payment term"""
@@ -59,9 +59,9 @@ def _cmd_payment_terms_get(ctx, id, extra_params):
 
 @payment_terms_group.command("delete")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_payment_terms_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete payment term"""
@@ -75,10 +75,10 @@ def _cmd_payment_terms_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @payment_terms_group.command("update")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_payment_terms_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update payment term"""

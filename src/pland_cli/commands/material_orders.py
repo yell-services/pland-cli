@@ -13,8 +13,8 @@ def material_orders_group():
 @click.option("--limit", "limit", default=None, type=int, help="")
 @click.option("--offset", "offset", default=None, type=int, help="")
 @click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_list(ctx, limit, offset, sort, fetch_all, extra_params):
     """List all orders"""
@@ -38,8 +38,8 @@ def _cmd_material_orders_list(ctx, limit, offset, sort, fetch_all, extra_params)
 @click.option("--to", "to", default=None, help="")
 @click.option("--customerIds", "customerIds", default=None, help="")
 @click.option("--searchOrders", "searchOrders", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_count(ctx, status, ids, objectId, objectIds, objectManagers, objectName, orderStatus, from_, to, customerIds, searchOrders, fetch_all, extra_params):
     """Count orders"""
@@ -52,8 +52,8 @@ def _cmd_material_orders_count(ctx, status, ids, objectId, objectIds, objectMana
     )
 
 @material_orders_group.command("count-new")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_count_new(ctx, fetch_all, extra_params):
     """Count new orders"""
@@ -67,8 +67,8 @@ def _cmd_material_orders_count_new(ctx, fetch_all, extra_params):
 
 @material_orders_group.command("get-distinct-values")
 @click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     """Get distinct values for orders"""
@@ -82,7 +82,7 @@ def _cmd_material_orders_get_distinct_values(ctx, fieldKey, fetch_all, extra_par
 
 @material_orders_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_get(ctx, id, extra_params):
     """Get order by ID"""
@@ -96,9 +96,9 @@ def _cmd_material_orders_get(ctx, id, extra_params):
 
 @material_orders_group.command("delete", short_help="🟡 Delete order")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete order"""
@@ -112,10 +112,10 @@ def _cmd_material_orders_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @material_orders_group.command("update", short_help="🟡 Update order")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update order"""
@@ -129,9 +129,9 @@ def _cmd_material_orders_update(ctx, id, data, dry_run, assume_yes, extra_params
 
 @material_orders_group.command("get-or-create-chat")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_params):
     """Get/create material order chat"""
@@ -145,9 +145,9 @@ def _cmd_material_orders_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_
 
 @material_orders_group.command("finish", short_help="🟡 Mark order as finished")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_finish(ctx, id, dry_run, assume_yes, extra_params):
     """Mark order as finished"""
@@ -163,9 +163,9 @@ def _cmd_material_orders_finish(ctx, id, dry_run, assume_yes, extra_params):
 @click.argument("ID")
 @click.argument("TYPE")
 @click.argument("ORDERITEMID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_remove_item(ctx, id, type, orderItemId, dry_run, assume_yes, extra_params):
     """Remove order item"""
@@ -181,9 +181,9 @@ def _cmd_material_orders_remove_item(ctx, id, type, orderItemId, dry_run, assume
 @click.argument("ID")
 @click.argument("ARTICLEID")
 @click.argument("BUDGET")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_change_budget(ctx, id, articleId, budget, dry_run, assume_yes, extra_params):
     """Change order items budget or adds article if missing"""
@@ -197,8 +197,8 @@ def _cmd_material_orders_change_budget(ctx, id, articleId, budget, dry_run, assu
 
 @material_orders_group.command("get-pdf")
 @click.argument("ID")
-@click.option("--output", type=click.Path(), help="Antwort in Datei schreiben.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--output", type=click.Path(), help="Write the response to a file.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_material_orders_get_pdf(ctx, id, output, extra_params):
     """Generate order PDF"""

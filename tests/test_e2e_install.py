@@ -7,7 +7,7 @@ pytestmark = pytest.mark.live
 
 
 def test_module_help_runs():
-    """Verifiziert, dass die CLI als Modul lauffähig ist (Smoke, kein Key nötig)."""
+    """Verify the CLI runs as a module (smoke test, no key required)."""
     out = subprocess.run([sys.executable, "-m", "pland_cli.cli", "--help"],
                          capture_output=True, text=True)
     assert out.returncode == 0

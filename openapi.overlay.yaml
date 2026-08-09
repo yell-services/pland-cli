@@ -1,20 +1,20 @@
-# Korrekturen an openapi.yaml, die pland.app (noch) nicht veröffentlicht hat.
+# Corrections to openapi.yaml that pland.app has not published (yet).
 #
-# openapi.yaml wird unverändert von docs.pland.app übernommen — diese Datei
-# legt sich beim Laden darüber (siehe _codegen/spec.py). Jeder Eintrag ist
-# gegen die Live-API (cloud-api.pland.app/v2) verifiziert; das Datum sagt,
-# wann. Wird ein Punkt upstream gefixt, fliegt der Eintrag hier raus.
+# openapi.yaml is a verbatim copy of docs.pland.app — this file is layered on
+# top at load time (see _codegen/spec.py). Every entry is verified against the
+# live API (cloud-api.pland.app/v2); the date below says when. Once a point is
+# fixed upstream, its entry here goes away.
 #
-# Verifikationsmethode: GET gegen die echte API. Existiert eine Route nicht,
-# greift der Fallback /{resource}/{id} und die API antwortet mit
+# How entries are verified: a GET against the real API. When a route does not
+# exist, the /{resource}/{id} fallback kicks in and the API answers with
 # "Failed to parse Id: <segment>".
 
 verified: 2026-08-09
 
-# --- Operationen, die die Spec dokumentiert, die API aber nicht hat ---------
-# Alle GETs liefern "Failed to parse Id: <segment>" — die Route existiert
-# nicht. Nur GET wird entfernt; POST/PATCH/DELETE auf denselben Pfaden sind
-# nicht nachgeprüft und bleiben stehen.
+# --- Operations the spec documents but the API does not serve ---------------
+# Every one of these GETs answers "Failed to parse Id: <segment>", meaning the
+# route does not exist. Only GET is removed; POST/PATCH/DELETE on the same
+# paths are unverified and stay in place.
 remove:
   /absences/capacity: [get]
   /absences/time-frame-check: [get]
@@ -25,15 +25,15 @@ remove:
   /salaries/jobOccurrencesWithoutSalaries: [get]
   /surcharges/count: [get]
   /surcharges/distinctValues: [get]
-  # Kein "Failed to parse Id", sondern "Method not allowed. Must be one of: POST".
+  # Not "Failed to parse Id" but "Method not allowed. Must be one of: POST".
   /invoiceReminders/: [get]
   /invoiceReminders/templates: [get]
 
-  # Pfade mit {id}: hier greift ein zweites Orakel. Existiert die Route,
-  # erreicht eine ungültige ID den ID-Parser und die API meldet
-  # "Error parsing ObjectId string" / "Failed to parse Id" / "Missing
-  # parameters". Bleibt es bei "Not found.", hat der Router nicht gematcht.
-  # Kontrolliert an 57 Pfaden gleicher Form, von denen 49 den Parser erreichen.
+  # Paths with {id} need a second oracle. When the route exists, an invalid ID
+  # reaches the ID parser and the API reports "Error parsing ObjectId string" /
+  # "Failed to parse Id" / "Missing parameters". If it stays at "Not found.",
+  # the router never matched. Checked against 57 paths of the same shape, 49 of
+  # which do reach the parser.
   /absences/{id}/affected-jobs: [get]
   /absences/{id}/replacement-jobs: [get]
   /complaints/{id}/generateResponse: [get]
@@ -43,36 +43,36 @@ remove:
   /qualityControl/objectManager/{id}: [get]
   /salaries/objects/{objectId}: [get]
 
-# --- Query-Parameter, die die Spec falsch beschreibt ------------------------
-# Korrektur nach Parametername, quer über alle Pfade. `expect` ist die Zahl
-# der Treffer in der rohen Spec — weicht sie ab, hat sich upstream etwas
-# bewegt und der Eintrag gehört überprüft (test_overlay_params_still_apply).
+# --- Query parameters the spec gets wrong -----------------------------------
+# Corrections by parameter name, across all paths. `expect` is the number of
+# matches in the raw spec — if it differs, something moved upstream and the
+# entry wants revisiting (test_overlay_params_still_apply).
 params:
-  # Die API verlangt durchgängig `fieldKey`. Die Spec schreibt bei 16 von 18
-  # distinctValues-Endpoints `field` und bekommt dafür
+  # The API expects `fieldKey` throughout. The spec writes `field` on 16 of 18
+  # distinctValues endpoints and gets back
   # "Missing parameters. Required parameters are: fieldKey".
-  # In der rohen Spec kommt `field` ausschliesslich auf distinctValues vor.
+  # In the raw spec, `field` appears on distinctValues endpoints only.
   field:
     expect: 16
     set:
       name: fieldKey
 
-  # Die Spec dokumentiert durchweg `name:1` — das lehnt die API mit
-  # "Sorting needs by and direction" ab. Verifiziert: JSON funktioniert auf
-  # allen 35 GET-Endpoints mit sort-Parameter, das Doppelpunkt-Format auf
-  # keinem (drei ignorieren den Parameter stillschweigend).
+  # The spec documents `name:1` everywhere, which the API rejects with
+  # "Sorting needs by and direction". Verified: JSON works on all 35 GET
+  # endpoints carrying a sort parameter, the colon form on none of them
+  # (three ignore the parameter silently).
   sort:
-    expect: 39   # in der rohen Spec; 2 davon sitzen auf Pfaden, die `remove` streicht
+    expect: 39   # in the raw spec; 2 of them sit on paths that `remove` deletes
     set:
-      # Bleibt unter 120 Zeichen — laenger kuerzt der Renderer den Hilfetext ab.
+      # Stays under 120 characters — beyond that the renderer truncates help text.
       description: >-
         Sort as JSON: {"by":"<field>","direction":1} (1 asc, -1 desc).
         The spec's "field:1" form returns 400.
 
-# --- Endpoints, die die API hat, die Spec aber nicht ------------------------
-# Per Kontrollprobe gefunden: Antwort weicht von der Signatur einer garantiert
-# nicht existierenden Route derselben Ressource ab. Nur GET ist verifiziert —
-# Schreiboperationen stehen hier bewusst nicht drin.
+# --- Endpoints the API serves but the spec does not document ----------------
+# Found via a control probe: the response differs from the signature of a route
+# on the same resource that is guaranteed not to exist. Only GET is verified —
+# write operations are deliberately absent here.
 paths:
   /absences/count:
     get:
@@ -136,8 +136,8 @@ paths:
       responses:
         '200': {description: Count}
 
-  # Custom-Field-Definitionen. Die Spec kennt `customFields` nur als Feld in
-  # /users/ und /objects/, nicht als eigene Ressource.
+  # Custom field definitions. The spec knows `customFields` only as a field on
+  # /users/ and /objects/, not as a resource of its own.
   /customFields/:
     get:
       tags: [Custom Fields]
@@ -170,7 +170,7 @@ paths:
       responses:
         '200': {description: Distinct values}
 
-  # Export-Jobs (exportStatus, type, summary, startedAt, acceptedExport).
+  # Export jobs (exportStatus, type, summary, startedAt, acceptedExport).
   /exports/:
     get:
       tags: [Exports]
@@ -184,8 +184,8 @@ paths:
       responses:
         '200': {description: List of exports}
 
-  # Tarifvorlagen (payTypeEntries, surchargeEntries) — der Tarifvorlagen-Wizard
-  # aus dem pland-Release vom 22.05.2026.
+  # Collective-agreement templates (payTypeEntries, surchargeEntries) — the
+  # template wizard from the pland release of 2026-05-22.
   /payTypeTemplates/:
     get:
       tags: [Pay Type Templates]

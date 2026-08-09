@@ -19,8 +19,8 @@ def quality_control_group():
 @click.option("--objectId", "objectId", default=None, help="")
 @click.option("--userId", "userId", default=None, help="")
 @click.option("--objectManagers", "objectManagers", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_quality_control_list(ctx, limit, offset, sort, status, ids, name, objectId, userId, objectManagers, fetch_all, extra_params):
     """List quality control entries"""
@@ -33,10 +33,10 @@ def _cmd_quality_control_list(ctx, limit, offset, sort, status, ids, name, objec
     )
 
 @quality_control_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_quality_control_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create quality control entry"""
@@ -50,7 +50,7 @@ def _cmd_quality_control_create(ctx, data, dry_run, assume_yes, extra_params):
 
 @quality_control_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_quality_control_get(ctx, id, extra_params):
     """Get quality control entry"""

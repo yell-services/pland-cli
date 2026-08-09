@@ -18,8 +18,8 @@ def service_report_group():
 @click.option("--customerId", "customerId", default=None, help="")
 @click.option("--objectIds", "objectIds", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_list(ctx, limit, offset, serviceReportTypeOf, assignmentIds, activityTypeId, customerId, objectIds, generalField, fetch_all, extra_params):
     """List service reports"""
@@ -32,10 +32,10 @@ def _cmd_service_report_list(ctx, limit, offset, serviceReportTypeOf, assignment
     )
 
 @service_report_group.command("create")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_create(ctx, data, dry_run, assume_yes, extra_params):
     """Create service report"""
@@ -49,7 +49,7 @@ def _cmd_service_report_create(ctx, data, dry_run, assume_yes, extra_params):
 
 @service_report_group.command("get")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_get(ctx, id, extra_params):
     """Get service report"""
@@ -63,9 +63,9 @@ def _cmd_service_report_get(ctx, id, extra_params):
 
 @service_report_group.command("delete", short_help="🟡 Delete service report")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_delete(ctx, id, dry_run, assume_yes, extra_params):
     """Delete service report"""
@@ -79,10 +79,10 @@ def _cmd_service_report_delete(ctx, id, dry_run, assume_yes, extra_params):
 
 @service_report_group.command("update", short_help="🟡 Update service report")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_update(ctx, id, data, dry_run, assume_yes, extra_params):
     """Update service report"""
@@ -95,8 +95,8 @@ def _cmd_service_report_update(ctx, id, data, dry_run, assume_yes, extra_params)
     )
 
 @service_report_group.command("get-last-number")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_get_last_number(ctx, fetch_all, extra_params):
     """Get last service report number"""
@@ -115,8 +115,8 @@ def _cmd_service_report_get_last_number(ctx, fetch_all, extra_params):
 @click.option("--customerId", "customerId", default=None, help="")
 @click.option("--objectIds", "objectIds", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_get_count(ctx, serviceReportTypeOf, assignmentIds, activityTypeId, customerId, objectIds, generalField, fetch_all, extra_params):
     """Get service report count"""
@@ -130,10 +130,10 @@ def _cmd_service_report_get_count(ctx, serviceReportTypeOf, assignmentIds, activ
 
 @service_report_group.command("generate-pdf", short_help="🟡 Generate service report PDF")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_generate_pdf(ctx, id, data, dry_run, assume_yes, extra_params):
     """Generate service report PDF"""
@@ -147,7 +147,7 @@ def _cmd_service_report_generate_pdf(ctx, id, data, dry_run, assume_yes, extra_p
 
 @service_report_group.command("list-referenced-faktura-documents")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_list_referenced_faktura_documents(ctx, id, extra_params):
     """List referenced faktura documents"""
@@ -161,10 +161,10 @@ def _cmd_service_report_list_referenced_faktura_documents(ctx, id, extra_params)
 
 @service_report_group.command("attach-documents-to")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_attach_documents_to(ctx, id, data, dry_run, assume_yes, extra_params):
     """Attach documents to service report"""
@@ -178,10 +178,10 @@ def _cmd_service_report_attach_documents_to(ctx, id, data, dry_run, assume_yes, 
 
 @service_report_group.command("add-documents-to")
 @click.argument("ID")
-@click.option("--file", "file_", type=click.Path(exists=True), help="Datei (multipart).")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_add_documents_to(ctx, id, file_, dry_run, assume_yes, extra_params):
     """Add documents to service report"""
@@ -195,7 +195,7 @@ def _cmd_service_report_add_documents_to(ctx, id, file_, dry_run, assume_yes, ex
 
 @service_report_group.command("get-or-create-chat")
 @click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_get_or_create_chat(ctx, id, extra_params):
     """Get or create service report chat"""
@@ -208,10 +208,10 @@ def _cmd_service_report_get_or_create_chat(ctx, id, extra_params):
     )
 
 @service_report_group.command("create-preview", short_help="🟡 Create service report preview")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_create_preview(ctx, data, dry_run, assume_yes, extra_params):
     """Create service report preview"""
@@ -225,9 +225,9 @@ def _cmd_service_report_create_preview(ctx, data, dry_run, assume_yes, extra_par
 
 @service_report_group.command("duplicate")
 @click.argument("ID")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_duplicate(ctx, id, dry_run, assume_yes, extra_params):
     """Duplicate service report"""
@@ -240,11 +240,11 @@ def _cmd_service_report_duplicate(ctx, id, dry_run, assume_yes, extra_params):
     )
 
 @service_report_group.command("generate-combined-pdf", short_help="🟡 Generate combined service report PDF")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--output", type=click.Path(), help="Antwort in Datei schreiben.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--output", type=click.Path(), help="Write the response to a file.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_generate_combined_pdf(ctx, data, output, dry_run, assume_yes, extra_params):
     """Generate combined service report PDF"""
@@ -257,11 +257,11 @@ def _cmd_service_report_generate_combined_pdf(ctx, data, output, dry_run, assume
     )
 
 @service_report_group.command("generate-zip", short_help="🟡 Generate service report ZIP archive")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--output", type=click.Path(), help="Antwort in Datei schreiben.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--output", type=click.Path(), help="Write the response to a file.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_generate_zip(ctx, data, output, dry_run, assume_yes, extra_params):
     """Generate service report ZIP archive"""
@@ -274,10 +274,10 @@ def _cmd_service_report_generate_zip(ctx, data, output, dry_run, assume_yes, ext
     )
 
 @service_report_group.command("set-fixed", short_help="🟡 Set service reports to fixed")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_set_fixed(ctx, data, dry_run, assume_yes, extra_params):
     """Set service reports to fixed"""
@@ -293,7 +293,7 @@ def _cmd_service_report_set_fixed(ctx, data, dry_run, assume_yes, extra_params):
 @click.argument("USERID")
 @click.option("--assignmentId", "assignmentId", default=None, help="Filter by specific assignment ID (optional)")
 @click.option("--includeFaktured", "includeFaktured", default=None, type=bool, help="Include service reports that have been invoiced (default: false)")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_get_user(ctx, userId, assignmentId, includeFaktured, extra_params):
     """Get user service reports"""
@@ -307,10 +307,10 @@ def _cmd_service_report_get_user(ctx, userId, assignmentId, includeFaktured, ext
 
 @service_report_group.command("create-from-app", short_help="🟡 Create service report from app")
 @click.argument("USERID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_create_from_app(ctx, userId, data, dry_run, assume_yes, extra_params):
     """Create service report from app"""
@@ -325,10 +325,10 @@ def _cmd_service_report_create_from_app(ctx, userId, data, dry_run, assume_yes, 
 @service_report_group.command("sign", short_help="🟡 Sign service report")
 @click.argument("USERID")
 @click.argument("SERVICEREPORTID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_sign(ctx, userId, serviceReportId, data, dry_run, assume_yes, extra_params):
     """Sign service report"""
@@ -341,10 +341,10 @@ def _cmd_service_report_sign(ctx, userId, serviceReportId, data, dry_run, assume
     )
 
 @service_report_group.command("set-to-finished", short_help="🟡 Set service reports to finished")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_set_to_finished(ctx, data, dry_run, assume_yes, extra_params):
     """Set service reports to finished"""
@@ -358,10 +358,10 @@ def _cmd_service_report_set_to_finished(ctx, data, dry_run, assume_yes, extra_pa
 
 @service_report_group.command("set-to-faktured", short_help="🟡 Set service report to faktured")
 @click.argument("ID")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_set_to_faktured(ctx, id, data, dry_run, assume_yes, extra_params):
     """Set service report to faktured"""
@@ -374,10 +374,10 @@ def _cmd_service_report_set_to_faktured(ctx, id, data, dry_run, assume_yes, extr
     )
 
 @service_report_group.command("set-multiple-to-faktured", short_help="🟡 Set multiple service reports to faktured")
-@click.option("--data", default=None, help="Request-Body als JSON-String.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Request nur anzeigen, nicht senden.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Bestaetigung ueberspringen (nur 🟡; 🔴 verlangt Terminal-Eingabe).")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--data", default=None, help="Request body as a JSON string.")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_set_multiple_to_faktured(ctx, data, dry_run, assume_yes, extra_params):
     """Set multiple service reports to faktured"""
@@ -391,8 +391,8 @@ def _cmd_service_report_set_multiple_to_faktured(ctx, data, dry_run, assume_yes,
 
 @service_report_group.command("get-distinct-values")
 @click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
 def _cmd_service_report_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     """Distinct values for a service report field"""

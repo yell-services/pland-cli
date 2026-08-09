@@ -5,7 +5,7 @@ from pland_cli.core.pagination import collect_all
 
 
 class FakeClient:
-    """Liefert vorgegebene Seiten; simuliert den Overlap-Bug (doppelte _id)."""
+    """Serves predefined pages; reproduces the overlap bug (duplicate _id)."""
 
     def __init__(self, pages, reject_sort=False):
         self.pages = pages
@@ -26,7 +26,7 @@ class FakeClient:
 def test_collect_dedups_overlapping_ids():
     pages = [
         [{"_id": "a"}, {"_id": "b"}],
-        [{"_id": "b"}, {"_id": "c"}],  # 'b' überlappt
+        [{"_id": "b"}, {"_id": "c"}],  # 'b' overlaps
         [],
     ]
     items = collect_all(FakeClient(pages), "/salaries/", page_size=2)
@@ -45,8 +45,8 @@ def test_collect_stops_on_empty():
 
 
 def test_collect_sends_stable_sort():
-    # Ohne stabile Sortierung liefert die API Seiten in zufaelliger
-    # Reihenfolge → Duplikate + verlorene Datensaetze (506 von 1705).
+    # Without a stable sort the API returns pages in random order →
+    # duplicates and lost records (506 of 1705).
     client = FakeClient([[{"_id": "a"}, {"_id": "b"}], []])
     collect_all(client, "/invoices/", page_size=2)
     for params in client.params_log:
@@ -60,7 +60,7 @@ def test_collect_respects_caller_sort():
 
 
 def test_collect_falls_back_when_sort_rejected():
-    # Endpoints ohne sort-Support → 400; Retry ohne sort, Dedup bleibt Backstop.
+    # Endpoints without sort support → 400; retry without it, dedup stays as backstop.
     client = FakeClient([[{"_id": "a"}, {"_id": "b"}], []], reject_sort=True)
     items = collect_all(client, "/legacy/", page_size=2)
     assert [i["_id"] for i in items] == ["a", "b"]
@@ -69,8 +69,8 @@ def test_collect_falls_back_when_sort_rejected():
 
 
 def test_collect_does_not_drop_sort_on_server_error():
-    # Ein 500 darf nicht als "Endpoint kennt sort nicht" durchgehen — sonst
-    # liefe die Pagination still ohne stabile Sortierung weiter.
+    # A 500 must not pass as "this endpoint does not know sort" — pagination
+    # would otherwise carry on silently without a stable order.
     class Failing(FakeClient):
         def get(self, path, params=None):
             self.params_log.append(dict(params or {}))
@@ -82,14 +82,14 @@ def test_collect_does_not_drop_sort_on_server_error():
     except PlandError as exc:
         assert exc.status == 500
     else:
-        raise AssertionError("PlandError erwartet")
-    assert len(client.params_log) == 1  # kein Retry ohne sort
+        raise AssertionError("expected a PlandError")
+    assert len(client.params_log) == 1  # no retry without sort
 
 
 def test_collect_advances_by_delivered_rows():
-    # /salaries/ deckelt serverseitig bei 200, egal welches limit angefragt
-    # wird. Ein Offset, der um die *angeforderte* Groesse springt, ueberliest
-    # die Differenz — gemessen 9800 statt 24483 Zeilen.
+    # /salaries/ caps server-side at 200 no matter what limit is requested. An
+    # offset that jumps by the *requested* size skips the difference — measured
+    # 9800 instead of 24483 rows.
     class Capped(FakeClient):
         def get(self, path, params=None):
             self.params_log.append(dict(params or {}))
@@ -104,8 +104,8 @@ def test_collect_advances_by_delivered_rows():
 
 
 def test_collect_raises_instead_of_truncating_on_endless_paging():
-    # Server deckelt den Offset und reicht immer neue _ids nach: ohne
-    # Obergrenze liefe das ewig. Ein Fehler ist besser als ein stilles Teilergebnis.
+    # The server caps the offset and keeps handing back fresh _ids: without a
+    # ceiling this runs forever. An error beats a silent partial result.
     class Endless(FakeClient):
         def __init__(self):
             super().__init__([])
@@ -118,6 +118,6 @@ def test_collect_raises_instead_of_truncating_on_endless_paging():
     try:
         collect_all(Endless(), "/x/", {"sort": "custom"}, page_size=1)
     except RuntimeError as exc:
-        assert "im Kreis" in str(exc)
+        assert "in circles" in str(exc)
     else:
-        raise AssertionError("RuntimeError erwartet")
+        raise AssertionError("expected a RuntimeError")
