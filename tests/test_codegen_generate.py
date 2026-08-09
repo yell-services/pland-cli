@@ -1,3 +1,7 @@
+from pathlib import Path
+
+import yaml
+
 from pland_cli._codegen.generate import generate_modules
 from pland_cli._codegen.spec import load_spec
 
@@ -64,9 +68,81 @@ def test_collision_raises(tmp_path, monkeypatch):
 def test_load_spec_dev_tree_resolves_real_spec():
     """load_spec() with no args must work in the editable dev tree.
 
-    The package resource ``pland_cli/openapi.yaml`` is absent from the src
-    tree (force-included only on wheel build), so load_spec falls back to the
-    repo-root ``openapi.yaml``. The real spec has 421 paths.
+    The package resources ``pland_cli/openapi.yaml`` and
+    ``pland_cli/openapi.overlay.yaml`` are absent from the src tree
+    (force-included only on wheel build), so load_spec falls back to the repo
+    root. Upstream ships 421 paths; das Overlay streicht die, die die API nicht
+    bedient, und ergänzt die, die sie undokumentiert bedient.
     """
+    root = Path(__file__).resolve().parents[1]
+    raw = load_spec(root / "openapi.yaml")
+    assert len(raw["paths"]) == 421
+
+    overlay = yaml.safe_load((root / "openapi.overlay.yaml").read_text(encoding="utf-8"))
+    methods = {"get", "post", "put", "patch", "delete"}
+    # Ein Pfad verschwindet nur, wenn `remove` seine letzte Operation nimmt.
+    dropped = sum(1 for path, gone in overlay["remove"].items()
+                  if not (set(raw["paths"][path]) & methods) - set(gone))
+    assert len(load_spec()["paths"]) == len(raw["paths"]) - dropped + len(overlay["paths"])
+
+
+def test_overlay_removes_renames_and_adds():
+    """Die drei Overlay-Sektionen greifen auf der echten Spec."""
     spec = load_spec()
-    assert len(spec["paths"]) == 421
+    # remove: Route existiert live nicht ("Failed to parse Id: count")
+    assert "/surcharges/count" not in spec["paths"]
+    # remove: nur GET fällt weg, POST bleibt stehen
+    assert set(spec["paths"]["/invoiceReminders/"]) == {"post"}
+    # params: die API verlangt fieldKey, die Spec schrieb field
+    names = [p["name"] for p in spec["paths"]["/invoices/distinctValues"]["get"]["parameters"]]
+    assert names == ["fieldKey"]
+    # params: das sort-Beispiel der Spec ("name:1") quittiert die API mit 400
+    sort = next(p for p in spec["paths"]["/invoices/"]["get"]["parameters"]
+                if p["name"] == "sort")
+    assert '{"by"' in sort["description"]
+    # paths: undokumentierte Ressource
+    assert spec["paths"]["/payTypeTemplates/"]["get"]["tags"] == ["Pay Type Templates"]
+
+
+def test_overlay_is_a_pure_correction_layer():
+    """Jeder Overlay-Eintrag muss die echte Spec treffen.
+
+    Fixt pland.app einen Punkt upstream, schlägt das hier fehl statt still
+    ins Leere zu laufen — genau dann gehört der Eintrag gelöscht.
+    """
+    root = Path(__file__).resolve().parents[1]
+    raw = load_spec(root / "openapi.yaml")
+    overlay = yaml.safe_load((root / "openapi.overlay.yaml").read_text(encoding="utf-8"))
+
+    for path, methods in overlay["remove"].items():
+        assert path in raw["paths"], f"remove: {path} gibt es upstream nicht mehr"
+        for method in methods:
+            assert method in raw["paths"][path], f"remove: {method} {path} ist weg"
+
+    for path in overlay["paths"]:
+        assert path not in raw["paths"], f"paths: {path} ist upstream dokumentiert"
+
+
+def test_overlay_params_still_apply():
+    """Die Parameter-Korrekturen greifen genau so oft wie dokumentiert.
+
+    ``expect`` sichert die namensbasierten Regeln gegen stille Ausweitung ab:
+    fuehrt upstream denselben Parameternamen anderswo ein oder korrigiert die
+    Stellen, weicht die Trefferzahl ab und der Eintrag will neu bewertet werden.
+    """
+    root = Path(__file__).resolve().parents[1]
+    raw = load_spec(root / "openapi.yaml")
+    overlay = yaml.safe_load((root / "openapi.overlay.yaml").read_text(encoding="utf-8"))
+
+    counts: dict[str, int] = {}
+    for ops in raw["paths"].values():
+        for op in ops.values():
+            if not isinstance(op, dict):
+                continue
+            for param in op.get("parameters") or []:
+                counts[param.get("name")] = counts.get(param.get("name"), 0) + 1
+
+    for name, fix in overlay["params"].items():
+        assert counts.get(name) == fix["expect"], (
+            f"params: {name} kommt {counts.get(name)}x vor, erwartet {fix['expect']}"
+        )

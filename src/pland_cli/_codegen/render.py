@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import keyword
 import re
 
@@ -26,9 +27,9 @@ def render_command(op: Operation) -> str:
     risk = "free" if op.method == "get" else classify(op.method, op.path, op.tag)
     marker = {"confirm": "🟡 ", "critical": "🔴 "}.get(risk, "")
     if marker:
-        short = (marker + (op.summary or "").replace('"', "'"))[:100]
+        short = json.dumps((marker + (op.summary or ""))[:100], ensure_ascii=False)
         lines: list[str] = [
-            f'@{_group_var(op.group)}.command("{op.command}", short_help="{short}")'
+            f'@{_group_var(op.group)}.command("{op.command}", short_help={short})'
         ]
     else:
         lines = [f'@{_group_var(op.group)}.command("{op.command}")']
@@ -43,7 +44,9 @@ def render_command(op: Operation) -> str:
         opt = p["name"]
         flag = "--" + opt.replace("_", "-")
         schema = p.get("schema", {})
-        help_txt = (p.get("description") or "").replace('"', "'")[:120]
+        # json.dumps liefert das Literal inkl. Quotes und escapt " korrekt —
+        # ein blindes " -> ' würde JSON-Beispiele im Hilfetext unbrauchbar machen.
+        help_txt = json.dumps((p.get("description") or "")[:120], ensure_ascii=False)
         extra = ""
         if "enum" in schema:
             choices = ", ".join(f'"{c}"' for c in schema["enum"])
@@ -51,7 +54,7 @@ def render_command(op: Operation) -> str:
         elif schema.get("type") in _PYTYPE:
             extra = f", type={_PYTYPE[schema['type']]}"
         lines.append(
-            f'@click.option("{flag}", "{_ident(opt)}", default=None{extra}, help="{help_txt}")'
+            f'@click.option("{flag}", "{_ident(opt)}", default=None{extra}, help={help_txt})'
         )
         sig_params.append(_ident(opt))
 

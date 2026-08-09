@@ -12,7 +12,7 @@ def users_group():
 @users_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of users to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of users to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort order (e.g., name:1, status.createdAt:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--name", "name", default=None, help="")
 @click.option("--username", "username", default=None, help="")
 @click.option("--status", "status", default=None, help="")
@@ -384,6 +384,20 @@ def _cmd_users_get_available_tags(ctx, name, username, status, employment, ids, 
     run_operation(
         ctx, method='get', path="/users/tags",
         query={"name": name, "username": username, "status": status, "employment": employment, "ids": ids, "excludeIds": excludeIds, "tags": tags, "activityTypeId": activityTypeId, "workedOnObjects": workedOnObjects, "worksOnObject": worksOnObject, "currentlyWorking": currentlyWorking, "basedOnObjectManager": basedOnObjectManager}, extra_params=extra_params, fetch_all=fetch_all,
+        data=None, file_=None, output=None, dry_run=False,
+        risk="free", draftable=None, assume_yes=False,
+    )
+
+@users_group.command("get-own")
+@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
+@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.pass_context
+def _cmd_users_get_own(ctx, fetch_all, extra_params):
+    """Get the user the API key belongs to"""
+    from pland_cli._codegen.runtime import run_operation
+    run_operation(
+        ctx, method='get', path="/users/self",
+        query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
     )

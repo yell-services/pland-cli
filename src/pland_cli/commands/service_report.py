@@ -389,5 +389,20 @@ def _cmd_service_report_set_multiple_to_faktured(ctx, data, dry_run, assume_yes,
         risk="confirm", draftable=None, assume_yes=assume_yes,
     )
 
+@service_report_group.command("get-distinct-values")
+@click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for")
+@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
+@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.pass_context
+def _cmd_service_report_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
+    """Distinct values for a service report field"""
+    from pland_cli._codegen.runtime import run_operation
+    run_operation(
+        ctx, method='get', path="/serviceReports/distinctValues",
+        query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
+        data=None, file_=None, output=None, dry_run=False,
+        risk="free", draftable=None, assume_yes=False,
+    )
+
 def register(root):
     root.add_command(service_report_group)

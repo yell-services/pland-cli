@@ -7,7 +7,7 @@
 
 > Inoffizielle, agent-native CLI für die [pland.app](https://pland.app) API —
 > Zeiterfassung, Lohn, Urlaub, Objekte, Rechnungen, Qualitätskontrolle u. v. m.
-> **529 Commands** über 53 Ressourcen-Gruppen, generiert aus der OpenAPI-Spec,
+> **522 Commands** über 56 Ressourcen-Gruppen, generiert aus der OpenAPI-Spec,
 > mit JSON-Ausgabe für KI-Agenten.
 
 > **Keywords:** pland.app cli · pland api client · pland.app api · agent-native cli · claude code skill · codex cli skill · zeiterfassung lohn urlaub rechnungen api
@@ -55,8 +55,8 @@ Wenn du ein Agent bist und das hier liest, um die CLI zu nutzen:
 
 1. **Installieren:** `uv tool install git+https://github.com/yell-services/pland-cli`
 2. **Key setzen:** `export PLAND_API_KEY="<id>:<secret>"`
-3. **Commands finden** (nicht raten — 529 Stück):
-   - `pland --help` (53 Gruppen) · `pland <gruppe> --help`
+3. **Commands finden** (nicht raten — 522 Stück):
+   - `pland --help` (56 Gruppen) · `pland <gruppe> --help`
    - `pland describe <gruppe> <command>` (Methode, Pfad, Parameter)
    - `pland schema <Name>` (z. B. `pland schema Absence`)
 4. **Immer `--json`** für maschinenlesbare Ausgabe: `pland --json <gruppe> <command>`.
@@ -133,3 +133,7 @@ uv run python -m pland_cli._codegen.generate      # commands/ neu
 uv run python -m pland_cli._codegen.skillgen      # skills/references/commands.md neu
 uv run pytest -q
 ```
+
+`openapi.yaml` bleibt eine wortgleiche Kopie von upstream. Wo die
+veröffentlichte Spec und die Live-API auseinandergehen, korrigiert
+`openapi.overlay.yaml` — siehe [CONTRIBUTING.md](./CONTRIBUTING.md).

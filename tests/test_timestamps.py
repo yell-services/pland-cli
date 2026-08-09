@@ -1,7 +1,7 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from pland_cli.utils.timestamps import to_ms, from_ms, parse_date
+from pland_cli.utils.timestamps import from_ms, parse_date, to_ms
 
 BERLIN = ZoneInfo("Europe/Berlin")
 

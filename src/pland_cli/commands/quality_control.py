@@ -9,44 +9,10 @@ def quality_control_group():
     """quality-control-Operationen."""
     pass
 
-@quality_control_group.command("list-for-object-manager")
-@click.argument("ID")
-@click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
-@click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. number:1, status.createdAt:-1)")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_quality_control_list_for_object_manager(ctx, id, limit, offset, sort, extra_params):
-    """List quality control by object manager"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/qualityControl/objectManager/" + id + "",
-        query={"limit": limit, "offset": offset, "sort": sort}, extra_params=extra_params, fetch_all=False,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
-@quality_control_group.command("list-for-object")
-@click.argument("OBJECTID")
-@click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
-@click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. number:1, status.createdAt:-1)")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_quality_control_list_for_object(ctx, objectId, limit, offset, sort, extra_params):
-    """List quality control by object"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/qualityControl/object/" + objectId + "",
-        query={"limit": limit, "offset": offset, "sort": sort}, extra_params=extra_params, fetch_all=False,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
 @quality_control_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. number:1, status.createdAt:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--status", "status", default=None, help="")
 @click.option("--ids", "ids", default=None, help="")
 @click.option("--name", "name", default=None, help="")
@@ -92,20 +58,6 @@ def _cmd_quality_control_get(ctx, id, extra_params):
     run_operation(
         ctx, method='get', path="/qualityControl/" + id + "",
         query={}, extra_params=extra_params, fetch_all=False,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
-@quality_control_group.command("get-monitor")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_quality_control_get_monitor(ctx, fetch_all, extra_params):
-    """Get quality control monitoring data"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/qualityControl/monitor",
-        query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
     )

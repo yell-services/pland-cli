@@ -12,7 +12,7 @@ def absences_group():
 @absences_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of absences to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of absences to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. dtStart:1, status.createdAt:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--status", "status", default=None, help="")
 @click.option("--ids", "ids", default=None, help="")
 @click.option("--user", "user", default=None, help="")
@@ -128,7 +128,7 @@ def _cmd_absences_update(ctx, id, data, dry_run, assume_yes, extra_params):
 @absences_group.command("list-personal")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of absences to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of absences to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. dtStart:1, status.createdAt:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--status", "status", default=None, help="")
 @click.option("--ids", "ids", default=None, help="")
 @click.option("--absencePayType", "absencePayType", default=None, help="")
@@ -146,48 +146,6 @@ def _cmd_absences_list_personal(ctx, limit, offset, sort, status, ids, absencePa
     run_operation(
         ctx, method='get', path="/absences/self",
         query={"limit": limit, "offset": offset, "sort": sort, "status": status, "ids": ids, "absencePayType": absencePayType, "absenceType": absenceType, "dtEndFrom": dtEndFrom, "dtEndTo": dtEndTo, "dtStartTo": dtStartTo, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
-@absences_group.command("list-requestable-types")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_absences_list_requestable_types(ctx, fetch_all, extra_params):
-    """List requestable absence types"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/absences/types",
-        query={}, extra_params=extra_params, fetch_all=fetch_all,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
-@absences_group.command("get-replacement-jobs")
-@click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_absences_get_replacement_jobs(ctx, id, extra_params):
-    """Get absence replacement jobs"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/absences/" + id + "/replacement-jobs",
-        query={}, extra_params=extra_params, fetch_all=False,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
-@absences_group.command("get-affected-jobs")
-@click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_absences_get_affected_jobs(ctx, id, extra_params):
-    """Get absence affected jobs"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/absences/" + id + "/affected-jobs",
-        query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
     )
@@ -275,37 +233,6 @@ def _cmd_absences_assign_replacements(ctx, id, data, dry_run, assume_yes, extra_
         risk="confirm", draftable=None, assume_yes=assume_yes,
     )
 
-@absences_group.command("has-in-time-frame")
-@click.option("--absenceId", "absenceId", default=None, help="Absence ID to check against")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_absences_has_in_time_frame(ctx, absenceId, fetch_all, extra_params):
-    """Check for conflicting absences"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/absences/time-frame-check",
-        query={"absenceId": absenceId}, extra_params=extra_params, fetch_all=fetch_all,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
-@absences_group.command("calc-active-for-every-day-in-range")
-@click.option("--from", "from_", default=None, type=int, help="Start date for the calculation (UTC timestamp)")
-@click.option("--to", "to", default=None, type=int, help="End date for the calculation (UTC timestamp)")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_absences_calc_active_for_every_day_in_range(ctx, from_, to, fetch_all, extra_params):
-    """Calculate absence capacity by date range"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/absences/capacity",
-        query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=fetch_all,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
 @absences_group.command("get-user-vacation-days")
 @click.argument("USERID")
 @click.option("--from", "from_", default=None, help="Start date for the calculation period (UTC timestamp)")
@@ -334,6 +261,34 @@ def _cmd_absences_get_user_days_absent(ctx, userId, from_, to, extra_params):
     run_operation(
         ctx, method='get', path="/users/" + userId + "/daysAbsent",
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
+        data=None, file_=None, output=None, dry_run=False,
+        risk="free", draftable=None, assume_yes=False,
+    )
+
+@absences_group.command("count")
+@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
+@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.pass_context
+def _cmd_absences_count(ctx, fetch_all, extra_params):
+    """Count absences"""
+    from pland_cli._codegen.runtime import run_operation
+    run_operation(
+        ctx, method='get', path="/absences/count",
+        query={}, extra_params=extra_params, fetch_all=fetch_all,
+        data=None, file_=None, output=None, dry_run=False,
+        risk="free", draftable=None, assume_yes=False,
+    )
+
+@absences_group.command("count-new")
+@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
+@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.pass_context
+def _cmd_absences_count_new(ctx, fetch_all, extra_params):
+    """Count new absences"""
+    from pland_cli._codegen.runtime import run_operation
+    run_operation(
+        ctx, method='get', path="/absences/countNewEntities",
+        query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
     )

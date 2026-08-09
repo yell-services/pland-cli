@@ -12,7 +12,7 @@ def surcharges_group():
 @surcharges_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. name:1, number:-1, surcharge:1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--name", "name", default=None, help="")
 @click.option("--ids", "ids", default=None, help="")
 @click.option("--status", "status", default=None, help="")
@@ -91,39 +91,6 @@ def _cmd_surcharges_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
-    )
-
-@surcharges_group.command("get-distinct-values")
-@click.option("--field", "field", default=None, type=click.Choice(["name", "activeOn", "number", "surcharge"]), help="Field name to get distinct values for")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_surcharges_get_distinct_values(ctx, field, fetch_all, extra_params):
-    """Get distinct values"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/surcharges/distinctValues",
-        query={"field": field}, extra_params=extra_params, fetch_all=fetch_all,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
-@surcharges_group.command("count")
-@click.option("--name", "name", default=None, help="")
-@click.option("--ids", "ids", default=None, help="")
-@click.option("--status", "status", default=None, help="")
-@click.option("--generalField", "generalField", default=None, help="")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_surcharges_count(ctx, name, ids, status, generalField, fetch_all, extra_params):
-    """Count surcharges"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/surcharges/count",
-        query={"name": name, "ids": ids, "status": status, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
     )
 
 @surcharges_group.command("update-many", short_help="🟡 Batch update surcharges")

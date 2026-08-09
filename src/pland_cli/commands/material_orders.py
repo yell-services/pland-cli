@@ -12,7 +12,7 @@ def material_orders_group():
 @material_orders_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="")
 @click.option("--offset", "offset", default=None, type=int, help="")
-@click.option("--sort", "sort", default=None, help="")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
 @click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
 @click.pass_context
@@ -51,20 +51,6 @@ def _cmd_material_orders_count(ctx, status, ids, objectId, objectIds, objectMana
         risk="free", draftable=None, assume_yes=False,
     )
 
-@material_orders_group.command("get-monitor")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_material_orders_get_monitor(ctx, fetch_all, extra_params):
-    """Get order monitor"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/orders/monitor",
-        query={}, extra_params=extra_params, fetch_all=fetch_all,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
 @material_orders_group.command("count-new")
 @click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
 @click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
@@ -80,16 +66,16 @@ def _cmd_material_orders_count_new(ctx, fetch_all, extra_params):
     )
 
 @material_orders_group.command("get-distinct-values")
-@click.option("--field", "field", default=None, help="Field name to get distinct values for")
+@click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for")
 @click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
 @click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
 @click.pass_context
-def _cmd_material_orders_get_distinct_values(ctx, field, fetch_all, extra_params):
+def _cmd_material_orders_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     """Get distinct values for orders"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='get', path="/orders/distinctValues",
-        query={"field": field}, extra_params=extra_params, fetch_all=fetch_all,
+        query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
     )

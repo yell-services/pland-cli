@@ -12,7 +12,7 @@ def implementation_group():
 @implementation_group.command("get-progress")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of users to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of users to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. progress:1, userName:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--userName", "userName", default=None, help="")
 @click.option("--employment", "employment", default=None, help="")
 @click.option("--department", "department", default=None, help="")

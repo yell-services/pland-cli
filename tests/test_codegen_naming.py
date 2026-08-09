@@ -1,4 +1,4 @@
-from pland_cli._codegen.naming import kebab, tag_to_group, command_name, is_hash_opid
+from pland_cli._codegen.naming import command_name, is_hash_opid, kebab, tag_to_group
 
 
 def test_tag_to_group_kebab():

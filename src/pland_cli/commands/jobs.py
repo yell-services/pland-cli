@@ -12,7 +12,7 @@ def jobs_group():
 @jobs_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. from:1, createdAt:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--status", "status", default=None, help="")
 @click.option("--ids", "ids", default=None, help="")
 @click.option("--jobTemplateId", "jobTemplateId", default=None, help="")
@@ -180,22 +180,6 @@ def _cmd_jobs_patch(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
-    )
-
-@jobs_group.command("get-user-target-time")
-@click.argument("USERID")
-@click.option("--from", "from_", default=None, help="Start of the time frame")
-@click.option("--to", "to", default=None, help="End of the time frame")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_jobs_get_user_target_time(ctx, userId, from_, to, extra_params):
-    """Get user target time"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/jobs/" + userId + "/targetTime",
-        query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
     )
 
 @jobs_group.command("load-resources-and-calendar-data")

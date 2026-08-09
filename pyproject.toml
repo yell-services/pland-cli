@@ -16,6 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries",
     "Topic :: Utilities",
 ]
@@ -51,10 +52,17 @@ packages = ["src/pland_cli"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "openapi.yaml" = "pland_cli/openapi.yaml"
+"openapi.overlay.yaml" = "pland_cli/openapi.overlay.yaml"
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+
+# Explizit gepinnt: ruff aendert sein Default-Ruleset zwischen Minors
+# (0.16 zog E402 raus und S/BLE/PIE/DTZ rein → 75 neue Findings, alle
+# Rauschen oder False Positives). Ohne select haengt CI am Tool-Default.
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
 
 [tool.pytest.ini_options]
 markers = ["live: echte API-Calls (opt-in, --run-live)"]

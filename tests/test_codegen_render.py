@@ -167,3 +167,26 @@ def test_render_free_has_no_risk_marker():
             command="get", group="salary", path_params=[{"name": "id"}])
     )
     assert "🟡" not in code and "🔴" not in code
+
+
+def test_render_keeps_quotes_and_emoji_literal():
+    """Hilfetexte mit " müssen als gültiges JSON durchkommen, Emojis als UTF-8.
+
+    Ein blindes " -> ' machte JSON-Beispiele im Hilfetext unbrauchbar; ein
+    json.dumps ohne ensure_ascii=False escapt die Risiko-Emojis zu
+    Surrogatpaaren, die beim Schreiben der Datei mit UnicodeEncodeError knallen.
+    """
+    code = render_command(
+        _op(method="get", path="/invoices/", tag="Invoice", command="list",
+            group="invoice",
+            query_params=[{"name": "sort", "description": 'JSON: {"by":"_id"}'}])
+    )
+    assert 'help="JSON: {\\"by\\":\\"_id\\"}"' in code
+    compile(code, "gen.py", "exec")
+
+    marked = render_command(
+        _op(method="delete", path="/salaries/{id}", tag="Salary",
+            command="delete", group="salary", path_params=[{"name": "id"}])
+    )
+    assert "🔴" in marked and "\\ud83d" not in marked
+    marked.encode("utf-8")  # Surrogate -> UnicodeEncodeError

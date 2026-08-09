@@ -43,7 +43,7 @@ def _cmd_customer_objects_list_by_location(ctx, lat, long, extra_params):
 @customer_objects_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. name:1, number:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--customerId", "customerId", default=None, help="")
 @click.option("--objectManagers", "objectManagers", default=None, help="")
 @click.option("--contactIds", "contactIds", default=None, help="")
@@ -339,6 +339,21 @@ def _cmd_customer_objects_get_last_number(ctx, fetch_all, extra_params):
     run_operation(
         ctx, method='get', path="/objects/lastNumber",
         query={}, extra_params=extra_params, fetch_all=fetch_all,
+        data=None, file_=None, output=None, dry_run=False,
+        risk="free", draftable=None, assume_yes=False,
+    )
+
+@customer_objects_group.command("get-distinct-values")
+@click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for")
+@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
+@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.pass_context
+def _cmd_customer_objects_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
+    """Distinct values for a customer object field"""
+    from pland_cli._codegen.runtime import run_operation
+    run_operation(
+        ctx, method='get', path="/objects/distinctValues",
+        query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
     )

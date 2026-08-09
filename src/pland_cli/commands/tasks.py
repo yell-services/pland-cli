@@ -12,7 +12,7 @@ def tasks_group():
 @tasks_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. status.createdAt:-1, dueDate:1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--customer", "customer", default=None, help="")
 @click.option("--userIds", "userIds", default=None, help="")
 @click.option("--taskByTitleIdentifier", "taskByTitleIdentifier", default=None, help="")
@@ -138,6 +138,20 @@ def _cmd_tasks_complete(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+    )
+
+@tasks_group.command("count-new")
+@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
+@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
+@click.pass_context
+def _cmd_tasks_count_new(ctx, fetch_all, extra_params):
+    """Count new tasks"""
+    from pland_cli._codegen.runtime import run_operation
+    run_operation(
+        ctx, method='get', path="/tasks/countNewEntities",
+        query={}, extra_params=extra_params, fetch_all=fetch_all,
+        data=None, file_=None, output=None, dry_run=False,
+        risk="free", draftable=None, assume_yes=False,
     )
 
 def register(root):

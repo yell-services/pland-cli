@@ -28,7 +28,7 @@ def _cmd_activity_types_create_with_assignment(ctx, data, dry_run, assume_yes, e
 @activity_types_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. name:1, name:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--name", "name", default=None, help="")
 @click.option("--status", "status", default=None, help="")
 @click.option("--generalField", "generalField", default=None, help="")

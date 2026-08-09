@@ -12,7 +12,7 @@ def complaints_group():
 @complaints_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. number:1, status.createdAt:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--status", "status", default=None, help="")
 @click.option("--ids", "ids", default=None, help="")
 @click.option("--objectIds", "objectIds", default=None, help="")
@@ -148,30 +148,16 @@ def _cmd_complaints_count_new(ctx, fetch_all, extra_params):
     )
 
 @complaints_group.command("get-distinct-values")
-@click.option("--field", "field", default=None, help="Field name to get distinct values for")
+@click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for")
 @click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
 @click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
 @click.pass_context
-def _cmd_complaints_get_distinct_values(ctx, field, fetch_all, extra_params):
+def _cmd_complaints_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     """Get complaint distinct values"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='get', path="/complaints/distinctValues",
-        query={"field": field}, extra_params=extra_params, fetch_all=fetch_all,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
-@complaints_group.command("get-monitor")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_complaints_get_monitor(ctx, fetch_all, extra_params):
-    """Get complaint monitor data"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/complaints/monitor",
-        query={}, extra_params=extra_params, fetch_all=fetch_all,
+        query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
     )
@@ -233,20 +219,6 @@ def _cmd_complaints_count_user(ctx, userId, extra_params):
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='get', path="/users/" + userId + "/countComplaints",
-        query={}, extra_params=extra_params, fetch_all=False,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
-@complaints_group.command("generate-response")
-@click.argument("ID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_complaints_generate_response(ctx, id, extra_params):
-    """Generate AI response for complaint"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/complaints/" + id + "/generateResponse",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,

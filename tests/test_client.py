@@ -1,7 +1,7 @@
 import httpx
 import pytest
 
-from pland_cli.core.client import PlandClient, PlandError, PlandAuthError
+from pland_cli.core.client import PlandAuthError, PlandClient, PlandError
 from pland_cli.core.config import Config
 
 

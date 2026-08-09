@@ -1,5 +1,7 @@
 import pytest
+
 from pland_cli._codegen.security import classify, draftable_for
+
 
 @pytest.mark.parametrize("method,path,tag,expected", [
     # critical

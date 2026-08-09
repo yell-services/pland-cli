@@ -12,7 +12,7 @@ def articles_group():
 @articles_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="")
 @click.option("--offset", "offset", default=None, type=int, help="")
-@click.option("--sort", "sort", default=None, help="")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
 @click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
 @click.pass_context
@@ -118,20 +118,6 @@ def _cmd_articles_order_material(ctx, objectId, data, dry_run, assume_yes, extra
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
-    )
-
-@articles_group.command("list-all-for-user")
-@click.argument("USERID")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_articles_list_all_for_user(ctx, userId, extra_params):
-    """List all articles for a user"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/articles/user/" + userId + "",
-        query={}, extra_params=extra_params, fetch_all=False,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
     )
 
 @articles_group.command("become-default", short_help="🟡 Set article as default for a budget")

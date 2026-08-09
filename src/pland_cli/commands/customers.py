@@ -12,7 +12,7 @@ def customers_group():
 @customers_group.command("list")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. number:1, status.createdAt:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--number", "number", default=None, type=int, help="")
 @click.option("--customerHasAssignedObjectManager", "customerHasAssignedObjectManager", default=None, help="")
 @click.option("--objectIds", "objectIds", default=None, help="")
@@ -84,16 +84,16 @@ def _cmd_customers_get_last_number(ctx, fetch_all, extra_params):
     )
 
 @customers_group.command("get-distinct-values")
-@click.option("--field", "field", default=None, help="Field name to get distinct values for (e.g. contactPerson, vatNumber, address.city)")
+@click.option("--fieldKey", "fieldKey", default=None, help="Field name to get distinct values for (e.g. contactPerson, vatNumber, address.city)")
 @click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
 @click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
 @click.pass_context
-def _cmd_customers_get_distinct_values(ctx, field, fetch_all, extra_params):
+def _cmd_customers_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
     """Get distinct values"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='get', path="/customers/distinctValues",
-        query={"field": field}, extra_params=extra_params, fetch_all=fetch_all,
+        query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
     )

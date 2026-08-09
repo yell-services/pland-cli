@@ -7,20 +7,17 @@
 | `pland absences approve` | POST | Approve absence |
 | `pland absences approve-multiple` | POST | Approve multiple absences |
 | `pland absences assign-replacements` | POST | Assign absence replacements |
-| `pland absences calc-active-for-every-day-in-range` | GET | Calculate absence capacity by date range |
 | `pland absences cancel` | POST | Cancel absence |
+| `pland absences count` | GET | Count absences |
+| `pland absences count-new` | GET | Count new absences |
 | `pland absences create` | POST | Create new absence |
 | `pland absences decline` | POST | Decline absence |
 | `pland absences delete` | DELETE | Delete absence |
 | `pland absences get` | GET | Get absence by ID |
-| `pland absences get-affected-jobs` | GET | Get absence affected jobs |
-| `pland absences get-replacement-jobs` | GET | Get absence replacement jobs |
 | `pland absences get-user-days-absent` | GET | Get user days absent |
 | `pland absences get-user-vacation-days` | GET | Get user vacation days |
-| `pland absences has-in-time-frame` | GET | Check for conflicting absences |
 | `pland absences list` | GET | List absences |
 | `pland absences list-personal` | GET | List personal absences |
-| `pland absences list-requestable-types` | GET | List requestable absence types |
 | `pland absences update` | PATCH | Update absence |
 | `pland absences update-full` | PUT | Update absence (full) |
 
@@ -56,7 +53,6 @@
 | `pland articles get-last-number` | GET | Get last article number |
 | `pland articles is-default` | GET | Check if article is default |
 | `pland articles list` | GET | List all articles |
-| `pland articles list-all-for-user` | GET | List all articles for a user |
 | `pland articles list-objects-for` | GET | List objects for an article |
 | `pland articles order-material` | POST | Order material for an object |
 | `pland articles remove-default` | DELETE | Remove article as default |
@@ -187,11 +183,9 @@
 | `pland complaints count-user` | GET | Count user complaints |
 | `pland complaints create` | POST | Create complaint |
 | `pland complaints delete` | DELETE | Delete complaint |
-| `pland complaints generate-response` | GET | Generate AI response for complaint |
 | `pland complaints get` | GET | Get complaint by ID |
 | `pland complaints get-distinct-values` | GET | Get complaint distinct values |
 | `pland complaints get-generations-left` | GET | Get remaining AI generations |
-| `pland complaints get-monitor` | GET | Get complaint monitor data |
 | `pland complaints get-user` | GET | Get user complaints |
 | `pland complaints list` | GET | List complaints |
 | `pland complaints resolve` | POST | Resolve complaint |
@@ -235,6 +229,14 @@
 | `pland credit set-fixed` | POST | Set credit notes to fixed |
 | `pland credit update` | PATCH | Update credit note |
 
+## custom-fields
+
+| Command | Methode | Beschreibung |
+|---|---|---|
+| `pland custom-fields count` | GET | Count custom field definitions |
+| `pland custom-fields get-distinct-values` | GET | Distinct values for a custom field |
+| `pland custom-fields list` | GET | List custom field definitions |
+
 ## customer-objects
 
 | Command | Methode | Beschreibung |
@@ -249,6 +251,7 @@
 | `pland customer-objects get-available-tags` | GET | Get available object tags |
 | `pland customer-objects get-basic-assignments-of` | GET | Get object assignments for time tracking |
 | `pland customer-objects get-by-number` | GET | Get customer object by number |
+| `pland customer-objects get-distinct-values` | GET | Distinct values for a customer object field |
 | `pland customer-objects get-last-number` | GET | Get last object number |
 | `pland customer-objects list` | GET | List customer objects |
 | `pland customer-objects list-active-users-on` | GET | List active users on object |
@@ -314,6 +317,12 @@
 | `pland equipment-types list` | GET | List equipment types |
 | `pland equipment-types update` | PATCH | Update equipment type |
 
+## exports
+
+| Command | Methode | Beschreibung |
+|---|---|---|
+| `pland exports list` | GET | List exports |
+
 ## holiday
 
 | Command | Methode | Beschreibung |
@@ -366,7 +375,6 @@
 | `pland invoice-reminder-templates delete` | DELETE | Delete invoice reminder template |
 | `pland invoice-reminder-templates get` | GET | Get invoice reminder template |
 | `pland invoice-reminder-templates get-distinct-values` | GET | Get distinct field values |
-| `pland invoice-reminder-templates list` | GET | List invoice reminder templates |
 | `pland invoice-reminder-templates update` | PATCH | Update invoice reminder template |
 
 ## invoice-reminders
@@ -384,7 +392,6 @@
 | `pland invoice-reminders get` | GET | Get invoice reminder |
 | `pland invoice-reminders get-distinct-values` | GET | Get distinct field values for invoice reminders |
 | `pland invoice-reminders get-or-create-chat` | POST | Get or create reminder chat |
-| `pland invoice-reminders list` | GET | List invoice reminders |
 | `pland invoice-reminders list-referenced-faktura-documents-for` | GET | List referenced documents |
 | `pland invoice-reminders send` | POST | Send reminders via email |
 | `pland invoice-reminders update` | PATCH | Update invoice reminder |
@@ -428,7 +435,6 @@
 | `pland jobs get-status-list-for` | GET | Get job status list |
 | `pland jobs get-status-list-for-object` | GET | Get job status list for object |
 | `pland jobs get-time-tracking-for` | GET | Get time tracking entries for a job |
-| `pland jobs get-user-target-time` | GET | Get user target time |
 | `pland jobs in-time-frame` | POST | Get jobs in a specific time frame |
 | `pland jobs list` | GET | List all jobs |
 | `pland jobs list-by-assignment` | GET | List jobs by assignment |
@@ -469,7 +475,6 @@
 | `pland material-orders finish` | PATCH | Mark order as finished |
 | `pland material-orders get` | GET | Get order by ID |
 | `pland material-orders get-distinct-values` | GET | Get distinct values for orders |
-| `pland material-orders get-monitor` | GET | Get order monitor |
 | `pland material-orders get-or-create-chat` | POST | Get/create material order chat |
 | `pland material-orders get-pdf` | GET | Generate order PDF |
 | `pland material-orders list` | GET | List all orders |
@@ -518,6 +523,12 @@
 | `pland offers set-to-accepted` | POST | Set offers to accepted |
 | `pland offers set-to-declined` | POST | Set offers to declined |
 | `pland offers update` | PATCH | Update offer |
+
+## pay-type-templates
+
+| Command | Methode | Beschreibung |
+|---|---|---|
+| `pland pay-type-templates list` | GET | List pay type templates |
 
 ## pay-types
 
@@ -578,10 +589,7 @@
 |---|---|---|
 | `pland quality-control create` | POST | Create quality control entry |
 | `pland quality-control get` | GET | Get quality control entry |
-| `pland quality-control get-monitor` | GET | Get quality control monitoring data |
 | `pland quality-control list` | GET | List quality control entries |
-| `pland quality-control list-for-object` | GET | List quality control by object |
-| `pland quality-control list-for-object-manager` | GET | List quality control by object manager |
 
 ## salary
 
@@ -594,12 +602,10 @@
 | `pland salary get` | GET | Get salary by ID |
 | `pland salary get-chat` | POST | Get or create salary chat |
 | `pland salary get-groups` | POST | Get salary groups |
-| `pland salary get-job-occurrences-without-salaries` | GET | Get job occurrences without salaries |
 | `pland salary get-overview-for-objects` | POST | Get salary overview for objects |
 | `pland salary get-overview-for-users` | POST | Get salary overview for users |
 | `pland salary get-user-absence-salaries` | GET | Get user absence salaries |
 | `pland salary get-user-salaries` | GET | Get user salaries |
-| `pland salary list-for-object` | GET | List salaries for object |
 | `pland salary list-salaries` | GET | List salaries |
 | `pland salary release-all-times-in-time-frame` | POST | Release all times in time frame |
 | `pland salary release-job-occurrences` | POST | Release job occurrences |
@@ -642,6 +648,7 @@
 | `pland service-report generate-zip` | POST | Generate service report ZIP archive |
 | `pland service-report get` | GET | Get service report |
 | `pland service-report get-count` | GET | Get service report count |
+| `pland service-report get-distinct-values` | GET | Distinct values for a service report field |
 | `pland service-report get-last-number` | GET | Get last service report number |
 | `pland service-report get-or-create-chat` | GET | Get or create service report chat |
 | `pland service-report get-user` | GET | Get user service reports |
@@ -684,11 +691,9 @@
 
 | Command | Methode | Beschreibung |
 |---|---|---|
-| `pland surcharges count` | GET | Count surcharges |
 | `pland surcharges create` | POST | Create surcharge |
 | `pland surcharges delete` | DELETE | Delete surcharge |
 | `pland surcharges get` | GET | Get surcharge by ID |
-| `pland surcharges get-distinct-values` | GET | Get distinct values |
 | `pland surcharges list` | GET | List surcharges |
 | `pland surcharges update` | PATCH | Update surcharge |
 | `pland surcharges update-many` | PATCH | Batch update surcharges |
@@ -708,6 +713,7 @@
 | Command | Methode | Beschreibung |
 |---|---|---|
 | `pland tasks complete` | POST | Complete task |
+| `pland tasks count-new` | GET | Count new tasks |
 | `pland tasks create` | POST | Create task |
 | `pland tasks delete-multiple` | POST | Delete multiple tasks |
 | `pland tasks get` | GET | Get task |
@@ -733,6 +739,7 @@
 | `pland time-tracking add-manually` | POST | Add time tracking manually (deprecated) |
 | `pland time-tracking can-be-approved-by-target` | GET | Check if time tracking can be approved by target time |
 | `pland time-tracking cancel` | POST | Cancel time tracking entry |
+| `pland time-tracking count-new` | GET | Count new time trackings |
 | `pland time-tracking filter` | GET | Filter time tracking entries |
 | `pland time-tracking get-active` | GET | Get active time tracking status |
 | `pland time-tracking get-not-approved-stamps` | GET | Get not approved time tracking entries |
@@ -774,6 +781,7 @@
 | `pland users get-chat` | POST | Get or create user chat |
 | `pland users get-distinct-values` | GET | Get user distinct values |
 | `pland users get-last-number` | GET | Get last user number |
+| `pland users get-own` | GET | Get the user the API key belongs to |
 | `pland users list` | GET | List users |
 | `pland users send-smsto-all` | POST | Send SMS credentials to all users |
 | `pland users set-device-token` | POST | Set device token for push notifications |

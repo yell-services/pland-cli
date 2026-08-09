@@ -12,7 +12,7 @@ def salary_group():
 @salary_group.command("list-salaries")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. from:1, createdAt:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--status", "status", default=None, help="")
 @click.option("--ids", "ids", default=None, help="")
 @click.option("--user", "user", default=None, help="")
@@ -219,22 +219,6 @@ def _cmd_salary_get_user_salaries(ctx, userId, from_, to, includeForTrackingDate
         risk="free", draftable=None, assume_yes=False,
     )
 
-@salary_group.command("list-for-object")
-@click.argument("OBJECTID")
-@click.option("--from", "from_", default=None, type=int, help="Start date for the salary period (UTC timestamp)")
-@click.option("--to", "to", default=None, type=int, help="End date for the salary period (UTC timestamp)")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_salary_list_for_object(ctx, objectId, from_, to, extra_params):
-    """List salaries for object"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/salaries/objects/" + objectId + "",
-        query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
-    )
-
 @salary_group.command("export-rows-in-background")
 @click.option("--from", "from_", default=None, type=int, help="Start date for the salary period (UTC timestamp)")
 @click.option("--to", "to", default=None, type=int, help="End date for the salary period (UTC timestamp)")
@@ -322,23 +306,6 @@ def _cmd_salary_release_job_occurrences(ctx, data, dry_run, assume_yes, extra_pa
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
-    )
-
-@salary_group.command("get-job-occurrences-without-salaries")
-@click.option("--from", "from_", default=None, type=int, help="Start date for the search period (UTC timestamp)")
-@click.option("--to", "to", default=None, type=int, help="End date for the search period (UTC timestamp)")
-@click.option("--userId", "userId", default=None, help="Optional user ID to filter job occurrences")
-@click.option("--all", "fetch_all", is_flag=True, help="Alle Seiten paginieren.")
-@click.option("--extra-params", default=None, help="Zusätzliche Query-Params als JSON.")
-@click.pass_context
-def _cmd_salary_get_job_occurrences_without_salaries(ctx, from_, to, userId, fetch_all, extra_params):
-    """Get job occurrences without salaries"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='get', path="/salaries/jobOccurrencesWithoutSalaries",
-        query={"from": from_, "to": to, "userId": userId}, extra_params=extra_params, fetch_all=fetch_all,
-        data=None, file_=None, output=None, dry_run=False,
-        risk="free", draftable=None, assume_yes=False,
     )
 
 def register(root):

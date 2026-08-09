@@ -11,7 +11,7 @@ Run the same checks CI runs (Python 3.11+, [uv](https://docs.astral.sh/uv/)):
 uv sync --extra dev
 uv run pytest -q -m "not live"
 uv run ruff check src tests
-uv run mypy src/pland_cli/core src/pland_cli/utils src/pland_cli/enrichment
+uv run mypy src/pland_cli/core src/pland_cli/utils src/pland_cli/enrichment src/pland_cli/_codegen
 ```
 
 A PR that fails any of them will not merge.
@@ -27,6 +27,14 @@ uv run python -m pland_cli._codegen.generate   # rebuilds commands/
 uv run python -m pland_cli._codegen.skillgen   # rebuilds skills/references/commands.md
 uv run pytest -q
 ```
+
+`openapi.yaml` stays a verbatim copy of upstream. Where the published spec and
+the live API disagree, the fix goes into **`openapi.overlay.yaml`**, which
+`load_spec()` merges on top: `remove` drops operations the API doesn't serve,
+`rename_params` fixes wrong parameter names, `paths` adds endpoints the API
+serves but doesn't document. Every entry must be verified against
+cloud-api.pland.app before it lands, and `test_overlay_is_a_pure_correction_layer`
+fails once upstream fixes a point — that's the signal to delete the entry.
 
 Behaviour that can't be expressed in the spec (broken server-side filters,
 client-side pagination, convenience flows) lives in `src/pland_cli/enrichment/`

@@ -1,0 +1,200 @@
+# Korrekturen an openapi.yaml, die pland.app (noch) nicht veröffentlicht hat.
+#
+# openapi.yaml wird unverändert von docs.pland.app übernommen — diese Datei
+# legt sich beim Laden darüber (siehe _codegen/spec.py). Jeder Eintrag ist
+# gegen die Live-API (cloud-api.pland.app/v2) verifiziert; das Datum sagt,
+# wann. Wird ein Punkt upstream gefixt, fliegt der Eintrag hier raus.
+#
+# Verifikationsmethode: GET gegen die echte API. Existiert eine Route nicht,
+# greift der Fallback /{resource}/{id} und die API antwortet mit
+# "Failed to parse Id: <segment>".
+
+verified: 2026-08-09
+
+# --- Operationen, die die Spec dokumentiert, die API aber nicht hat ---------
+# Alle GETs liefern "Failed to parse Id: <segment>" — die Route existiert
+# nicht. Nur GET wird entfernt; POST/PATCH/DELETE auf denselben Pfaden sind
+# nicht nachgeprüft und bleiben stehen.
+remove:
+  /absences/capacity: [get]
+  /absences/time-frame-check: [get]
+  /absences/types: [get]
+  /complaints/monitor: [get]
+  /orders/monitor: [get]
+  /qualityControl/monitor: [get]
+  /salaries/jobOccurrencesWithoutSalaries: [get]
+  /surcharges/count: [get]
+  /surcharges/distinctValues: [get]
+  # Kein "Failed to parse Id", sondern "Method not allowed. Must be one of: POST".
+  /invoiceReminders/: [get]
+  /invoiceReminders/templates: [get]
+
+  # Pfade mit {id}: hier greift ein zweites Orakel. Existiert die Route,
+  # erreicht eine ungültige ID den ID-Parser und die API meldet
+  # "Error parsing ObjectId string" / "Failed to parse Id" / "Missing
+  # parameters". Bleibt es bei "Not found.", hat der Router nicht gematcht.
+  # Kontrolliert an 57 Pfaden gleicher Form, von denen 49 den Parser erreichen.
+  /absences/{id}/affected-jobs: [get]
+  /absences/{id}/replacement-jobs: [get]
+  /complaints/{id}/generateResponse: [get]
+  /jobs/{userId}/targetTime: [get]
+  /articles/user/{userId}: [get]
+  /qualityControl/object/{objectId}: [get]
+  /qualityControl/objectManager/{id}: [get]
+  /salaries/objects/{objectId}: [get]
+
+# --- Query-Parameter, die die Spec falsch beschreibt ------------------------
+# Korrektur nach Parametername, quer über alle Pfade. `expect` ist die Zahl
+# der Treffer in der rohen Spec — weicht sie ab, hat sich upstream etwas
+# bewegt und der Eintrag gehört überprüft (test_overlay_params_still_apply).
+params:
+  # Die API verlangt durchgängig `fieldKey`. Die Spec schreibt bei 16 von 18
+  # distinctValues-Endpoints `field` und bekommt dafür
+  # "Missing parameters. Required parameters are: fieldKey".
+  # In der rohen Spec kommt `field` ausschliesslich auf distinctValues vor.
+  field:
+    expect: 16
+    set:
+      name: fieldKey
+
+  # Die Spec dokumentiert durchweg `name:1` — das lehnt die API mit
+  # "Sorting needs by and direction" ab. Verifiziert: JSON funktioniert auf
+  # allen 35 GET-Endpoints mit sort-Parameter, das Doppelpunkt-Format auf
+  # keinem (drei ignorieren den Parameter stillschweigend).
+  sort:
+    expect: 39   # in der rohen Spec; 2 davon sitzen auf Pfaden, die `remove` streicht
+    set:
+      # Bleibt unter 120 Zeichen — laenger kuerzt der Renderer den Hilfetext ab.
+      description: >-
+        Sort as JSON: {"by":"<field>","direction":1} (1 asc, -1 desc).
+        The spec's "field:1" form returns 400.
+
+# --- Endpoints, die die API hat, die Spec aber nicht ------------------------
+# Per Kontrollprobe gefunden: Antwort weicht von der Signatur einer garantiert
+# nicht existierenden Route derselben Ressource ab. Nur GET ist verifiziert —
+# Schreiboperationen stehen hier bewusst nicht drin.
+paths:
+  /absences/count:
+    get:
+      tags: [Absences]
+      operationId: countAbsences
+      summary: Count absences
+      responses:
+        '200': {description: Count}
+
+  /absences/countNewEntities:
+    get:
+      tags: [Absences]
+      operationId: countNewAbsences
+      summary: Count new absences
+      responses:
+        '200': {description: Count}
+
+  /users/self:
+    get:
+      tags: [Users]
+      operationId: getOwnUser
+      summary: Get the user the API key belongs to
+      responses:
+        '200': {description: User}
+
+  /objects/distinctValues:
+    get:
+      tags: [Customer Objects]
+      operationId: getCustomerObjectDistinctValues
+      summary: Distinct values for a customer object field
+      parameters:
+        - {name: fieldKey, in: query, required: true, schema: {type: string},
+           description: Field name to get distinct values for}
+      responses:
+        '200': {description: Distinct values}
+
+  /serviceReports/distinctValues:
+    get:
+      tags: [ServiceReport]
+      operationId: getServiceReportDistinctValues
+      summary: Distinct values for a service report field
+      parameters:
+        - {name: fieldKey, in: query, required: true, schema: {type: string},
+           description: Field name to get distinct values for}
+      responses:
+        '200': {description: Distinct values}
+
+  /tasks/countNewEntities:
+    get:
+      tags: [Tasks]
+      operationId: countNewTasks
+      summary: Count new tasks
+      responses:
+        '200': {description: Count}
+
+  /timetracking/countNewEntities:
+    get:
+      tags: [Time Tracking]
+      operationId: countNewTimeTrackings
+      summary: Count new time trackings
+      responses:
+        '200': {description: Count}
+
+  # Custom-Field-Definitionen. Die Spec kennt `customFields` nur als Feld in
+  # /users/ und /objects/, nicht als eigene Ressource.
+  /customFields/:
+    get:
+      tags: [Custom Fields]
+      operationId: listCustomFields
+      summary: List custom field definitions
+      parameters:
+        - {name: limit, in: query, schema: {type: integer},
+           description: Maximum number of items to return}
+        - {name: offset, in: query, schema: {type: integer},
+           description: Number of items to skip for pagination}
+      responses:
+        '200': {description: List of custom fields}
+
+  /customFields/count:
+    get:
+      tags: [Custom Fields]
+      operationId: countCustomFields
+      summary: Count custom field definitions
+      responses:
+        '200': {description: Count}
+
+  /customFields/distinctValues:
+    get:
+      tags: [Custom Fields]
+      operationId: getCustomFieldDistinctValues
+      summary: Distinct values for a custom field
+      parameters:
+        - {name: fieldKey, in: query, required: true, schema: {type: string},
+           description: Field name to get distinct values for}
+      responses:
+        '200': {description: Distinct values}
+
+  # Export-Jobs (exportStatus, type, summary, startedAt, acceptedExport).
+  /exports/:
+    get:
+      tags: [Exports]
+      operationId: listExports
+      summary: List exports
+      parameters:
+        - {name: limit, in: query, schema: {type: integer},
+           description: Maximum number of items to return}
+        - {name: offset, in: query, schema: {type: integer},
+           description: Number of items to skip for pagination}
+      responses:
+        '200': {description: List of exports}
+
+  # Tarifvorlagen (payTypeEntries, surchargeEntries) — der Tarifvorlagen-Wizard
+  # aus dem pland-Release vom 22.05.2026.
+  /payTypeTemplates/:
+    get:
+      tags: [Pay Type Templates]
+      operationId: listPayTypeTemplates
+      summary: List pay type templates
+      parameters:
+        - {name: limit, in: query, schema: {type: integer},
+           description: Maximum number of items to return}
+        - {name: offset, in: query, schema: {type: integer},
+           description: Number of items to skip for pagination}
+      responses:
+        '200': {description: List of pay type templates}

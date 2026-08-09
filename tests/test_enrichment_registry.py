@@ -1,7 +1,7 @@
 import click
 from click.testing import CliRunner
 
-from pland_cli.enrichment.registry import enrich, apply_enrichment, OVERRIDES, _REGISTRY
+from pland_cli.enrichment.registry import _REGISTRY, OVERRIDES, apply_enrichment, enrich
 
 
 def test_enrich_replaces_generated_command():

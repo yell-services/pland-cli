@@ -59,7 +59,7 @@ def _cmd_payments_update(ctx, id, data, dry_run, assume_yes, extra_params):
 @payments_group.command("get")
 @click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
-@click.option("--sort", "sort", default=None, help="Sort field and direction (e.g. paymentDate:1, amount:-1)")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
 @click.option("--invoiceIds", "invoiceIds", default=None, help="Filter by invoice IDs (comma-separated)")
 @click.option("--paymentDateFrom", "paymentDateFrom", default=None, help="Filter payments from this date (YYYY-MM-DD)")
 @click.option("--paymentDateTo", "paymentDateTo", default=None, help="Filter payments to this date (YYYY-MM-DD)")
