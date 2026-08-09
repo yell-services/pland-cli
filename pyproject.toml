@@ -1,6 +1,6 @@
 [project]
 name = "pland-cli"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Inoffizielle, agent-native CLI für die pland.app API"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -42,6 +42,11 @@ pland = "pland_cli.cli:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "respx>=0.21", "ruff>=0.6", "mypy>=1.11", "types-PyYAML"]
+
+[tool.hatch.version]
+# Single source of truth: pyproject would otherwise drift from __init__.py,
+# which is what `pland --version` reports.
+path = "src/pland_cli/__init__.py"
 
 [build-system]
 requires = ["hatchling"]

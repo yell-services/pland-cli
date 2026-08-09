@@ -7,75 +7,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-09
+
+Two silent data-loss bugs in `--all` and a batch of commands that could never
+have worked. If you script against this CLI, read the Removed and Fixed
+sections — some call sites need adjusting.
+
 ### Added
 
-- `openapi.overlay.yaml` — Korrekturschicht über der veröffentlichten Spec, für
-  Stellen an denen `docs.pland.app/openapi.yaml` und die Live-API auseinander
-  gehen. `load_spec()` merged sie; jeder Eintrag ist gegen
-  cloud-api.pland.app verifiziert.
-- 12 Endpoints ergänzt, die die API bedient, die Spec aber nicht dokumentiert:
-  `custom-fields` (list/count/get-distinct-values), `exports list`,
-  `pay-type-templates list` (die Tarifvorlagen aus dem pland-Release vom
-  22.05.2026), `users get-own`, `absences count`/`count-new`,
-  `tasks count-new`, `time-tracking count-new`, `customer-objects` und
+- `openapi.overlay.yaml` — a correction layer over the published spec, for the
+  places where `docs.pland.app/openapi.yaml` and the live API disagree.
+  `load_spec()` merges it on top; every entry is verified against
+  cloud-api.pland.app. See CONTRIBUTING.md.
+- 12 endpoints the API serves but does not document: `custom-fields`
+  (list/count/get-distinct-values), `exports list`, `pay-type-templates list`
+  (the collective-agreement templates from the pland release of 2026-05-22),
+  `users get-own`, `absences count`/`count-new`, `tasks count-new`,
+  `time-tracking count-new`, plus `customer-objects` and
   `service-report get-distinct-values`.
-- Python 3.14 als offiziell unterstützte Version deklariert (CI testete sie
-  bereits, der Classifier fehlte).
+- Python 3.14 declared as officially supported (CI already tested it, the
+  classifier was missing).
 
 ### Changed
 
-- Dev-Toolchain und Lockfile aktualisiert (ruff 0.16, mypy 2.3, pytest 9.1,
-  httpx-/click-Stack).
-- GitHub Actions auf aktuelle Majors gehoben (checkout v7, setup-uv v9,
+- **Breaking:** `distinct-values` commands take `--fieldKey` instead of
+  `--field`. See Fixed below.
+- Dev toolchain and lockfile updated (ruff 0.16, mypy 2.3, pytest 9.1,
+  httpx/click stack).
+- GitHub Actions raised to current majors (checkout v7, setup-uv v9,
   upload-artifact v7, download-artifact v8, action-gh-release v3).
-- Dependabot nutzt das `uv`-Ecosystem statt `pip` — damit wird `uv.lock`
-  mitgepflegt und nicht nur `pyproject.toml`.
-- `mypy` deckt jetzt auch `src/pland_cli/_codegen` ab (war bereits typsauber).
-- Ruff-Regelauswahl explizit gepinnt (`select = ["E4","E7","E9","F","I"]`).
-  Ohne `select` hing CI am Tool-Default, den ruff zwischen Minors ändert.
+- Dependabot uses the `uv` ecosystem instead of `pip`, so `uv.lock` is kept
+  up to date and not just `pyproject.toml`.
+- `mypy` now also covers `src/pland_cli/_codegen` (it was already type-clean).
+- Ruff rule selection pinned explicitly (`select = ["E4","E7","E9","F","I"]`).
+  Without `select`, CI depended on the tool default, which ruff reshuffles
+  between minor releases.
 
 ### Removed
 
-- 19 Operationen, die die Spec dokumentiert, die API aber nicht bedient — sie
-  liefen unweigerlich in einen 400. Ohne `{id}`:
+- **Breaking:** 19 operations the spec documents but the API does not serve —
+  they always ran into a 400. Without `{id}`:
   `absences get-capacity`/`time-frame-check`/`get-types`,
   `complaints get-monitor`, `material-orders get-monitor`,
   `quality-control get-monitor`, `salary get-job-occurrences-without-salaries`,
-  `surcharges count`/`get-distinct-values` sowie die GET-Varianten von
-  `/invoiceReminders/` und `/invoiceReminders/templates` (die API erlaubt dort
-  nur POST). Mit `{id}`: `absences get-affected-jobs`/`get-replacement-jobs`,
+  `surcharges count`/`get-distinct-values`, and the GET variants of
+  `/invoiceReminders/` and `/invoiceReminders/templates` (the API only allows
+  POST there). With `{id}`: `absences get-affected-jobs`/`get-replacement-jobs`,
   `complaints generate-response`, `jobs get-target-time`, `articles get-user`,
-  `quality-control get-object`/`get-object-manager` und `salary get-objects`.
-  Die POST-Operationen auf denselben Pfaden bleiben unangetastet.
+  `quality-control get-object`/`get-object-manager`, and `salary get-objects`.
+  The POST operations on those same paths are untouched.
 
 ### Fixed
 
-- `distinct-values` funktioniert wieder: 15 Commands schickten den
-  Pflichtparameter als `--field`, die API verlangt `fieldKey` und antwortete
-  mit `Missing parameters`. Betrifft assignments, complaints, contacts, credit,
+- `--all` dropped more than half the data. The offset advanced by the
+  *requested* page size, but some endpoints cap server-side regardless of
+  `limit` (`/salaries/` at 200). With `page_size=500` every round skipped 300
+  rows: measured 9800 instead of 24483 records, a 60 % loss. The offset now
+  advances by the number of rows actually returned. A page ceiling aborts with
+  an error rather than returning a partial result, should a server cap the
+  offset and keep handing back the same page.
+- Pagination (`--all`/`paginate`) now injects a stable sort
+  (`sort={"by":"_id","direction":1}`). Without it the API returns pages in
+  non-deterministic order, so records were silently lost despite `_id`
+  deduplication (506 of 1705 missing on `/invoices/`). Endpoints that reject
+  the sort parameter (400) fall back to the previous behaviour.
+- That fallback now triggers on `400` only. Previously any `PlandError` caused
+  it — a transient 500 would have silently abandoned the stable sort, bringing
+  back the very data loss the injection prevents.
+- **Breaking:** `distinct-values` works again. 15 commands sent the required
+  parameter as `--field`; the API expects `fieldKey` and answered with
+  `Missing parameters`. Affects assignments, complaints, contacts, credit,
   customers, equipment, equipment-types, invoice, invoice-reminders,
   invoice-reminder-templates, invoice-templates, offers, material-orders,
-  service-products und banking-transactions.
-- `--sort` ist korrekt dokumentiert: die Spec gibt durchgängig `name:1` als
-  Beispiel an, das die API mit `Sorting needs by and direction` ablehnt.
-  Richtig ist `{"by":"<feld>","direction":1}` — verifiziert auf allen 35
-  GET-Endpoints mit sort-Parameter. Betraf 34 Hilfetexte.
-- Hilfetexte behalten ihre Anführungszeichen. Der Renderer ersetzte `"` durch
-  `'`, was JSON-Beispiele in der `--help`-Ausgabe unbrauchbar machte.
-- `--all` verlor über die Hälfte der Daten. Der Offset wanderte um die
-  *angeforderte* Seitengröße weiter, manche Endpoints deckeln aber
-  serverseitig unabhängig vom `limit` (`/salaries/` bei 200). Mit
-  `page_size=500` übersprang jede Runde 300 Zeilen: gemessen 9800 statt 24483
-  Datensätzen, 60 % Verlust. Jetzt wandert der Offset um die tatsächlich
-  gelieferte Zeilenzahl. Eine Seitenobergrenze bricht mit Fehler ab, statt
-  ein Teilergebnis zurückzugeben, falls ein Server den Offset deckelt.
-- Pagination fällt nur noch bei `400` auf "ohne sort" zurück. Vorher löste
-  jeder `PlandError` den Fallback aus — ein transienter 500 hätte die stabile
-  Sortierung still aufgegeben und damit genau den Datenverlust zurückgeholt,
-  den die Injektion verhindert.
-- Pagination (`--all`/`paginate`) injiziert jetzt eine stabile Sortierung
-  (`sort={"by":"_id","direction":1}`). Ohne sie liefert die API Seiten in
-  nicht-deterministischer Reihenfolge, wodurch trotz `_id`-Deduplizierung
-  Datensätze still verloren gingen (bei `/invoices/` fehlten 506 von 1705).
-  Endpoints ohne sort-Support (400) fallen automatisch auf das alte
-  Verhalten zurück.
+  service-products and banking-transactions.
+- `--sort` is documented correctly. The spec gives `name:1` as the example
+  throughout, which the API rejects with `Sorting needs by and direction`. The
+  correct form is `{"by":"<field>","direction":1}` — verified on all 35 GET
+  endpoints carrying a sort parameter. 34 help texts were affected.
+- Help texts keep their double quotes. The renderer replaced `"` with `'`,
+  which made JSON examples in `--help` output unusable.
+
+[0.2.0]: https://github.com/yell-services/pland-cli/compare/v0.1.0...v0.2.0
