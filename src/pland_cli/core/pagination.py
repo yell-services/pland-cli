@@ -6,6 +6,9 @@ from typing import Iterator
 from pland_cli.core.client import PlandError
 
 _PAGE_SIZE = 500
+# Backstop gegen einen Server, der den Offset deckelt und dieselbe Seite endlos
+# weiterreicht. Lieber ein Abbruch mit Fehler als ein still gekuerztes Ergebnis.
+_MAX_PAGES = 500
 
 # Ohne stabile, eindeutige Sortierung liefert die API Seiten in
 # nicht-deterministischer Reihenfolge: bei Pagination entstehen Duplikate
@@ -28,7 +31,7 @@ def paginate(client, path: str, params: dict | None = None,
         base["sort"] = _STABLE_SORT
     offset = 0
     seen: set = set()
-    while True:
+    for _ in range(_MAX_PAGES):
         page_params = {**base, "limit": page_size, "offset": offset}
         try:
             batch = client.get(path, params=page_params)
@@ -54,9 +57,20 @@ def paginate(client, path: str, params: dict | None = None,
                 seen.add(_id)
             new += 1
             yield item
-        if new == 0:
+        # Sortiert heisst: eine Seite aus lauter Bekanntem ist das Ende.
+        # Unsortiert kann sie echt sein (die Zeilen haben sich zwischen den
+        # Seiten verschoben) — dort greift nur die Seitenobergrenze.
+        if new == 0 and "sort" in base:
             break
-        offset += page_size
+        # Um die *gelieferte* Zeilenzahl weiter, nicht um die angeforderte:
+        # manche Endpoints deckeln serverseitig unabhaengig vom limit
+        # (/salaries/ bei 200). Mit page_size 500 uebersprang jede Runde 300
+        # Zeilen — gemessen 9800 statt 24483 Datensaetzen, 60 % Verlust.
+        offset += len(batch)
+    else:
+        raise RuntimeError(
+            f"{path}: nach {_MAX_PAGES} Seiten kein Ende — die Paginierung dreht sich im Kreis."
+        )
 
 
 def collect_all(client, path: str, params: dict | None = None,

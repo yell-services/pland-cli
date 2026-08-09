@@ -62,6 +62,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   GET-Endpoints mit sort-Parameter. Betraf 34 Hilfetexte.
 - Hilfetexte behalten ihre Anführungszeichen. Der Renderer ersetzte `"` durch
   `'`, was JSON-Beispiele in der `--help`-Ausgabe unbrauchbar machte.
+- `--all` verlor über die Hälfte der Daten. Der Offset wanderte um die
+  *angeforderte* Seitengröße weiter, manche Endpoints deckeln aber
+  serverseitig unabhängig vom `limit` (`/salaries/` bei 200). Mit
+  `page_size=500` übersprang jede Runde 300 Zeilen: gemessen 9800 statt 24483
+  Datensätzen, 60 % Verlust. Jetzt wandert der Offset um die tatsächlich
+  gelieferte Zeilenzahl. Eine Seitenobergrenze bricht mit Fehler ab, statt
+  ein Teilergebnis zurückzugeben, falls ein Server den Offset deckelt.
 - Pagination fällt nur noch bei `400` auf "ohne sort" zurück. Vorher löste
   jeder `PlandError` den Fallback aus — ein transienter 500 hätte die stabile
   Sortierung still aufgegeben und damit genau den Datenverlust zurückgeholt,

@@ -84,3 +84,40 @@ def test_collect_does_not_drop_sort_on_server_error():
     else:
         raise AssertionError("PlandError erwartet")
     assert len(client.params_log) == 1  # kein Retry ohne sort
+
+
+def test_collect_advances_by_delivered_rows():
+    # /salaries/ deckelt serverseitig bei 200, egal welches limit angefragt
+    # wird. Ein Offset, der um die *angeforderte* Groesse springt, ueberliest
+    # die Differenz — gemessen 9800 statt 24483 Zeilen.
+    class Capped(FakeClient):
+        def get(self, path, params=None):
+            self.params_log.append(dict(params or {}))
+            offset = params["offset"]
+            rows = [{"_id": f"r{i}"} for i in range(offset, min(offset + 2, 5))]
+            return rows
+
+    client = Capped([], )
+    items = collect_all(client, "/salaries/", page_size=10)
+    assert [i["_id"] for i in items] == [f"r{i}" for i in range(5)]
+    assert [p["offset"] for p in client.params_log] == [0, 2, 4, 5]
+
+
+def test_collect_raises_instead_of_truncating_on_endless_paging():
+    # Server deckelt den Offset und reicht immer neue _ids nach: ohne
+    # Obergrenze liefe das ewig. Ein Fehler ist besser als ein stilles Teilergebnis.
+    class Endless(FakeClient):
+        def __init__(self):
+            super().__init__([])
+            self.n = 0
+
+        def get(self, path, params=None):
+            self.n += 1
+            return [{"_id": f"x{self.n}"}]
+
+    try:
+        collect_all(Endless(), "/x/", {"sort": "custom"}, page_size=1)
+    except RuntimeError as exc:
+        assert "im Kreis" in str(exc)
+    else:
+        raise AssertionError("RuntimeError erwartet")
