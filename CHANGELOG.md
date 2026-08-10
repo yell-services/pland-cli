@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `pland batch run --file <json>` runs many operations behind a single risk gate,
+  derived as the maximum risk across the file's entries. Prints a plan first,
+  continues past individual failures, exits 1 if any entry failed.
+
 ### Fixed
 
 - 42 commands raised `TypeError` on invocation instead of doing anything. The

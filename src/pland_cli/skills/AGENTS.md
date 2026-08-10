@@ -25,6 +25,10 @@ Commands sind nach Risiko markiert: 🟡 (confirm) und 🔴 (critical) im `--hel
   löschung, Account-Änderung) verlangen eine Terminal-Eingabe durch einen Menschen
   und lassen sich nicht per Flag auslösen — fordere den User auf, sie selbst zu bestätigen.
 - Vor jedem Schreiben erst `--dry-run` zeigen, dann fragen.
+- **Viele Schreibvorgänge:** `pland batch run --file ops.json` bündelt sie hinter
+  **einer** Rückfrage (Stufe = höchstes Risiko in der Datei). Erst `--dry-run`
+  zeigen, dann den User die Datei freigeben lassen. 🔴 verlangt weiterhin ein
+  Terminal — ein Agent kann das nicht selbst auslösen.
 
 ## Wichtige Fallstricke
 - Zeitstempel sind Unix-Millisekunden.
