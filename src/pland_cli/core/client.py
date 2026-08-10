@@ -1,14 +1,19 @@
 from __future__ import annotations
 
 import time
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from typing import Any
 
+import click
 import httpx
 
 from pland_cli.core.config import Config
 
 _TIMEOUT = 120.0
 _MAX_RETRIES = 5
+# A server may ask for any delay it likes; a CLI that sleeps for an hour looks hung.
+_MAX_RETRY_WAIT = 60.0
 
 
 class PlandAuthError(Exception):
@@ -38,6 +43,29 @@ def _handle_response(resp: httpx.Response) -> Any:
     errs = body.get("errors") or []
     detail = "; ".join(e.get("message", "") for e in errs) or body.get("message", "")
     raise PlandError(resp.status_code, body.get("message", resp.reason_phrase), detail, body)
+
+
+def _retry_after(value: str | None, attempt: int) -> float:
+    """Seconds to wait before retrying a 429, clamped to [0, _MAX_RETRY_WAIT].
+
+    RFC 7231 allows either delta-seconds or an HTTP-date. Anything unparseable
+    falls back to exponential backoff rather than raising in the middle of a
+    retry, which used to turn a rate limit into a traceback.
+    """
+    wait = float(2 ** attempt)
+    if value:
+        try:
+            wait = float(value)
+        except ValueError:
+            try:
+                when: datetime | None = parsedate_to_datetime(value)
+            except (TypeError, ValueError):
+                when = None
+            if when is not None:
+                if when.tzinfo is None:
+                    when = when.replace(tzinfo=timezone.utc)
+                wait = (when - datetime.now(timezone.utc)).total_seconds()
+    return min(max(wait, 0.0), _MAX_RETRY_WAIT)
 
 
 def bootstrap_api_key(
@@ -89,12 +117,20 @@ class PlandClient:
         )
 
     def _request(self, method: str, path: str, **kwargs: Any) -> Any:
+        # A command builds its path by substituting an argument into a template
+        # ("/holidays/" + id). httpx resolves dot segments client-side, so an
+        # argument like "../../users/ID" would retarget the request at a
+        # different — and possibly higher-risk — endpoint than the one
+        # guard.enforce classified. One check here covers every caller.
+        if ".." in path.split("/"):
+            raise click.ClickException(
+                f"Request path must not contain '..' segments: {path!r}"
+            )
         resp = self._client.request(method, path, **kwargs)
         for attempt in range(_MAX_RETRIES):
             if resp.status_code != 429:
                 break
-            wait = float(resp.headers.get("Retry-After", 2 ** attempt))
-            time.sleep(wait)
+            time.sleep(_retry_after(resp.headers.get("Retry-After"), attempt))
             resp = self._client.request(method, path, **kwargs)
         return self._handle(resp)
 
