@@ -1,3 +1,4 @@
+import json
 import re
 from pathlib import Path
 
@@ -5,9 +6,11 @@ import click
 import pytest
 
 import pland_cli.commands as commands_pkg
+from pland_cli.core.client import PlandError
 from pland_cli.enrichment.batch import (
     ResolvedEntry,
     _operation_index,
+    execute,
     format_plan,
     max_risk,
     resolve_entries,
@@ -148,3 +151,65 @@ def test_plan_preserves_first_appearance_ordering():
     assert jobs_line in plan
     # Verify salary appears before jobs (first-appearance order)
     assert plan.index(salary_line) < plan.index(jobs_line)
+
+
+class _FakeClient:
+    def __init__(self, fail_on: set[str] | None = None):
+        self.calls: list[tuple[str, str, dict | None]] = []
+        self.fail_on = fail_on or set()
+
+    def _maybe_fail(self, path):
+        if path in self.fail_on:
+            raise PlandError(409, "Conflict", "already exists", {})
+
+    def post(self, path, json=None, params=None, files=None, data=None):
+        self.calls.append(("post", path, json))
+        self._maybe_fail(path)
+        return {"_id": "new"}
+
+    def get(self, path, params=None):
+        self.calls.append(("get", path, None))
+        self._maybe_fail(path)
+        return {}
+
+
+def test_execute_calls_every_entry_in_order(monkeypatch, tmp_path):
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    entries = [
+        _entry(0, "jobs", "create", "post", "/jobs/v2", "free"),
+        _entry(1, "jobs", "view", "get", "/jobs/x1", "free"),
+    ]
+    entries[0].data = {"a": 1}
+    ok, failures = execute(client, entries)
+    assert ok == 2 and failures == []
+    assert client.calls == [("post", "/jobs/v2", {"a": 1}), ("get", "/jobs/x1", None)]
+
+
+def test_execute_continues_past_a_failure(monkeypatch, tmp_path):
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient(fail_on={"/jobs/bad"})
+    entries = [
+        _entry(0, "jobs", "view", "get", "/jobs/ok1", "free"),
+        _entry(1, "jobs", "view", "get", "/jobs/bad", "free"),
+        _entry(2, "jobs", "view", "get", "/jobs/ok2", "free"),
+    ]
+    ok, failures = execute(client, entries)
+    assert ok == 2
+    assert [f["index"] for f in failures] == [1]
+    assert failures[0]["status"] == 409
+    assert [c[1] for c in client.calls] == ["/jobs/ok1", "/jobs/bad", "/jobs/ok2"]
+
+
+def test_execute_audits_one_line_per_executed_entry(monkeypatch, tmp_path):
+    log = tmp_path / "a.jsonl"
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: log)
+    client = _FakeClient(fail_on={"/jobs/bad"})
+    execute(client, [
+        _entry(0, "jobs", "view", "get", "/jobs/ok1", "free"),
+        _entry(1, "jobs", "view", "get", "/jobs/bad", "free"),
+    ])
+    lines = log.read_text().splitlines()
+    assert len(lines) == 2
+    assert json.loads(lines[0])["decision"] == "batch_ok"
+    assert json.loads(lines[1])["decision"] == "batch_failed"

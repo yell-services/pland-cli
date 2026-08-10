@@ -9,6 +9,8 @@ import click
 from pland_cli._codegen.extract import Operation, extract_operations
 from pland_cli._codegen.security import classify
 from pland_cli._codegen.spec import load_spec
+from pland_cli.core import guard
+from pland_cli.core.client import PlandError
 
 RISK_ORDER = {"free": 0, "confirm": 1, "critical": 2}
 MARKER = {"free": "🟢", "confirm": "🟡", "critical": "🔴"}
@@ -89,3 +91,35 @@ def format_plan(entries: list[ResolvedEntry]) -> str:
         else:
             lines.append(f"  {len(group_entries):>3} x  {group} {command}  {MARKER[risk]}")
     return "\n".join(lines)
+
+
+def execute(client, entries: list[ResolvedEntry]) -> tuple[int, list[dict]]:
+    """Run every entry, recording failures instead of aborting.
+
+    Runs with no per-entry risk gate: the batch is gated once, up front.
+    guard.audit() still records one line per executed operation.
+    """
+    succeeded = 0
+    failures: list[dict] = []
+    for entry in entries:
+        try:
+            if entry.method == "get":
+                client.get(entry.path)
+            elif entry.method == "delete":
+                client.delete(entry.path)
+            else:
+                getattr(client, entry.method)(entry.path, json=entry.data)
+        except PlandError as exc:
+            failures.append({
+                "index": entry.index, "group": entry.group, "command": entry.command,
+                "status": exc.status, "detail": exc.detail or exc.title,
+            })
+            decision = "batch_failed"
+        else:
+            succeeded += 1
+            decision = "batch_ok"
+        guard.audit({
+            "method": entry.method.upper(), "path": entry.path,
+            "risk": entry.risk, "decision": decision, "batch_index": entry.index,
+        })
+    return succeeded, failures
