@@ -5,7 +5,6 @@ import click
 import pytest
 
 import pland_cli.commands as commands_pkg
-from pland_cli._codegen.security import classify
 from pland_cli.enrichment.batch import _operation_index, max_risk, resolve_entries
 
 
@@ -93,7 +92,8 @@ def test_runtime_risk_matches_generated_risk():
         func = "_cmd_" + f"{group}_{command}".replace("-", "_")
         if func not in generated:
             continue
-        expected = "free" if op.method == "get" else classify(op.method, op.path, op.tag)
+        entry = {"group": group, "command": command, "args": ["x"] * len(op.path_params)}
+        expected = resolve_entries([entry])[0].risk
         assert generated[func] == expected, f"{group} {command}"
         checked += 1
     assert checked > 300, f"only {checked} commands compared, expected the full surface"
