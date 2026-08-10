@@ -45,7 +45,9 @@ Commands sind nach Risiko markiert: 🟡 (confirm) und 🔴 (critical) im `--hel
 - **Viele Schreibvorgänge:** `pland batch run --file ops.json` bündelt sie hinter
   **einer** Rückfrage (Stufe = höchstes Risiko in der Datei). Erst `--dry-run`
   zeigen, dann den User die Datei freigeben lassen. 🔴 verlangt weiterhin ein
-  Terminal — ein Agent kann das nicht selbst auslösen.
+  Terminal — ein Agent kann das nicht selbst auslösen. Query-Parameter lassen sich
+  in einem Batch-Eintrag nicht abbilden — u. a. `jobs delete` (`splitDate`, `type`,
+  `teamId`) niemals batchen, sondern einzeln ausführen.
 
 ## Fallstricke (sonst falsche Ergebnisse) — Details: references/gotchas.md
 

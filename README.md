@@ -134,6 +134,10 @@ risk gate. The file holds a JSON array; each entry names an existing command:
 
 `args` supplies path parameters positionally, in the order `pland describe`
 reports them. Enriched commands (`in-range`, `active`, …) are not addressable.
+An entry cannot express query parameters — 8 write commands take them, among
+them `jobs delete` (`splitDate`, `type`, `teamId`); run those individually
+instead of batching them, or the request goes out without the parameters that
+control what gets deleted.
 
 The risk level is the **maximum** across all entries: a file containing one 🔴
 operation asks for a typed token once, and `--yes` does not skip it. A plan is
