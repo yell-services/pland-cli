@@ -80,8 +80,12 @@ def enforce(
     """Enforce the risk tier. Returning means the call may proceed;
     raising SystemExit(2) means aborted or blocked."""
     isatty = isatty or sys.stdin.isatty
-    confirmer = confirmer or (lambda prompt: click.confirm(prompt, default=False))
-    tokener = tokener or (lambda prompt: click.prompt(prompt, default="", show_default=False))
+    # Prompts go to stderr: with --json, stdout carries the result object, and a
+    # confirmation written there would make it unparseable for the caller.
+    confirmer = confirmer or (lambda prompt: click.confirm(prompt, default=False, err=True))
+    tokener = tokener or (
+        lambda prompt: click.prompt(prompt, default="", show_default=False, err=True)
+    )
 
     # Zustandsabhaengig: draftfaehige DELETE -> NUR bei einem echten Entwurf-Objekt
     # auf free herabstufen. Ein leeres/unerwartetes Lookup-Ergebnis ({}, Liste,
@@ -121,8 +125,8 @@ def enforce(
     if not isatty():
         _abort(method, path, risk, "blocked_no_tty",
                f"🟡 {label} is protected and needs confirmation. No interactive "
-               f"TTY — mit --yes bewusst freigeben.")
-    if confirmer(f"🟡 {label} ausfuehren?"):
+               f"TTY — release it deliberately with --yes.")
+    if confirmer(f"🟡 Run {label}?"):
         audit({"method": method.upper(), "path": path, "risk": "confirm", "decision": "confirmed"})
         return
     _abort(method, path, risk, "aborted", "Aborted.")

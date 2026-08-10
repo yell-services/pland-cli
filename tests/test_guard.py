@@ -3,6 +3,7 @@ import json
 
 import click
 import pytest
+from click.testing import CliRunner
 
 from pland_cli.core import guard
 
@@ -59,10 +60,10 @@ def test_confirm_no_tty_blocks(monkeypatch, tmp_path):
 
 
 def test_critical_requires_correct_token(monkeypatch, tmp_path):
-    # falscher Token -> Abbruch
+    # A wrong token must abort.
     with pytest.raises((click.Abort, SystemExit)):
         _enforce(monkeypatch, tmp_path, risk="critical", method="delete",
-                 path="/salaries/1", tokener=lambda p: "falsch")
+                 path="/salaries/1", tokener=lambda p: "wrong")
 
 
 def test_critical_yes_flag_does_not_bypass(monkeypatch, tmp_path):
@@ -75,3 +76,34 @@ def test_critical_correct_token_runs(monkeypatch, tmp_path):
     # Token = the parent of the last path segment ("salaries") — see the implementation
     _enforce(monkeypatch, tmp_path, risk="critical", path="/salaries/1",
              tokener=lambda p: "salaries")
+
+
+def test_confirm_prompt_goes_to_stderr(monkeypatch, tmp_path):
+    """With --json, stdout carries the result object — a prompt there breaks it."""
+    monkeypatch.setattr(guard, "_audit_path", lambda: tmp_path / "a.jsonl")
+
+    @click.command()
+    def cmd():
+        guard.enforce(method="delete", path="/documents/1", risk="confirm",
+                      isatty=lambda: True)
+        click.echo('{"ok": true}')
+
+    result = CliRunner().invoke(cmd, input="y\n")
+    assert result.exit_code == 0
+    assert result.stdout == '{"ok": true}\n'
+    assert "Run DELETE /documents/1?" in result.stderr
+
+
+def test_critical_token_prompt_goes_to_stderr(monkeypatch, tmp_path):
+    monkeypatch.setattr(guard, "_audit_path", lambda: tmp_path / "a.jsonl")
+
+    @click.command()
+    def cmd():
+        guard.enforce(method="delete", path="/salaries/1", risk="critical",
+                      isatty=lambda: True)
+        click.echo('{"ok": true}')
+
+    result = CliRunner().invoke(cmd, input="salaries\n")
+    assert result.exit_code == 0
+    assert result.stdout == '{"ok": true}\n'
+    assert "Type 'salaries' to confirm" in result.stderr
