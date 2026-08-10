@@ -469,3 +469,31 @@ def test_unknown_command_aborts_before_any_request(tmp_path, monkeypatch):
     result = CliRunner().invoke(main, ["batch", "run", "--file", file])
     assert result.exit_code != 0
     assert client.calls == []
+
+
+def test_gate_names_the_first_entry_at_the_maximum_risk(tmp_path, monkeypatch):
+    """The prompt label and the 🔴 token must name the operation being gated.
+
+    Taking entries[0] instead would still gate at the right tier, but would ask
+    the user to type a token for a benign resource while a critical entry rides
+    along on that confirmation.
+    """
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    seen: dict = {}
+    monkeypatch.setattr("pland_cli.core.guard.enforce", lambda **kw: seen.update(kw))
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [
+        {"group": "jobs", "command": "view", "args": ["x1"]},
+        {"group": "absences", "command": "delete", "args": ["a1"]},
+        {"group": "salary", "command": "release-using-time-tracking",
+         "data": {"timeTrackingId": "t1"}},
+        {"group": "salary", "command": "release-using-time-tracking",
+         "data": {"timeTrackingId": "t2"}},
+    ])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file])
+    assert result.exit_code == 0
+    assert seen["risk"] == "critical"
+    assert seen["method"] == "post"
+    assert seen["path"] == "/salaries/releaseWithTimeTracking"
