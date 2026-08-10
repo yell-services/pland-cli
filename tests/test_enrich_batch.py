@@ -58,3 +58,13 @@ def test_resolve_rejects_wrong_arg_count():
 def test_resolve_rejects_non_object_entry():
     with pytest.raises(click.ClickException, match="entry 0: must be a JSON object"):
         resolve_entries(["oops"])
+
+
+def test_resolve_rejects_non_list_args():
+    with pytest.raises(click.ClickException, match="entry 0: 'args' must be a JSON array"):
+        resolve_entries([{"group": "jobs", "command": "view", "args": 42}])
+
+
+def test_resolve_rejects_dict_args():
+    with pytest.raises(click.ClickException, match="entry 0: 'args' must be a JSON array"):
+        resolve_entries([{"group": "jobs", "command": "view", "args": {"jobId": "abc"}}])

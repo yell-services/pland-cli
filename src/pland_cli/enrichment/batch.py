@@ -52,6 +52,8 @@ def resolve_entries(entries: list) -> list[ResolvedEntry]:
         if op is None:
             raise click.ClickException(f"entry {i}: unknown command '{group} {command}'")
         args = raw.get("args") or []
+        if not isinstance(args, list):
+            raise click.ClickException(f"entry {i}: 'args' must be a JSON array")
         if len(args) != len(op.path_params):
             raise click.ClickException(
                 f"entry {i}: expects {len(op.path_params)} path argument"
