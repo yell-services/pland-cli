@@ -1,7 +1,12 @@
+import re
+from pathlib import Path
+
 import click
 import pytest
 
-from pland_cli.enrichment.batch import max_risk, resolve_entries
+import pland_cli.commands as commands_pkg
+from pland_cli._codegen.security import classify
+from pland_cli.enrichment.batch import _operation_index, max_risk, resolve_entries
 
 
 def test_max_risk_of_empty_list_is_free():
@@ -68,3 +73,27 @@ def test_resolve_rejects_non_list_args():
 def test_resolve_rejects_dict_args():
     with pytest.raises(click.ClickException, match="entry 0: 'args' must be a JSON array"):
         resolve_entries([{"group": "jobs", "command": "view", "args": {"jobId": "abc"}}])
+
+
+def test_runtime_risk_matches_generated_risk():
+    """batch classifies at run time; the generator baked risk into the source.
+
+    If these ever disagree, a single gate would understate what a batch does.
+    """
+    generated: dict[tuple[str, str], str] = {}
+    for source in Path(commands_pkg.__path__[0]).glob("*.py"):
+        text = source.read_text()
+        for match in re.finditer(
+            r'def _cmd_([a-z0-9_]+)\(.*?risk="([a-z]+)"', text, re.DOTALL
+        ):
+            generated["_cmd_" + match.group(1)] = match.group(2)
+
+    checked = 0
+    for (group, command), op in _operation_index().items():
+        func = "_cmd_" + f"{group}_{command}".replace("-", "_")
+        if func not in generated:
+            continue
+        expected = "free" if op.method == "get" else classify(op.method, op.path, op.tag)
+        assert generated[func] == expected, f"{group} {command}"
+        checked += 1
+    assert checked > 300, f"only {checked} commands compared, expected the full surface"
