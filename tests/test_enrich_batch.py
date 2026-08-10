@@ -116,10 +116,10 @@ def test_plan_groups_and_counts():
         _entry(1, "salary", "release-using-time-tracking", "post", "/salaries/releaseWithTimeTracking", "critical"),
         _entry(2, "jobs", "create", "post", "/jobs/v2", "free"),
     ])
-    assert "3 operations" in plan
-    assert "2 x  salary release-using-time-tracking" in plan
-    assert "1 x  jobs create" in plan
-    assert "🔴" in plan and "🟢" in plan
+    assert "Plan: 3 operations" in plan
+    # Pin the exact rendered line: marker bound to its own operation
+    assert "    2 x  salary release-using-time-tracking  🔴" in plan
+    assert "    1 x  jobs create  🟢" in plan
 
 
 def test_plan_lists_deletes_individually():
@@ -127,6 +127,24 @@ def test_plan_lists_deletes_individually():
         _entry(0, "jobs", "delete", "delete", "/jobs/a1", "confirm"),
         _entry(1, "jobs", "delete", "delete", "/jobs/b2", "confirm"),
     ])
-    assert "/jobs/a1" in plan
-    assert "/jobs/b2" in plan
+    # Pin the exact rendered lines: marker bound to each deletion
+    assert "  [0] jobs delete  /jobs/a1  🟡" in plan
+    assert "  [1] jobs delete  /jobs/b2  🟡" in plan
+    # Ensure deletions are listed individually, not aggregated
     assert "2 x" not in plan
+
+
+def test_plan_preserves_first_appearance_ordering():
+    """Verify that groups appear in first-appearance order, not sorted."""
+    plan = format_plan([
+        _entry(0, "salary", "release-using-time-tracking", "post", "/salaries/releaseWithTimeTracking", "critical"),
+        _entry(1, "jobs", "create", "post", "/jobs/v2", "free"),
+        _entry(2, "salary", "release-using-time-tracking", "post", "/salaries/releaseWithTimeTracking", "critical"),
+    ])
+    # Pin the exact lines with their markers
+    salary_line = "    2 x  salary release-using-time-tracking  🔴"
+    jobs_line = "    1 x  jobs create  🟢"
+    assert salary_line in plan
+    assert jobs_line in plan
+    # Verify salary appears before jobs (first-appearance order)
+    assert plan.index(salary_line) < plan.index(jobs_line)
