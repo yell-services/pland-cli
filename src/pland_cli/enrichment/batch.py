@@ -1,8 +1,10 @@
 """Run many spec operations from one file behind a single risk gate."""
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from functools import lru_cache
+from pathlib import Path
 
 import click
 import httpx
@@ -12,6 +14,8 @@ from pland_cli._codegen.security import classify
 from pland_cli._codegen.spec import load_spec
 from pland_cli.core import guard
 from pland_cli.core.client import PlandError
+from pland_cli.enrichment.registry import enrich, get_client
+from pland_cli.utils import output as out_mod
 
 RISK_ORDER = {"free": 0, "confirm": 1, "critical": 2}
 MARKER = {"free": "🟢", "confirm": "🟡", "critical": "🔴"}
@@ -125,3 +129,52 @@ def execute(client, entries: list[ResolvedEntry]) -> tuple[int, list[dict]]:
             "risk": entry.risk, "decision": decision, "batch_index": entry.index,
         })
     return succeeded, failures
+
+
+@enrich("batch", "run", new=True)
+@click.command()
+@click.option("--file", "file_", required=True, type=click.Path(exists=True, dir_okay=False),
+              help="JSON file holding an array of operations.")
+@click.option("--dry-run", is_flag=True, help="Print the plan and exit without asking.")
+@click.option("--yes", "assume_yes", is_flag=True,
+              help="Skip a 🟡 confirmation. Has no effect on 🔴.")
+@click.pass_context
+def batch_run(ctx: click.Context, file_: str, dry_run: bool, assume_yes: bool) -> None:
+    """Run many operations from a file behind a single risk gate."""
+    out_mod.set_json(ctx.obj.get("as_json", False))
+    try:
+        raw = json.loads(Path(file_).read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise click.ClickException(f"{file_} is not valid JSON: {exc}") from exc
+    if not isinstance(raw, list):
+        raise click.ClickException(f"{file_} must hold a JSON array of operations")
+
+    entries = resolve_entries(raw)
+    risk = max_risk([e.risk for e in entries])
+    # The plan is always shown before the gate, but it must not pollute the
+    # machine-readable stream: under --json it goes to stderr.
+    click.echo(format_plan(entries), err=out_mod.USE_JSON)
+    if dry_run:
+        if out_mod.USE_JSON:
+            out_mod.out({"operations": len(entries), "risk": risk})
+        return
+
+    if risk != "free":
+        # Gate on the actual riskiest operation, so prompt label and audit line
+        # name a real request rather than a synthetic one.
+        gate = next(e for e in entries if e.risk == risk)
+        guard.enforce(method=gate.method, path=gate.path, risk=risk,
+                      draftable=None, assume_yes=assume_yes)
+
+    succeeded, failures = execute(get_client(ctx), entries)
+    if out_mod.USE_JSON:
+        out_mod.out({"succeeded": succeeded, "failed": len(failures), "failures": failures})
+    else:
+        click.echo(f"Done: {succeeded} succeeded, {len(failures)} failed")
+        for failure in failures:
+            # status 0 is execute()'s sentinel for "never got an HTTP response".
+            status = failure["status"] or "no response"
+            click.echo(f"  [{failure['index']}] {failure['group']} {failure['command']}"
+                       f"  {status}  {failure['detail']}")
+    if failures:
+        ctx.exit(1)

@@ -79,7 +79,15 @@ def _apply_enrichments() -> None:
     validate_overrides(main)
 
 
+@click.group("batch")
+def batch_group() -> None:
+    """Run many operations from one file behind a single risk gate."""
+
+
 _register_generated()
+# Must precede _apply_enrichments(): @enrich("batch", "run") needs the group to
+# exist, and validate_overrides() aborts on an enrichment without one.
+main.add_command(batch_group)
 _apply_enrichments()
 
 from pland_cli.meta import register_meta  # noqa: E402

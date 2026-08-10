@@ -5,8 +5,10 @@ from pathlib import Path
 import click
 import httpx
 import pytest
+from click.testing import CliRunner
 
 import pland_cli.commands as commands_pkg
+from pland_cli.cli import main
 from pland_cli.core.client import PlandError
 from pland_cli.enrichment.batch import (
     ResolvedEntry,
@@ -235,3 +237,96 @@ def test_execute_continues_past_a_transport_error(monkeypatch, tmp_path):
     lines = log.read_text().splitlines()
     assert len(lines) == 3
     assert json.loads(lines[1])["decision"] == "batch_failed"
+
+
+def _write(tmp_path, entries):
+    path = tmp_path / "ops.json"
+    path.write_text(json.dumps(entries))
+    return str(path)
+
+
+def test_dry_run_prints_plan_and_never_prompts(tmp_path):
+    file = _write(tmp_path, [
+        {"group": "salary", "command": "release-using-time-tracking", "data": {"timeTrackingId": "t"}},
+    ])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file, "--dry-run"])
+    assert result.exit_code == 0
+    assert "1 operations" in result.output
+    assert "salary release-using-time-tracking" in result.output
+
+
+def test_json_dry_run_keeps_stdout_parseable(tmp_path):
+    """--json must not have the human plan corrupt the machine-readable stream."""
+    file = _write(tmp_path, [
+        {"group": "salary", "command": "release-using-time-tracking", "data": {"timeTrackingId": "t"}},
+    ])
+    result = CliRunner().invoke(main, ["--json", "batch", "run", "--file", file, "--dry-run"])
+    assert result.exit_code == 0
+    assert json.loads(result.stdout) == {"operations": 1, "risk": "critical"}
+    # The human still sees the plan before any gate — on stderr, out of the way.
+    assert "salary release-using-time-tracking" in result.stderr
+
+
+def test_free_only_batch_does_not_prompt(tmp_path, monkeypatch):
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [{"group": "jobs", "command": "view", "args": ["x1"]}])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file])
+    assert result.exit_code == 0
+    assert client.calls == [("get", "/jobs/x1", None)]
+
+
+def test_critical_batch_requires_the_token(tmp_path, monkeypatch):
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [
+        {"group": "salary", "command": "release-using-time-tracking", "data": {"timeTrackingId": "t"}},
+    ])
+    # No TTY under CliRunner: fail-closed, and nothing is sent.
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file])
+    assert result.exit_code == 2
+    assert client.calls == []
+
+
+def test_yes_flag_does_not_bypass_critical(tmp_path, monkeypatch):
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [
+        {"group": "salary", "command": "release-using-time-tracking", "data": {"timeTrackingId": "t"}},
+    ])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file, "--yes"])
+    assert result.exit_code == 2
+    assert client.calls == []
+
+
+def test_failure_makes_exit_code_nonzero(tmp_path, monkeypatch):
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient(fail_on={"/jobs/bad"})
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [
+        {"group": "jobs", "command": "view", "args": ["ok"]},
+        {"group": "jobs", "command": "view", "args": ["bad"]},
+    ])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file])
+    assert result.exit_code == 1
+    assert "1 failed" in result.output
+
+
+def test_unknown_command_aborts_before_any_request(tmp_path, monkeypatch):
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [
+        {"group": "jobs", "command": "view", "args": ["ok"]},
+        {"group": "salary", "command": "nope"},
+    ])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file])
+    assert result.exit_code != 0
+    assert client.calls == []
