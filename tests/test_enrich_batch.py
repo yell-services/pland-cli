@@ -86,6 +86,48 @@ def test_resolve_rejects_dict_args():
         resolve_entries([{"group": "jobs", "command": "view", "args": {"jobId": "abc"}}])
 
 
+@pytest.mark.parametrize("entry", [
+    # Row 1: gate says free (DELETE /holidays/{id}), would send DELETE /users/USERID.
+    {"group": "holiday", "command": "delete", "args": ["../../users/USERID"]},
+    # Row 2: gate says confirm, would send the 🔴 mass-delete DELETE /notifications/delete.
+    {"group": "jobs", "command": "delete", "args": ["../notifications/delete"]},
+    # Row 3: gate says free, would send PATCH /api_key/KEYID.
+    {"group": "articles", "command": "update", "args": ["../api_key/KEYID"]},
+])
+def test_resolve_rejects_path_arguments_that_escape_their_segment(entry):
+    """A '/' in a path argument makes the gated path differ from the sent one."""
+    with pytest.raises(click.ClickException, match="must not contain '/'"):
+        resolve_entries([entry])
+
+
+def test_resolve_refuses_a_write_with_required_query_parameters():
+    """jobs delete needs splitDate and type, which no batch entry can carry."""
+    with pytest.raises(click.ClickException, match="requires query parameters"):
+        resolve_entries([{"group": "jobs", "command": "delete", "args": ["a1"]}])
+
+
+def test_resolve_refuses_a_get_with_required_query_parameters():
+    """The limitation is about the entry format, so it holds for reads too."""
+    with pytest.raises(click.ClickException, match=r"requires query parameters \['fieldKey'\]"):
+        resolve_entries([{"group": "assignments", "command": "get-distinct-field-values"}])
+
+
+def test_resolve_rejects_non_object_data():
+    with pytest.raises(click.ClickException, match="entry 0: 'data' must be a JSON object"):
+        resolve_entries([{"group": "jobs", "command": "create", "data": 42}])
+
+
+def test_resolve_treats_null_args_as_no_path_arguments():
+    resolved = resolve_entries([{"group": "jobs", "command": "create", "args": None}])
+    assert resolved[0].path == "/jobs/v2"
+
+
+def test_resolve_rejects_empty_dict_args():
+    """Falsy non-lists must not slip through as an implicit empty arg list."""
+    with pytest.raises(click.ClickException, match="entry 0: 'args' must be a JSON array"):
+        resolve_entries([{"group": "jobs", "command": "view", "args": {}}])
+
+
 def test_runtime_risk_matches_generated_risk():
     """batch classifies at run time; the generator baked risk into the source.
 
@@ -100,15 +142,26 @@ def test_runtime_risk_matches_generated_risk():
             generated["_cmd_" + match.group(1)] = match.group(2)
 
     checked = 0
+    refused = 0
     for (group, command), op in _operation_index().items():
         func = "_cmd_" + f"{group}_{command}".replace("-", "_")
         if func not in generated:
             continue
         entry = {"group": group, "command": command, "args": ["x"] * len(op.path_params)}
+        if any(p.get("required") for p in op.query_params):
+            # resolve_entries refuses these outright, so they have no runtime
+            # risk to compare. Assert the refusal rather than merely skipping.
+            with pytest.raises(click.ClickException, match="requires query parameters"):
+                resolve_entries([entry])
+            refused += 1
+            continue
         expected = resolve_entries([entry])[0].risk
         assert generated[func] == expected, f"{group} {command}"
         checked += 1
-    assert checked > 300, f"only {checked} commands compared, expected the full surface"
+    # Exact, not a floor: 521 generated commands map onto a spec operation and
+    # 43 of them carry a required query parameter. If either number moves, the
+    # comparison surface changed and this test must be re-read, not re-tuned.
+    assert (checked, refused) == (478, 43), f"compared {checked}, refused {refused}"
 
 
 def _entry(i, group, command, method, path, risk):
@@ -215,15 +268,22 @@ def test_execute_continues_past_a_failure(monkeypatch, tmp_path):
 def test_execute_audits_one_line_per_executed_entry(monkeypatch, tmp_path):
     log = tmp_path / "a.jsonl"
     monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: log)
-    client = _FakeClient(fail_on={"/jobs/bad"})
+    client = _FakeClient(fail_on={"/absences/bad"})
     execute(client, [
         _entry(0, "jobs", "view", "get", "/jobs/ok1", "free"),
-        _entry(1, "jobs", "view", "get", "/jobs/bad", "free"),
+        _entry(1, "absences", "delete", "delete", "/absences/bad", "confirm"),
     ])
     lines = log.read_text().splitlines()
     assert len(lines) == 2
     assert json.loads(lines[0])["decision"] == "batch_ok"
-    assert json.loads(lines[1])["decision"] == "batch_failed"
+    # The audit trail is the only forensic record a batch leaves, so pin every
+    # field execute() writes, not just the decision.
+    record = json.loads(lines[1])
+    assert record["decision"] == "batch_failed"
+    assert record["batch_index"] == 1
+    assert record["method"] == "DELETE"
+    assert record["path"] == "/absences/bad"
+    assert record["risk"] == "confirm"
 
 
 def test_execute_continues_past_a_transport_error(monkeypatch, tmp_path):
@@ -316,10 +376,10 @@ def test_yes_flag_releases_a_confirm_batch(tmp_path, monkeypatch):
     client = _FakeClient()
     import pland_cli.enrichment.batch as batch_mod
     monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
-    file = _write(tmp_path, [{"group": "jobs", "command": "delete", "args": ["a1"]}])
+    file = _write(tmp_path, [{"group": "absences", "command": "delete", "args": ["a1"]}])
     result = CliRunner().invoke(main, ["batch", "run", "--file", file, "--yes"])
     assert result.exit_code == 0
-    assert client.calls == [("delete", "/jobs/a1", None)]
+    assert client.calls == [("delete", "/absences/a1", None)]
 
 
 def test_confirm_batch_without_yes_is_fail_closed(tmp_path, monkeypatch):
@@ -328,10 +388,60 @@ def test_confirm_batch_without_yes_is_fail_closed(tmp_path, monkeypatch):
     client = _FakeClient()
     import pland_cli.enrichment.batch as batch_mod
     monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
-    file = _write(tmp_path, [{"group": "jobs", "command": "delete", "args": ["a1"]}])
+    file = _write(tmp_path, [{"group": "absences", "command": "delete", "args": ["a1"]}])
     result = CliRunner().invoke(main, ["batch", "run", "--file", file])
     assert result.exit_code == 2
     assert client.calls == []
+
+
+def test_mixed_batch_gates_on_a_critical_entry_that_is_not_first(tmp_path, monkeypatch):
+    """The gate is max() over the whole file, not the first entry's risk.
+
+    A free read followed by a 🔴 release must still hit the 🔴 tier, which
+    fail-closes without a TTY — so not even the free read is sent.
+    """
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [
+        {"group": "jobs", "command": "view", "args": ["x1"]},
+        {"group": "salary", "command": "release-using-time-tracking",
+         "data": {"timeTrackingId": "t"}},
+    ])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file])
+    assert result.exit_code == 2
+    assert client.calls == []
+
+
+def test_mixed_batch_without_yes_is_fail_closed_when_confirm_is_not_first(tmp_path, monkeypatch):
+    """free + confirm with the confirm last: one 🟡 gate, and it fail-closes."""
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [
+        {"group": "jobs", "command": "view", "args": ["x1"]},
+        {"group": "absences", "command": "delete", "args": ["a1"]},
+    ])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file])
+    assert result.exit_code == 2
+    assert client.calls == []
+
+
+def test_mixed_batch_with_yes_runs_every_entry_when_confirm_is_not_first(tmp_path, monkeypatch):
+    """The same file with --yes: one 🟡 gate released, both entries execute."""
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [
+        {"group": "jobs", "command": "view", "args": ["x1"]},
+        {"group": "absences", "command": "delete", "args": ["a1"]},
+    ])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file, "--yes"])
+    assert result.exit_code == 0
+    assert client.calls == [("get", "/jobs/x1", None), ("delete", "/absences/a1", None)]
 
 
 def test_failure_makes_exit_code_nonzero(tmp_path, monkeypatch):

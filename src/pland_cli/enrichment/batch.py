@@ -59,7 +59,11 @@ def resolve_entries(entries: list) -> list[ResolvedEntry]:
         op = index.get((group, command))
         if op is None:
             raise click.ClickException(f"entry {i}: unknown command '{group} {command}'")
-        args = raw.get("args") or []
+        # A missing key and an explicit null both mean "no path arguments";
+        # anything else that is not a list is an error, including falsy values.
+        args = raw.get("args")
+        if args is None:
+            args = []
         if not isinstance(args, list):
             raise click.ClickException(f"entry {i}: 'args' must be a JSON array")
         if len(args) != len(op.path_params):
@@ -69,15 +73,35 @@ def resolve_entries(entries: list) -> list[ResolvedEntry]:
             )
         path = op.path
         for param, value in zip(op.path_params, args):
+            # A path argument is a single URL segment. Letting one carry '/'
+            # would let it walk to another endpoint (httpx normalises '..'
+            # client-side), so the gate would classify a request that is never
+            # the one actually sent.
+            if "/" in str(value):
+                raise click.ClickException(
+                    f"entry {i}: path argument {value!r} must not contain '/'")
             path = path.replace("{" + param["name"] + "}", str(value))
+        # An entry carries only group/command/args/data, so an operation whose
+        # query parameters are mandatory can never be expressed completely.
+        # Sending it anyway would let the server decide what the missing half
+        # meant, so refuse it for every method — GET included.
+        required_qp = [p["name"] for p in op.query_params if p.get("required")]
+        if required_qp:
+            raise click.ClickException(
+                f"entry {i}: '{op.group} {op.command}' requires query parameters {required_qp}, "
+                f"which a batch entry cannot express — run it individually"
+            )
         # GET is always read-only -> free (classify() only reasons about write ops
         # and would fall through to its confirm fail-safe for reads). Mirrors
         # _codegen/render.py:39 exactly, so classification cannot drift between
         # generated commands and batch.
         risk = "free" if op.method == "get" else classify(op.method, op.path, op.tag)
+        data = raw.get("data")
+        if data is not None and not isinstance(data, dict):
+            raise click.ClickException(f"entry {i}: 'data' must be a JSON object")
         resolved.append(ResolvedEntry(
             index=i, group=op.group, command=op.command, method=op.method,
-            path=path, risk=risk, data=raw.get("data"),
+            path=path, risk=risk, data=data,
         ))
     return resolved
 
