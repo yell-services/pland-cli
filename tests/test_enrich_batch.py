@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 
 import click
+import httpx
 import pytest
 
 import pland_cli.commands as commands_pkg
@@ -154,11 +155,14 @@ def test_plan_preserves_first_appearance_ordering():
 
 
 class _FakeClient:
-    def __init__(self, fail_on: set[str] | None = None):
+    def __init__(self, fail_on: set[str] | None = None, timeout_on: set[str] | None = None):
         self.calls: list[tuple[str, str, dict | None]] = []
         self.fail_on = fail_on or set()
+        self.timeout_on = timeout_on or set()
 
     def _maybe_fail(self, path):
+        if path in self.timeout_on:
+            raise httpx.ReadTimeout("timed out")
         if path in self.fail_on:
             raise PlandError(409, "Conflict", "already exists", {})
 
@@ -212,4 +216,22 @@ def test_execute_audits_one_line_per_executed_entry(monkeypatch, tmp_path):
     lines = log.read_text().splitlines()
     assert len(lines) == 2
     assert json.loads(lines[0])["decision"] == "batch_ok"
+    assert json.loads(lines[1])["decision"] == "batch_failed"
+
+
+def test_execute_continues_past_a_transport_error(monkeypatch, tmp_path):
+    log = tmp_path / "a.jsonl"
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: log)
+    client = _FakeClient(timeout_on={"/jobs/bad"})
+    entries = [
+        _entry(0, "jobs", "view", "get", "/jobs/ok1", "free"),
+        _entry(1, "jobs", "view", "get", "/jobs/bad", "free"),
+        _entry(2, "jobs", "view", "get", "/jobs/ok2", "free"),
+    ]
+    ok, failures = execute(client, entries)
+    assert ok == 2
+    assert [f["index"] for f in failures] == [1]
+    assert [c[1] for c in client.calls] == ["/jobs/ok1", "/jobs/bad", "/jobs/ok2"]
+    lines = log.read_text().splitlines()
+    assert len(lines) == 3
     assert json.loads(lines[1])["decision"] == "batch_failed"

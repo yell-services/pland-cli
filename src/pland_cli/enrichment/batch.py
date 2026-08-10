@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 
 import click
+import httpx
 
 from pland_cli._codegen.extract import Operation, extract_operations
 from pland_cli._codegen.security import classify
@@ -109,10 +110,11 @@ def execute(client, entries: list[ResolvedEntry]) -> tuple[int, list[dict]]:
                 client.delete(entry.path)
             else:
                 getattr(client, entry.method)(entry.path, json=entry.data)
-        except PlandError as exc:
+        except (PlandError, httpx.HTTPError) as exc:
             failures.append({
                 "index": entry.index, "group": entry.group, "command": entry.command,
-                "status": exc.status, "detail": exc.detail or exc.title,
+                "status": getattr(exc, "status", 0),
+                "detail": getattr(exc, "detail", None) or str(exc),
             })
             decision = "batch_failed"
         else:
