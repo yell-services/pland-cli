@@ -11,8 +11,8 @@ from pland_cli.utils.timestamps import parse_date, to_ms
 @enrich("absences", "in-range", new=True)
 @click.command()
 @click.option("--from", "frm", required=True, help="Start YYYY-MM-DD.")
-@click.option("--to", "to", required=True, help="Ende YYYY-MM-DD.")
-@click.option("--approved-only", is_flag=True, help="Nur genehmigte (approvedBy gesetzt).")
+@click.option("--to", "to", required=True, help="End YYYY-MM-DD.")
+@click.option("--approved-only", is_flag=True, help="Only approved ones (approvedBy set).")
 @click.pass_context
 def absences_in_range(ctx: click.Context, frm: str, to: str, approved_only: bool) -> None:
     """Absences in a date range, filtered client-side on dtStart."""

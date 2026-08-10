@@ -20,7 +20,7 @@ def _start_repl(ctx: click.Context) -> None:
 @click.command("repl")
 @click.pass_context
 def repl_cmd(ctx: click.Context) -> None:
-    """Interaktiven REPL starten."""
+    """Start the interactive REPL."""
     _start_repl(ctx.parent or ctx)
 
 
@@ -46,7 +46,7 @@ def _attach_client(ctx: click.Context) -> None:
 
 
 @click.group(invoke_without_command=True)
-@click.option("--json", "as_json", is_flag=True, help="Maschinenlesbare JSON-Ausgabe.")
+@click.option("--json", "as_json", is_flag=True, help="Machine-readable JSON output.")
 @click.option("--profile", default=None, help="API-Profil: prod | beta | local.")
 @click.version_option(__version__, "--version")
 @click.pass_context

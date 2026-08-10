@@ -11,7 +11,7 @@ from pland_cli.utils import output as out_mod
 @click.command()
 @click.pass_context
 def users_active(ctx: click.Context) -> None:
-    """Nur aktive Mitarbeiter (status.status == '1')."""
+    """Only active employees (status.status == '1')."""
     out_mod.set_json(ctx.obj.get("as_json", False))
     client = get_client(ctx)
     active = [

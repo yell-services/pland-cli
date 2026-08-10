@@ -10,8 +10,8 @@ from pland_cli.utils.timestamps import parse_date, to_ms
 
 @enrich("time-tracking", "in-range", new=True)
 @click.command()
-@click.option("--from", "frm", required=True, help="Arbeitstag-Start YYYY-MM-DD.")
-@click.option("--to", "to", required=True, help="Arbeitstag-Ende YYYY-MM-DD.")
+@click.option("--from", "frm", required=True, help="Working day start YYYY-MM-DD.")
+@click.option("--to", "to", required=True, help="Working day end YYYY-MM-DD.")
 @click.option("--unapproved", is_flag=True, help="Only entries that are not approved.")
 @click.pass_context
 def timetracking_in_range(ctx: click.Context, frm: str, to: str, unapproved: bool) -> None:

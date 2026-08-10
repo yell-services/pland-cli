@@ -32,7 +32,7 @@ def set_key(profile: str, key: str) -> None:
     "--password", prompt="pland Passwort", confirmation_prompt=False,
     help="Login password (NOT stored).",
 )
-@click.option("--name", default="pland-cli", help="Name des neuen API-Keys.")
+@click.option("--name", default="pland-cli", help="Name for the new API key.")
 @click.pass_context
 def bootstrap(ctx: click.Context, profile: str | None, login_id: str, password: str, name: str) -> None:
     """Create a new API key via login and store only that key.
