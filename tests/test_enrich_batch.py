@@ -178,6 +178,11 @@ class _FakeClient:
         self._maybe_fail(path)
         return {}
 
+    def delete(self, path, params=None):
+        self.calls.append(("delete", path, None))
+        self._maybe_fail(path)
+        return {}
+
 
 def test_execute_calls_every_entry_in_order(monkeypatch, tmp_path):
     monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
@@ -301,6 +306,30 @@ def test_yes_flag_does_not_bypass_critical(tmp_path, monkeypatch):
         {"group": "salary", "command": "release-using-time-tracking", "data": {"timeTrackingId": "t"}},
     ])
     result = CliRunner().invoke(main, ["batch", "run", "--file", file, "--yes"])
+    assert result.exit_code == 2
+    assert client.calls == []
+
+
+def test_yes_flag_releases_a_confirm_batch(tmp_path, monkeypatch):
+    """--yes must actually reach guard.enforce for the 🟡 tier."""
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [{"group": "jobs", "command": "delete", "args": ["a1"]}])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file, "--yes"])
+    assert result.exit_code == 0
+    assert client.calls == [("delete", "/jobs/a1", None)]
+
+
+def test_confirm_batch_without_yes_is_fail_closed(tmp_path, monkeypatch):
+    """The same file without --yes: no TTY under CliRunner, so nothing is sent."""
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [{"group": "jobs", "command": "delete", "args": ["a1"]}])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file])
     assert result.exit_code == 2
     assert client.calls == []
 
