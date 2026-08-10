@@ -15,6 +15,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- A path argument containing `..` retargeted the request at a different endpoint
+  than the one the guard classified. `holiday delete` is 🟢, but
+  `pland holiday delete '../../users/<id>'` was sent as `DELETE /users/<id>` — a
+  🔴 endpoint — because httpx resolves dot segments client-side. `PlandClient`
+  now refuses such a path before the request leaves, which covers every generated
+  command, `batch run` and any future caller at once.
+- A `Retry-After` header in its HTTP-date form (RFC 7231 allows it) raised
+  `ValueError` in the middle of a 429 retry. It is parsed now, and every retry
+  delay is clamped to at most 60 s so a large value cannot hang the CLI.
+- Confirmation prompts went to stdout, so under `--json` a 🟡 or 🔴 prompt at a
+  terminal made the result unparseable. They go to stderr now; the risk tiers and
+  the fail-closed no-TTY behaviour are unchanged.
+- The last German user-facing strings — two guard prompts and seven `--help`
+  texts — are English, completing the sweep started in 849d7d5.
 - 42 commands raised `TypeError` on invocation instead of doing anything. The
   generator wrote camelCase identifiers for path parameters (`userId`) while
   Click derives lowercase ones from the argument declaration (`userid`), so the
