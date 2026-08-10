@@ -11,6 +11,7 @@ from pland_cli._codegen.security import classify
 from pland_cli._codegen.spec import load_spec
 
 RISK_ORDER = {"free": 0, "confirm": 1, "critical": 2}
+MARKER = {"free": "🟢", "confirm": "🟡", "critical": "🔴"}
 
 
 def max_risk(risks: list[str]) -> str:
@@ -72,3 +73,19 @@ def resolve_entries(entries: list) -> list[ResolvedEntry]:
             path=path, risk=risk, data=raw.get("data"),
         ))
     return resolved
+
+
+def format_plan(entries: list[ResolvedEntry]) -> str:
+    """Human-readable summary shown before the risk gate."""
+    lines = [f"Plan: {len(entries)} operations"]
+    counts: dict[tuple[str, str], list[ResolvedEntry]] = {}
+    for entry in entries:
+        counts.setdefault((entry.group, entry.command), []).append(entry)
+    for (group, command), group_entries in counts.items():
+        risk = group_entries[0].risk
+        if group_entries[0].method == "delete":
+            for entry in group_entries:
+                lines.append(f"  [{entry.index}] {group} {command}  {entry.path}  {MARKER[risk]}")
+        else:
+            lines.append(f"  {len(group_entries):>3} x  {group} {command}  {MARKER[risk]}")
+    return "\n".join(lines)

@@ -5,7 +5,13 @@ import click
 import pytest
 
 import pland_cli.commands as commands_pkg
-from pland_cli.enrichment.batch import _operation_index, max_risk, resolve_entries
+from pland_cli.enrichment.batch import (
+    ResolvedEntry,
+    _operation_index,
+    format_plan,
+    max_risk,
+    resolve_entries,
+)
 
 
 def test_max_risk_of_empty_list_is_free():
@@ -97,3 +103,30 @@ def test_runtime_risk_matches_generated_risk():
         assert generated[func] == expected, f"{group} {command}"
         checked += 1
     assert checked > 300, f"only {checked} commands compared, expected the full surface"
+
+
+def _entry(i, group, command, method, path, risk):
+    return ResolvedEntry(index=i, group=group, command=command, method=method,
+                         path=path, risk=risk, data=None)
+
+
+def test_plan_groups_and_counts():
+    plan = format_plan([
+        _entry(0, "salary", "release-using-time-tracking", "post", "/salaries/releaseWithTimeTracking", "critical"),
+        _entry(1, "salary", "release-using-time-tracking", "post", "/salaries/releaseWithTimeTracking", "critical"),
+        _entry(2, "jobs", "create", "post", "/jobs/v2", "free"),
+    ])
+    assert "3 operations" in plan
+    assert "2 x  salary release-using-time-tracking" in plan
+    assert "1 x  jobs create" in plan
+    assert "🔴" in plan and "🟢" in plan
+
+
+def test_plan_lists_deletes_individually():
+    plan = format_plan([
+        _entry(0, "jobs", "delete", "delete", "/jobs/a1", "confirm"),
+        _entry(1, "jobs", "delete", "delete", "/jobs/b2", "confirm"),
+    ])
+    assert "/jobs/a1" in plan
+    assert "/jobs/b2" in plan
+    assert "2 x" not in plan
