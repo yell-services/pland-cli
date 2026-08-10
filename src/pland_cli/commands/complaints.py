@@ -166,11 +166,11 @@ def _cmd_complaints_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
 @click.argument("USERID")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_complaints_get_user(ctx, userId, extra_params):
+def _cmd_complaints_get_user(ctx, userid, extra_params):
     """Get user complaints"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/users/" + userId + "/complaints",
+        ctx, method='get', path="/users/" + userid + "/complaints",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -183,11 +183,11 @@ def _cmd_complaints_get_user(ctx, userId, extra_params):
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_complaints_assign(ctx, complaintId, data, dry_run, assume_yes, extra_params):
+def _cmd_complaints_assign(ctx, complaintid, data, dry_run, assume_yes, extra_params):
     """Assign complaint to user"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/complaints/" + complaintId + "/assign",
+        ctx, method='post', path="/complaints/" + complaintid + "/assign",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
@@ -200,11 +200,11 @@ def _cmd_complaints_assign(ctx, complaintId, data, dry_run, assume_yes, extra_pa
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_complaints_resolve(ctx, complaintId, data, dry_run, assume_yes, extra_params):
+def _cmd_complaints_resolve(ctx, complaintid, data, dry_run, assume_yes, extra_params):
     """Resolve complaint"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/complaints/" + complaintId + "/resolve",
+        ctx, method='post', path="/complaints/" + complaintid + "/resolve",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
@@ -214,11 +214,11 @@ def _cmd_complaints_resolve(ctx, complaintId, data, dry_run, assume_yes, extra_p
 @click.argument("USERID")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_complaints_count_user(ctx, userId, extra_params):
+def _cmd_complaints_count_user(ctx, userid, extra_params):
     """Count user complaints"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/users/" + userId + "/countComplaints",
+        ctx, method='get', path="/users/" + userid + "/countComplaints",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,

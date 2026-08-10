@@ -16,11 +16,11 @@ def time_tracking_group():
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_start_for_job(ctx, jobId, data, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_start_for_job(ctx, jobid, data, dry_run, assume_yes, extra_params):
     """Start time tracking for a job"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/timetracking/start/" + jobId + "",
+        ctx, method='post', path="/timetracking/start/" + jobid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
@@ -103,11 +103,11 @@ def _cmd_time_tracking_filter(ctx, limit, offset, sort, userId, from_, to, objec
 @click.option("--includeForTrackingDate", "includeForTrackingDate", default=None, type=bool, help="Whether to include entries filtered by tracking date instead of time start")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_list_from_user(ctx, userId, from_, to, includeForTrackingDate, extra_params):
+def _cmd_time_tracking_list_from_user(ctx, userid, from_, to, includeForTrackingDate, extra_params):
     """Get time tracking entries for a user"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/users/" + userId + "/timeTrackings",
+        ctx, method='get', path="/users/" + userid + "/timeTrackings",
         query={"from": from_, "to": to, "includeForTrackingDate": includeForTrackingDate}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -250,11 +250,11 @@ def _cmd_time_tracking_un_cancel(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_add_manually(ctx, jobId, data, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_add_manually(ctx, jobid, data, dry_run, assume_yes, extra_params):
     """Add time tracking manually (deprecated)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/timetracking/add/" + jobId + "",
+        ctx, method='post', path="/timetracking/add/" + jobid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,

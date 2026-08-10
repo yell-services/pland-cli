@@ -160,11 +160,11 @@ def _cmd_logbuch_mark_messages_as_read(ctx, id, dry_run, assume_yes, extra_param
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_delete_message(ctx, id, messageId, dry_run, assume_yes, extra_params):
+def _cmd_logbuch_delete_message(ctx, id, messageid, dry_run, assume_yes, extra_params):
     """Delete a message"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='delete', path="/chat/v2/" + id + "/messages/" + messageId + "",
+        ctx, method='delete', path="/chat/v2/" + id + "/messages/" + messageid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
@@ -178,11 +178,11 @@ def _cmd_logbuch_delete_message(ctx, id, messageId, dry_run, assume_yes, extra_p
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_patch_message(ctx, id, messageId, data, dry_run, assume_yes, extra_params):
+def _cmd_logbuch_patch_message(ctx, id, messageid, data, dry_run, assume_yes, extra_params):
     """Update a message"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='patch', path="/chat/v2/" + id + "/messages/" + messageId + "",
+        ctx, method='patch', path="/chat/v2/" + id + "/messages/" + messageid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
@@ -196,11 +196,11 @@ def _cmd_logbuch_patch_message(ctx, id, messageId, data, dry_run, assume_yes, ex
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_pin_message(ctx, id, messageId, data, dry_run, assume_yes, extra_params):
+def _cmd_logbuch_pin_message(ctx, id, messageid, data, dry_run, assume_yes, extra_params):
     """Pin or unpin a message"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/chat/v2/" + id + "/messages/" + messageId + "/pin",
+        ctx, method='post', path="/chat/v2/" + id + "/messages/" + messageid + "/pin",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,

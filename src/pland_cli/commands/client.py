@@ -32,11 +32,11 @@ def _cmd_client_create_unauthorized_complain(ctx, data, dry_run, assume_yes, ext
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_client_upload_to_complaint(ctx, objectId, file_, dry_run, assume_yes, extra_params):
+def _cmd_client_upload_to_complaint(ctx, objectid, file_, dry_run, assume_yes, extra_params):
     """Upload complaint image"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/client/" + objectId + "/upload",
+        ctx, method='post', path="/client/" + objectid + "/upload",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=file_, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
@@ -49,11 +49,11 @@ def _cmd_client_upload_to_complaint(ctx, objectId, file_, dry_run, assume_yes, e
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_client_upload_documents(ctx, objectId, file_, dry_run, assume_yes, extra_params):
+def _cmd_client_upload_documents(ctx, objectid, file_, dry_run, assume_yes, extra_params):
     """Upload documents"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/client/" + objectId + "/uploadDocuments",
+        ctx, method='post', path="/client/" + objectid + "/uploadDocuments",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=file_, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
@@ -63,11 +63,11 @@ def _cmd_client_upload_documents(ctx, objectId, file_, dry_run, assume_yes, extr
 @click.argument("OBJECTID")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_client_get_object_documentation(ctx, objectId, extra_params):
+def _cmd_client_get_object_documentation(ctx, objectid, extra_params):
     """Get object documentation"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/client/" + objectId + "/documentation",
+        ctx, method='get', path="/client/" + objectid + "/documentation",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -77,11 +77,11 @@ def _cmd_client_get_object_documentation(ctx, objectId, extra_params):
 @click.argument("OBJECTID")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_client_get_company_info_unauthorized(ctx, objectId, extra_params):
+def _cmd_client_get_company_info_unauthorized(ctx, objectid, extra_params):
     """Get company info"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/client/" + objectId + "/company",
+        ctx, method='get', path="/client/" + objectid + "/company",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -169,11 +169,11 @@ def _cmd_client_decline_offer(ctx, id, zipCode, extra_params):
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_client_create_user_unauthorized(ctx, companyId, data, dry_run, assume_yes, extra_params):
+def _cmd_client_create_user_unauthorized(ctx, companyid, data, dry_run, assume_yes, extra_params):
     """Create user (unauthorized)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/client/" + companyId + "/users/",
+        ctx, method='post', path="/client/" + companyid + "/users/",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
@@ -187,11 +187,11 @@ def _cmd_client_create_user_unauthorized(ctx, companyId, data, dry_run, assume_y
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_client_update_user_unauthorized(ctx, companyId, userId, data, dry_run, assume_yes, extra_params):
+def _cmd_client_update_user_unauthorized(ctx, companyid, userid, data, dry_run, assume_yes, extra_params):
     """Update user (unauthorized)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/client/" + companyId + "/users/" + userId + "",
+        ctx, method='post', path="/client/" + companyid + "/users/" + userid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,

@@ -21,6 +21,18 @@ def _group_var(group: str) -> str:
     return _ident(group) + "_group"
 
 
+def _path_ident(name: str) -> str:
+    """Identifier for a path parameter, matching what Click derives from it.
+
+    Arguments are declared as ``@click.argument("USERID")`` and Click builds the
+    parameter name by lowercasing that decl. A camelCase identifier such as
+    ``userId`` therefore never receives its value and the command raises
+    TypeError on invocation. Lowercase first, then run the keyword guard, so a
+    path parameter named e.g. ``Class`` does not become the keyword ``class``.
+    """
+    return _ident(name.lower())
+
+
 def render_command(op: Operation) -> str:
     # GET is always read-only -> free (classify() only reasons about write ops
     # and would fall through to its confirm fail-safe for reads).
@@ -38,7 +50,7 @@ def render_command(op: Operation) -> str:
     for p in op.path_params:
         arg = p["name"]
         lines.append(f'@click.argument("{arg.upper()}")')
-        sig_params.append(_ident(arg))
+        sig_params.append(_path_ident(arg))
 
     for p in op.query_params:
         opt = p["name"]
@@ -92,7 +104,7 @@ def render_command(op: Operation) -> str:
     qp = "{" + ", ".join(f'"{p["name"]}": {_ident(p["name"])}' for p in op.query_params) + "}"
     path_expr = '"' + op.path + '"'
     for p in op.path_params:
-        path_expr = path_expr.replace("{" + p["name"] + "}", '" + ' + _ident(p["name"]) + ' + "')
+        path_expr = path_expr.replace("{" + p["name"] + "}", '" + ' + _path_ident(p["name"]) + ' + "')
     lines.append("    run_operation(")
     lines.append(f"        ctx, method={op.method!r}, path={path_expr},")
     fetch_arg = "fetch_all" if is_list_get else "False"

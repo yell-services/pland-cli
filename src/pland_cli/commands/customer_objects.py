@@ -15,11 +15,11 @@ def customer_objects_group():
 @click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_list_by(ctx, customerId, limit, offset, extra_params):
+def _cmd_customer_objects_list_by(ctx, customerid, limit, offset, extra_params):
     """List objects by customer"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/customers/" + customerId + "/objects",
+        ctx, method='get', path="/customers/" + customerid + "/objects",
         query={"limit": limit, "offset": offset}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -89,11 +89,11 @@ def _cmd_customer_objects_create(ctx, data, dry_run, assume_yes, extra_params):
 @click.option("--allWhenEmpty", "allWhenEmpty", default=None, type=bool, help="Return all materials when closet is empty")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_list_material(ctx, objectId, allWhenEmpty, extra_params):
+def _cmd_customer_objects_list_material(ctx, objectid, allWhenEmpty, extra_params):
     """List object material"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/objects/" + objectId + "/material",
+        ctx, method='get', path="/objects/" + objectid + "/material",
         query={"allWhenEmpty": allWhenEmpty}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -106,11 +106,11 @@ def _cmd_customer_objects_list_material(ctx, objectId, allWhenEmpty, extra_param
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_add_material(ctx, objectId, data, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_add_material(ctx, objectid, data, dry_run, assume_yes, extra_params):
     """Add material to object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/objects/" + objectId + "/material",
+        ctx, method='post', path="/objects/" + objectid + "/material",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
@@ -121,11 +121,11 @@ def _cmd_customer_objects_add_material(ctx, objectId, data, dry_run, assume_yes,
 @click.option("--showAll", "showAll", default=None, type=bool, help="Show all users when no active users found")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_list_active_users_on(ctx, objectId, showAll, extra_params):
+def _cmd_customer_objects_list_active_users_on(ctx, objectid, showAll, extra_params):
     """List active users on object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/objects/" + objectId + "/activeUsers",
+        ctx, method='get', path="/objects/" + objectid + "/activeUsers",
         query={"showAll": showAll}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -139,11 +139,11 @@ def _cmd_customer_objects_list_active_users_on(ctx, objectId, showAll, extra_par
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_remove_material(ctx, objectId, type, closetId, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_remove_material(ctx, objectid, type, closetid, dry_run, assume_yes, extra_params):
     """Remove material from object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='delete', path="/objects/" + objectId + "/material/" + type + "/" + closetId + "",
+        ctx, method='delete', path="/objects/" + objectid + "/material/" + type + "/" + closetid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
@@ -157,11 +157,11 @@ def _cmd_customer_objects_remove_material(ctx, objectId, type, closetId, dry_run
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_change_material_budget(ctx, objectId, articleId, budget, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_change_material_budget(ctx, objectid, articleid, budget, dry_run, assume_yes, extra_params):
     """Change material budget"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='patch', path="/objects/" + objectId + "/material/" + articleId + "/" + budget + "",
+        ctx, method='patch', path="/objects/" + objectid + "/material/" + articleid + "/" + budget + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
@@ -174,11 +174,11 @@ def _cmd_customer_objects_change_material_budget(ctx, objectId, articleId, budge
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_set_location(ctx, objectId, data, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_set_location(ctx, objectid, data, dry_run, assume_yes, extra_params):
     """Set object location"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/objects/" + objectId + "/location",
+        ctx, method='post', path="/objects/" + objectid + "/location",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
@@ -202,11 +202,11 @@ def _cmd_customer_objects_get_assigned_managers(ctx, fetch_all, extra_params):
 @click.argument("OBJECTNUMBER")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_get_by_number(ctx, objectNumber, extra_params):
+def _cmd_customer_objects_get_by_number(ctx, objectnumber, extra_params):
     """Get customer object by number"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/objects/" + objectNumber + "/byNumber",
+        ctx, method='get', path="/objects/" + objectnumber + "/byNumber",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -219,11 +219,11 @@ def _cmd_customer_objects_get_by_number(ctx, objectNumber, extra_params):
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_set_end_date_for_and_assignments(ctx, objectId, data, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_set_end_date_for_and_assignments(ctx, objectid, data, dry_run, assume_yes, extra_params):
     """Set end date for object and assignments"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/objects/" + objectId + "/setEndDateForObjectAndAllAssignmentsOnObject",
+        ctx, method='post', path="/objects/" + objectid + "/setEndDateForObjectAndAllAssignmentsOnObject",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,

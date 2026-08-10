@@ -110,11 +110,11 @@ def _cmd_articles_update(ctx, id, data, dry_run, assume_yes, extra_params):
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_articles_order_material(ctx, objectId, data, dry_run, assume_yes, extra_params):
+def _cmd_articles_order_material(ctx, objectid, data, dry_run, assume_yes, extra_params):
     """Order material for an object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/objects/" + objectId + "/order",
+        ctx, method='post', path="/objects/" + objectid + "/order",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,

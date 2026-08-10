@@ -59,11 +59,11 @@ def _cmd_jobs_list_by_assignment(ctx, id, extra_params):
 @click.argument("USERID")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_list_for_user(ctx, userId, extra_params):
+def _cmd_jobs_list_for_user(ctx, userid, extra_params):
     """List jobs for user"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/users/" + userId + "/jobs",
+        ctx, method='get', path="/users/" + userid + "/jobs",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -89,11 +89,11 @@ def _cmd_jobs_check_user_capacity(ctx, data, dry_run, assume_yes, extra_params):
 @click.argument("OBJECTID")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_list_for_object(ctx, objectId, extra_params):
+def _cmd_jobs_list_for_object(ctx, objectid, extra_params):
     """List jobs for object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/objects/" + objectId + "/jobs",
+        ctx, method='get', path="/objects/" + objectid + "/jobs",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -299,11 +299,11 @@ def _cmd_jobs_get_status_list_for(ctx, id, extra_params):
 @click.option("--to", "to", default=None, help="End of the time frame")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_get_status_list_for_object(ctx, objectId, from_, to, extra_params):
+def _cmd_jobs_get_status_list_for_object(ctx, objectid, from_, to, extra_params):
     """Get job status list for object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/objects/" + objectId + "/statusList",
+        ctx, method='get', path="/objects/" + objectid + "/statusList",
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,

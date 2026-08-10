@@ -167,11 +167,11 @@ def _cmd_material_orders_finish(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_material_orders_remove_item(ctx, id, type, orderItemId, dry_run, assume_yes, extra_params):
+def _cmd_material_orders_remove_item(ctx, id, type, orderitemid, dry_run, assume_yes, extra_params):
     """Remove order item"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='delete', path="/orders/" + id + "/" + type + "/" + orderItemId + "",
+        ctx, method='delete', path="/orders/" + id + "/" + type + "/" + orderitemid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
@@ -185,11 +185,11 @@ def _cmd_material_orders_remove_item(ctx, id, type, orderItemId, dry_run, assume
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_material_orders_change_budget(ctx, id, articleId, budget, dry_run, assume_yes, extra_params):
+def _cmd_material_orders_change_budget(ctx, id, articleid, budget, dry_run, assume_yes, extra_params):
     """Change order items budget or adds article if missing"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='patch', path="/orders/" + id + "/" + articleId + "/" + budget + "",
+        ctx, method='patch', path="/orders/" + id + "/" + articleid + "/" + budget + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,

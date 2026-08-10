@@ -239,11 +239,11 @@ def _cmd_absences_assign_replacements(ctx, id, data, dry_run, assume_yes, extra_
 @click.option("--to", "to", default=None, help="End date for the calculation period (UTC timestamp)")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_get_user_vacation_days(ctx, userId, from_, to, extra_params):
+def _cmd_absences_get_user_vacation_days(ctx, userid, from_, to, extra_params):
     """Get user vacation days"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/users/" + userId + "/vacationDays",
+        ctx, method='get', path="/users/" + userid + "/vacationDays",
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -255,11 +255,11 @@ def _cmd_absences_get_user_vacation_days(ctx, userId, from_, to, extra_params):
 @click.option("--to", "to", default=None, help="End date for the absence period (UTC timestamp)")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_get_user_days_absent(ctx, userId, from_, to, extra_params):
+def _cmd_absences_get_user_days_absent(ctx, userid, from_, to, extra_params):
     """Get user days absent"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/users/" + userId + "/daysAbsent",
+        ctx, method='get', path="/users/" + userid + "/daysAbsent",
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,

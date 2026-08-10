@@ -1,9 +1,16 @@
 import importlib
 import pkgutil
+import re
+from pathlib import Path
 
 import pland_cli.commands as commands_pkg
 from pland_cli._codegen.extract import extract_operations
 from pland_cli._codegen.spec import load_spec
+
+_ARGUMENT_THEN_DEF = re.compile(
+    r'@click\.argument\("([A-Z_0-9]+)"\)\n(?:@click[^\n]*\n)*@click\.pass_context\n'
+    r"def (_cmd_[a-z0-9_]+)\(ctx, ([a-zA-Z_0-9]+)",
+)
 
 
 def test_one_module_per_group():
@@ -36,3 +43,19 @@ def test_command_count_matches_spec():
             if (group_var.name, cmd_name) in spec_pairs
         )
     assert total == len(ops)
+
+
+def test_click_argument_names_match_the_function_parameter():
+    """Click lowercases an argument name; the signature has to agree.
+
+    A mismatch raises TypeError the moment the command is invoked, so neither
+    an import check nor a command count can see it.
+    """
+    mismatches = []
+    for source in sorted(Path(commands_pkg.__path__[0]).glob("*.py")):
+        for argument, func, param in _ARGUMENT_THEN_DEF.findall(source.read_text()):
+            if argument.lower() != param:
+                mismatches.append(
+                    f"{source.name}: {func} takes {param!r}, Click passes {argument.lower()!r}"
+                )
+    assert not mismatches, f"{len(mismatches)} mismatches:\n" + "\n".join(mismatches)

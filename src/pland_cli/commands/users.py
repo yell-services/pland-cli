@@ -258,11 +258,11 @@ def _cmd_users_send_smsto_all(ctx, dry_run, assume_yes, extra_params):
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_set_home_location(ctx, userId, data, dry_run, assume_yes, extra_params):
+def _cmd_users_set_home_location(ctx, userid, data, dry_run, assume_yes, extra_params):
     """Set user home location"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/users/" + userId + "/location",
+        ctx, method='post', path="/users/" + userid + "/location",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
@@ -275,11 +275,11 @@ def _cmd_users_set_home_location(ctx, userId, data, dry_run, assume_yes, extra_p
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_set_profile_image(ctx, userId, data, dry_run, assume_yes, extra_params):
+def _cmd_users_set_profile_image(ctx, userid, data, dry_run, assume_yes, extra_params):
     """Set user profile image"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/users/" + userId + "/profileImage",
+        ctx, method='post', path="/users/" + userid + "/profileImage",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
@@ -335,11 +335,11 @@ def _cmd_users_filter(ctx, data, dry_run, assume_yes, extra_params):
 @click.argument("USERNUMBER")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_get_by_number(ctx, userNumber, extra_params):
+def _cmd_users_get_by_number(ctx, usernumber, extra_params):
     """Get user by number"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/users/" + userNumber + "/byNumber",
+        ctx, method='get', path="/users/" + usernumber + "/byNumber",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,

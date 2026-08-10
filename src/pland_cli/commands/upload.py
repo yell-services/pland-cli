@@ -47,11 +47,11 @@ def _cmd_upload_csv(ctx, type, file_, dry_run, assume_yes, extra_params):
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_upload_image(ctx, uploadPath, file_, dry_run, assume_yes, extra_params):
+def _cmd_upload_image(ctx, uploadpath, file_, dry_run, assume_yes, extra_params):
     """Image upload"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/upload/images/" + uploadPath + "",
+        ctx, method='post', path="/upload/images/" + uploadpath + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=file_, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
@@ -78,11 +78,11 @@ def _cmd_upload_camt_transactions(ctx, file_, dry_run, assume_yes, extra_params)
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_upload_get_image_safe(ctx, uploadId, output, extra_params):
+def _cmd_upload_get_image_safe(ctx, uploadid, output, extra_params):
     """Get image by upload ID"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/upload/images/" + uploadId + "",
+        ctx, method='get', path="/upload/images/" + uploadid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=output, dry_run=False,
         risk="free", draftable=None, assume_yes=False,

@@ -47,11 +47,11 @@ def _cmd_api_keys_create_api_key(ctx, data, dry_run, assume_yes, extra_params):
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_api_keys_delete_api_key(ctx, keyId, dry_run, assume_yes, extra_params):
+def _cmd_api_keys_delete_api_key(ctx, keyid, dry_run, assume_yes, extra_params):
     """Expire API Key"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='delete', path="/api_key/" + keyId + "",
+        ctx, method='delete', path="/api_key/" + keyid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
@@ -63,11 +63,11 @@ def _cmd_api_keys_delete_api_key(ctx, keyId, dry_run, assume_yes, extra_params):
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_api_keys_update_api_key(ctx, keyId, dry_run, assume_yes, extra_params):
+def _cmd_api_keys_update_api_key(ctx, keyid, dry_run, assume_yes, extra_params):
     """Rotate API Key"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='patch', path="/api_key/" + keyId + "",
+        ctx, method='patch', path="/api_key/" + keyid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,

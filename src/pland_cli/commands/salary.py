@@ -192,11 +192,11 @@ def _cmd_salary_get_overview_for_objects(ctx, from_, to, data, dry_run, assume_y
 @click.option("--to", "to", default=None, type=int, help="End date for the salary period (UTC timestamp)")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_get_user_absence_salaries(ctx, userId, from_, to, extra_params):
+def _cmd_salary_get_user_absence_salaries(ctx, userid, from_, to, extra_params):
     """Get user absence salaries"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/users/" + userId + "/absenceSalaries",
+        ctx, method='get', path="/users/" + userid + "/absenceSalaries",
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -209,11 +209,11 @@ def _cmd_salary_get_user_absence_salaries(ctx, userId, from_, to, extra_params):
 @click.option("--includeForTrackingDate", "includeForTrackingDate", default=None, type=bool, help="Include salaries based on tracking date instead of salary period")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_get_user_salaries(ctx, userId, from_, to, includeForTrackingDate, extra_params):
+def _cmd_salary_get_user_salaries(ctx, userid, from_, to, includeForTrackingDate, extra_params):
     """Get user salaries"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/users/" + userId + "/salaries",
+        ctx, method='get', path="/users/" + userid + "/salaries",
         query={"from": from_, "to": to, "includeForTrackingDate": includeForTrackingDate}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,

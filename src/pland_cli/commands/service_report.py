@@ -295,11 +295,11 @@ def _cmd_service_report_set_fixed(ctx, data, dry_run, assume_yes, extra_params):
 @click.option("--includeFaktured", "includeFaktured", default=None, type=bool, help="Include service reports that have been invoiced (default: false)")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_get_user(ctx, userId, assignmentId, includeFaktured, extra_params):
+def _cmd_service_report_get_user(ctx, userid, assignmentId, includeFaktured, extra_params):
     """Get user service reports"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/users/" + userId + "/serviceReports",
+        ctx, method='get', path="/users/" + userid + "/serviceReports",
         query={"assignmentId": assignmentId, "includeFaktured": includeFaktured}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
@@ -312,11 +312,11 @@ def _cmd_service_report_get_user(ctx, userId, assignmentId, includeFaktured, ext
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_create_from_app(ctx, userId, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_create_from_app(ctx, userid, data, dry_run, assume_yes, extra_params):
     """Create service report from app"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/users/" + userId + "/serviceReports",
+        ctx, method='post', path="/users/" + userid + "/serviceReports",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
@@ -330,11 +330,11 @@ def _cmd_service_report_create_from_app(ctx, userId, data, dry_run, assume_yes, 
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_sign(ctx, userId, serviceReportId, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_sign(ctx, userid, servicereportid, data, dry_run, assume_yes, extra_params):
     """Sign service report"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/users/" + userId + "/serviceReports/" + serviceReportId + "/sign",
+        ctx, method='post', path="/users/" + userid + "/serviceReports/" + servicereportid + "/sign",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,

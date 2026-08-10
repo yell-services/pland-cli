@@ -83,11 +83,11 @@ def _cmd_payments_get(ctx, limit, offset, sort, invoiceIds, paymentDateFrom, pay
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_payments_create_invoice(ctx, invoiceId, data, dry_run, assume_yes, extra_params):
+def _cmd_payments_create_invoice(ctx, invoiceid, data, dry_run, assume_yes, extra_params):
     """Create payment for invoice"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='post', path="/payments/invoice/" + invoiceId + "",
+        ctx, method='post', path="/payments/invoice/" + invoiceid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,

@@ -129,11 +129,11 @@ def _cmd_contacts_update_many(ctx, data, dry_run, assume_yes, extra_params):
 @click.argument("OBJECTID")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_contacts_list_for_object(ctx, objectId, extra_params):
+def _cmd_contacts_list_for_object(ctx, objectid, extra_params):
     """List contacts for object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
-        ctx, method='get', path="/objects/" + objectId + "/contacts",
+        ctx, method='get', path="/objects/" + objectid + "/contacts",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,

@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- 42 commands raised `TypeError` on invocation instead of doing anything. The
+  generator wrote camelCase identifiers for path parameters (`userId`) while
+  Click derives lowercase ones from the argument declaration (`userid`), so the
+  value never reached the function. Affected every command with a camelCase path
+  parameter, among them `salary get-user-salaries`, `jobs list-for-user`,
+  `time-tracking list-from-user`, `users get-by-number` and
+  `client upload-documents`. Command names, arguments and help output are
+  unchanged — only the generated identifiers.
+- `test_generated_conformance.py` now checks that every generated
+  `@click.argument` has a matching function parameter. The previous checks
+  covered module count, importability and command count, none of which can see
+  a signature mismatch.
+
 ## [0.2.0] - 2026-08-09
 
 Two silent data-loss bugs in `--all` and a batch of commands that could never
