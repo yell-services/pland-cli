@@ -90,7 +90,11 @@ def test_confirm_prompt_goes_to_stderr(monkeypatch, tmp_path):
 
     result = CliRunner().invoke(cmd, input="y\n")
     assert result.exit_code == 0
-    assert result.stdout == '{"ok": true}\n'
+    # Assert the prompt is absent from stdout rather than comparing the whole
+    # stream: on Windows CliRunner echoes the input back into stdout, which is a
+    # harness artefact — a real terminal echoes the typing, the app does not.
+    assert '{"ok": true}' in result.stdout
+    assert "Run DELETE /documents/1?" not in result.stdout
     assert "Run DELETE /documents/1?" in result.stderr
 
 
@@ -105,7 +109,8 @@ def test_critical_token_prompt_goes_to_stderr(monkeypatch, tmp_path):
 
     result = CliRunner().invoke(cmd, input="salaries\n")
     assert result.exit_code == 0
-    assert result.stdout == '{"ok": true}\n'
+    assert '{"ok": true}' in result.stdout
+    assert "Type 'salaries' to confirm" not in result.stdout
     assert "Type 'salaries' to confirm" in result.stderr
 
 
