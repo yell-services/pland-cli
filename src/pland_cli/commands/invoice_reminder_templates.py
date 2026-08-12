@@ -13,9 +13,10 @@ def invoice_reminder_templates_group():
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_reminder_templates_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_reminder_templates_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create invoice reminder template"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -23,6 +24,7 @@ def _cmd_invoice_reminder_templates_create(ctx, data, dry_run, assume_yes, extra
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_reminder_templates_group.command("get-distinct-values")
@@ -39,6 +41,7 @@ def _cmd_invoice_reminder_templates_get_distinct_values(ctx, fieldKey, status, f
         query={"fieldKey": fieldKey, "status": status}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_reminder_templates_group.command("get")
@@ -53,15 +56,17 @@ def _cmd_invoice_reminder_templates_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_reminder_templates_group.command("delete")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_reminder_templates_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_invoice_reminder_templates_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete invoice reminder template"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -69,6 +74,7 @@ def _cmd_invoice_reminder_templates_delete(ctx, id, dry_run, assume_yes, extra_p
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_reminder_templates_group.command("update")
@@ -76,9 +82,10 @@ def _cmd_invoice_reminder_templates_delete(ctx, id, dry_run, assume_yes, extra_p
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_reminder_templates_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_reminder_templates_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update invoice reminder template"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -86,6 +93,7 @@ def _cmd_invoice_reminder_templates_update(ctx, id, data, dry_run, assume_yes, e
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 def register(root):

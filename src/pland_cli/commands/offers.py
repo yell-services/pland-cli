@@ -42,15 +42,17 @@ def _cmd_offers_list(ctx, limit, offset, sort, status, name, ids, customer, obje
         query={"limit": limit, "offset": offset, "sort": sort, "status": status, "name": name, "ids": ids, "customer": customer, "objectIds": objectIds, "objectIdsByTag": objectIdsByTag, "statusTags": statusTags, "referenceIds": referenceIds, "fakturaDocuments": fakturaDocuments, "issuedOnFrom": issuedOnFrom, "issuedOnTo": issuedOnTo, "documentNumber": documentNumber, "fakturaDocumentNames": fakturaDocumentNames, "documentPrefix": documentPrefix, "offerTypeOf": offerTypeOf, "assignmentIds": assignmentIds, "activityTypeId": activityTypeId, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @offers_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create offer"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -58,6 +60,7 @@ def _cmd_offers_create(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("attach-documents-to")
@@ -65,9 +68,10 @@ def _cmd_offers_create(ctx, data, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_attach_documents_to(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_attach_documents_to(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Attach documents"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -75,6 +79,7 @@ def _cmd_offers_attach_documents_to(ctx, id, data, dry_run, assume_yes, extra_pa
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("add-documents-to")
@@ -82,9 +87,10 @@ def _cmd_offers_attach_documents_to(ctx, id, data, dry_run, assume_yes, extra_pa
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_add_documents_to(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_add_documents_to(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Add documents"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -92,6 +98,7 @@ def _cmd_offers_add_documents_to(ctx, id, data, dry_run, assume_yes, extra_param
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("get-last-number")
@@ -106,6 +113,7 @@ def _cmd_offers_get_last_number(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @offers_group.command("list-referenced-faktura-documents-for")
@@ -120,6 +128,7 @@ def _cmd_offers_list_referenced_faktura_documents_for(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @offers_group.command("count")
@@ -137,6 +146,7 @@ def _cmd_offers_count(ctx, status, offerTypeOf, customerId, fetch_all, extra_par
         query={"status": status, "offerTypeOf": offerTypeOf, "customerId": customerId}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @offers_group.command("get-distinct-values")
@@ -152,6 +162,7 @@ def _cmd_offers_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @offers_group.command("get")
@@ -166,15 +177,17 @@ def _cmd_offers_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @offers_group.command("delete", short_help="🟡 Delete offer")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_offers_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete offer"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -182,6 +195,7 @@ def _cmd_offers_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable="Offers", assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("update", short_help="🟡 Update offer")
@@ -189,9 +203,10 @@ def _cmd_offers_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update offer"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -199,15 +214,17 @@ def _cmd_offers_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("get-or-create-chat")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_offers_get_or_create_chat(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Get/create offer chat"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -215,6 +232,7 @@ def _cmd_offers_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("create-preview")
@@ -222,9 +240,10 @@ def _cmd_offers_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_create_preview(ctx, data, output, dry_run, assume_yes, extra_params):
+def _cmd_offers_create_preview(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Create offer preview"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -232,15 +251,17 @@ def _cmd_offers_create_preview(ctx, data, output, dry_run, assume_yes, extra_par
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("duplicate")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_duplicate(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_duplicate(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Duplicate offers"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -248,6 +269,7 @@ def _cmd_offers_duplicate(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("generate-combined-pdf")
@@ -255,9 +277,10 @@ def _cmd_offers_duplicate(ctx, data, dry_run, assume_yes, extra_params):
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_generate_combined_pdf(ctx, data, output, dry_run, assume_yes, extra_params):
+def _cmd_offers_generate_combined_pdf(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Generate combined offers PDF"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -265,6 +288,7 @@ def _cmd_offers_generate_combined_pdf(ctx, data, output, dry_run, assume_yes, ex
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("generate-zip")
@@ -272,9 +296,10 @@ def _cmd_offers_generate_combined_pdf(ctx, data, output, dry_run, assume_yes, ex
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_generate_zip(ctx, data, output, dry_run, assume_yes, extra_params):
+def _cmd_offers_generate_zip(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Generate offers ZIP"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -282,15 +307,17 @@ def _cmd_offers_generate_zip(ctx, data, output, dry_run, assume_yes, extra_param
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("send", short_help="🟡 Send offers")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_send(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_send(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Send offers"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -298,15 +325,17 @@ def _cmd_offers_send(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("send-letters", short_help="🟡 Send offer letters")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_send_letters(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_send_letters(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Send offer letters"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -314,15 +343,17 @@ def _cmd_offers_send_letters(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("calculate-letter-price")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_calculate_letter_price(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_calculate_letter_price(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Calculate letter price"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -330,6 +361,7 @@ def _cmd_offers_calculate_letter_price(ctx, data, dry_run, assume_yes, extra_par
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("generate-pdf")
@@ -338,9 +370,10 @@ def _cmd_offers_calculate_letter_price(ctx, data, dry_run, assume_yes, extra_par
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_generate_pdf(ctx, id, data, output, dry_run, assume_yes, extra_params):
+def _cmd_offers_generate_pdf(ctx, id, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Generate offer PDF"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -348,15 +381,17 @@ def _cmd_offers_generate_pdf(ctx, id, data, output, dry_run, assume_yes, extra_p
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("set-fixed", short_help="🟡 Set offers to fixed/open")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_set_fixed(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_set_fixed(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set offers to fixed/open"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -364,15 +399,17 @@ def _cmd_offers_set_fixed(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("set-to-accepted", short_help="🟡 Set offers to accepted")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_set_to_accepted(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_set_to_accepted(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set offers to accepted"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -380,15 +417,17 @@ def _cmd_offers_set_to_accepted(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("set-to-declined", short_help="🟡 Set offers to declined")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_set_to_declined(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_set_to_declined(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set offers to declined"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -396,15 +435,17 @@ def _cmd_offers_set_to_declined(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("generate-assignment-confirmations", short_help="🟡 Generate assignment confirmations")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_generate_assignment_confirmations(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_generate_assignment_confirmations(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Generate assignment confirmations"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -412,6 +453,7 @@ def _cmd_offers_generate_assignment_confirmations(ctx, data, dry_run, assume_yes
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("link-to-assignment", short_help="🟡 Link offer to assignment")
@@ -419,9 +461,10 @@ def _cmd_offers_generate_assignment_confirmations(ctx, data, dry_run, assume_yes
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_link_to_assignment(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_link_to_assignment(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Link offer to assignment"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -429,6 +472,7 @@ def _cmd_offers_link_to_assignment(ctx, id, data, dry_run, assume_yes, extra_par
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("link-to-invoice", short_help="🟡 Link offer to invoice")
@@ -436,9 +480,10 @@ def _cmd_offers_link_to_assignment(ctx, id, data, dry_run, assume_yes, extra_par
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_offers_link_to_invoice(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_offers_link_to_invoice(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Link offer to invoice"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -446,6 +491,7 @@ def _cmd_offers_link_to_invoice(ctx, id, data, dry_run, assume_yes, extra_params
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @offers_group.command("get-partial-invoices-for")
@@ -460,6 +506,7 @@ def _cmd_offers_get_partial_invoices_for(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

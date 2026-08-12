@@ -30,15 +30,17 @@ def _cmd_banking_transactions_list(ctx, limit, offset, sort, bookingDateFrom, bo
         query={"limit": limit, "offset": offset, "sort": sort, "bookingDateFrom": bookingDateFrom, "bookingDateTo": bookingDateTo, "transactionTypeOf": transactionTypeOf, "transactions": transactions, "senderId": senderId, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @banking_transactions_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_banking_transactions_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_banking_transactions_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create banking transaction"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -46,6 +48,7 @@ def _cmd_banking_transactions_create(ctx, data, dry_run, assume_yes, extra_param
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @banking_transactions_group.command("get-distinct-values")
@@ -61,15 +64,17 @@ def _cmd_banking_transactions_get_distinct_values(ctx, fieldKey, fetch_all, extr
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @banking_transactions_group.command("delete", short_help="🟡 Delete banking transaction")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_banking_transactions_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_banking_transactions_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete banking transaction"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -77,6 +82,7 @@ def _cmd_banking_transactions_delete(ctx, id, dry_run, assume_yes, extra_params)
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @banking_transactions_group.command("list-senders")
@@ -94,6 +100,7 @@ def _cmd_banking_transactions_list_senders(ctx, limit, offset, sort, fetch_all, 
         query={"limit": limit, "offset": offset, "sort": sort}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @banking_transactions_group.command("match-to-invoices", short_help="🟡 Match transaction to invoices")
@@ -101,9 +108,10 @@ def _cmd_banking_transactions_list_senders(ctx, limit, offset, sort, fetch_all, 
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_banking_transactions_match_to_invoices(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_banking_transactions_match_to_invoices(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Match transaction to invoices"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -111,15 +119,17 @@ def _cmd_banking_transactions_match_to_invoices(ctx, id, data, dry_run, assume_y
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @banking_transactions_group.command("unmatch", short_help="🟡 Unmatch transaction from invoices")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_banking_transactions_unmatch(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_banking_transactions_unmatch(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Unmatch transaction from invoices"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -127,15 +137,17 @@ def _cmd_banking_transactions_unmatch(ctx, id, dry_run, assume_yes, extra_params
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @banking_transactions_group.command("delete-many", short_help="🔴 Delete multiple transactions")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_banking_transactions_delete_many(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_banking_transactions_delete_many(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Delete multiple transactions"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -143,6 +155,7 @@ def _cmd_banking_transactions_delete_many(ctx, data, dry_run, assume_yes, extra_
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @banking_transactions_group.command("get-matching-invoices")
@@ -157,15 +170,17 @@ def _cmd_banking_transactions_get_matching_invoices(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @banking_transactions_group.command("ignore", short_help="🟡 Ignore/unignore transactions")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_banking_transactions_ignore(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_banking_transactions_ignore(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Ignore/unignore transactions"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -173,6 +188,7 @@ def _cmd_banking_transactions_ignore(ctx, data, dry_run, assume_yes, extra_param
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 def register(root):

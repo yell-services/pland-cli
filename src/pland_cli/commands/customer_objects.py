@@ -23,6 +23,7 @@ def _cmd_customer_objects_list_by(ctx, customerid, limit, offset, extra_params):
         query={"limit": limit, "offset": offset}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("list-by-location")
@@ -38,6 +39,7 @@ def _cmd_customer_objects_list_by_location(ctx, lat, long, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("list")
@@ -66,15 +68,17 @@ def _cmd_customer_objects_list(ctx, limit, offset, sort, customerId, objectManag
         query={"limit": limit, "offset": offset, "sort": sort, "customerId": customerId, "objectManagers": objectManagers, "contactIds": contactIds, "nameAndAddress": nameAndAddress, "name": name, "tags": tags, "active": active, "status": status, "ids": ids, "customerIds": customerIds, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create customer object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -82,6 +86,7 @@ def _cmd_customer_objects_create(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @customer_objects_group.command("list-material")
@@ -97,6 +102,7 @@ def _cmd_customer_objects_list_material(ctx, objectid, allWhenEmpty, extra_param
         query={"allWhenEmpty": allWhenEmpty}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("add-material")
@@ -104,9 +110,10 @@ def _cmd_customer_objects_list_material(ctx, objectid, allWhenEmpty, extra_param
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_add_material(ctx, objectid, data, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_add_material(ctx, objectid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Add material to object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -114,6 +121,7 @@ def _cmd_customer_objects_add_material(ctx, objectid, data, dry_run, assume_yes,
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @customer_objects_group.command("list-active-users-on")
@@ -129,6 +137,7 @@ def _cmd_customer_objects_list_active_users_on(ctx, objectid, showAll, extra_par
         query={"showAll": showAll}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("remove-material", short_help="🟡 Remove material from object")
@@ -137,9 +146,10 @@ def _cmd_customer_objects_list_active_users_on(ctx, objectid, showAll, extra_par
 @click.argument("CLOSETID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_remove_material(ctx, objectid, type, closetid, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_remove_material(ctx, objectid, type, closetid, dry_run, assume_yes, confirm_token, extra_params):
     """Remove material from object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -147,6 +157,7 @@ def _cmd_customer_objects_remove_material(ctx, objectid, type, closetid, dry_run
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @customer_objects_group.command("change-material-budget", short_help="🟡 Change material budget")
@@ -155,9 +166,10 @@ def _cmd_customer_objects_remove_material(ctx, objectid, type, closetid, dry_run
 @click.argument("BUDGET")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_change_material_budget(ctx, objectid, articleid, budget, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_change_material_budget(ctx, objectid, articleid, budget, dry_run, assume_yes, confirm_token, extra_params):
     """Change material budget"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -165,6 +177,7 @@ def _cmd_customer_objects_change_material_budget(ctx, objectid, articleid, budge
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @customer_objects_group.command("set-location")
@@ -172,9 +185,10 @@ def _cmd_customer_objects_change_material_budget(ctx, objectid, articleid, budge
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_set_location(ctx, objectid, data, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_set_location(ctx, objectid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set object location"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -182,6 +196,7 @@ def _cmd_customer_objects_set_location(ctx, objectid, data, dry_run, assume_yes,
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @customer_objects_group.command("get-assigned-managers")
@@ -196,6 +211,7 @@ def _cmd_customer_objects_get_assigned_managers(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("get-by-number")
@@ -210,6 +226,7 @@ def _cmd_customer_objects_get_by_number(ctx, objectnumber, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("set-end-date-for-and-assignments", short_help="🔴 Set end date for object and assignments")
@@ -217,9 +234,10 @@ def _cmd_customer_objects_get_by_number(ctx, objectnumber, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_set_end_date_for_and_assignments(ctx, objectid, data, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_set_end_date_for_and_assignments(ctx, objectid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set end date for object and assignments"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -227,6 +245,7 @@ def _cmd_customer_objects_set_end_date_for_and_assignments(ctx, objectid, data, 
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @customer_objects_group.command("get-available-tags")
@@ -242,6 +261,7 @@ def _cmd_customer_objects_get_available_tags(ctx, name, fetch_all, extra_params)
         query={"name": name}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("get-basic-assignments-of")
@@ -256,6 +276,7 @@ def _cmd_customer_objects_get_basic_assignments_of(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("get")
@@ -270,15 +291,17 @@ def _cmd_customer_objects_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("delete", short_help="🟡 Delete customer object")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete customer object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -286,6 +309,7 @@ def _cmd_customer_objects_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @customer_objects_group.command("update", short_help="🟡 Update customer object")
@@ -293,9 +317,10 @@ def _cmd_customer_objects_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_customer_objects_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_customer_objects_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update customer object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -303,6 +328,7 @@ def _cmd_customer_objects_update(ctx, id, data, dry_run, assume_yes, extra_param
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @customer_objects_group.command("count")
@@ -327,6 +353,7 @@ def _cmd_customer_objects_count(ctx, customerId, objectManagers, contactIds, nam
         query={"customerId": customerId, "objectManagers": objectManagers, "contactIds": contactIds, "nameAndAddress": nameAndAddress, "name": name, "tags": tags, "status": status, "ids": ids, "customerIds": customerIds, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("get-last-number")
@@ -341,6 +368,7 @@ def _cmd_customer_objects_get_last_number(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @customer_objects_group.command("get-distinct-values")
@@ -356,6 +384,7 @@ def _cmd_customer_objects_get_distinct_values(ctx, fieldKey, fetch_all, extra_pa
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

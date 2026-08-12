@@ -21,6 +21,7 @@ def _cmd_upload_list(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @upload_group.command("csv", short_help="🟡 CSV import for various entities")
@@ -28,9 +29,10 @@ def _cmd_upload_list(ctx, fetch_all, extra_params):
 @click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_upload_csv(ctx, type, file_, dry_run, assume_yes, extra_params):
+def _cmd_upload_csv(ctx, type, file_, dry_run, assume_yes, confirm_token, extra_params):
     """CSV import for various entities"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -38,6 +40,7 @@ def _cmd_upload_csv(ctx, type, file_, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=file_, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @upload_group.command("image", short_help="🟡 Image upload")
@@ -45,9 +48,10 @@ def _cmd_upload_csv(ctx, type, file_, dry_run, assume_yes, extra_params):
 @click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_upload_image(ctx, uploadpath, file_, dry_run, assume_yes, extra_params):
+def _cmd_upload_image(ctx, uploadpath, file_, dry_run, assume_yes, confirm_token, extra_params):
     """Image upload"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -55,15 +59,17 @@ def _cmd_upload_image(ctx, uploadpath, file_, dry_run, assume_yes, extra_params)
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=file_, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @upload_group.command("camt-transactions", short_help="🟡 camt v8 xml upload")
 @click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_upload_camt_transactions(ctx, file_, dry_run, assume_yes, extra_params):
+def _cmd_upload_camt_transactions(ctx, file_, dry_run, assume_yes, confirm_token, extra_params):
     """camt v8 xml upload"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -71,6 +77,7 @@ def _cmd_upload_camt_transactions(ctx, file_, dry_run, assume_yes, extra_params)
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=file_, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @upload_group.command("get-image-safe")
@@ -86,6 +93,7 @@ def _cmd_upload_get_image_safe(ctx, uploadid, output, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=output, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

@@ -23,6 +23,7 @@ def _cmd_custom_fields_list(ctx, limit, offset, fetch_all, extra_params):
         query={"limit": limit, "offset": offset}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @custom_fields_group.command("count")
@@ -37,6 +38,7 @@ def _cmd_custom_fields_count(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @custom_fields_group.command("get-distinct-values")
@@ -52,6 +54,7 @@ def _cmd_custom_fields_get_distinct_values(ctx, fieldKey, fetch_all, extra_param
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

@@ -327,7 +327,8 @@ def test_json_dry_run_keeps_stdout_parseable(tmp_path):
     ])
     result = CliRunner().invoke(main, ["--json", "batch", "run", "--file", file, "--dry-run"])
     assert result.exit_code == 0
-    assert json.loads(result.stdout) == {"operations": 1, "risk": "critical"}
+    assert json.loads(result.stdout) == {"operations": 1, "risk": "critical",
+                                        "confirmToken": "releaseWithTimeTracking"}
     # The human still sees the plan before any gate — on stderr, out of the way.
     assert "salary release-using-time-tracking" in result.stderr
 
@@ -497,3 +498,42 @@ def test_gate_names_the_first_entry_at_the_maximum_risk(tmp_path, monkeypatch):
     assert seen["risk"] == "critical"
     assert seen["method"] == "post"
     assert seen["path"] == "/salaries/releaseWithTimeTracking"
+
+
+def test_confirm_token_runs_the_critical_batch_without_a_tty(tmp_path, monkeypatch):
+    """The user gave the go, so the token is passed instead of typed."""
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [
+        {"group": "salary", "command": "release-using-time-tracking", "data": {"timeTrackingId": "t"}},
+    ])
+    result = CliRunner().invoke(
+        main, ["batch", "run", "--file", file, "--confirm", "releaseWithTimeTracking"])
+    assert result.exit_code == 0
+    assert client.calls == [("post", "/salaries/releaseWithTimeTracking", {"timeTrackingId": "t"})]
+
+
+def test_a_wrong_confirm_token_sends_nothing(tmp_path, monkeypatch):
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    client = _FakeClient()
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", lambda ctx: client)
+    file = _write(tmp_path, [
+        {"group": "salary", "command": "release-using-time-tracking", "data": {"timeTrackingId": "t"}},
+    ])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file, "--confirm", "jobs"])
+    assert result.exit_code == 2
+    assert client.calls == []
+
+
+def test_the_plan_names_the_token_to_pass(tmp_path, monkeypatch):
+    """--dry-run has to tell the caller which token the real run expects."""
+    monkeypatch.setattr("pland_cli.core.guard._audit_path", lambda: tmp_path / "a.jsonl")
+    file = _write(tmp_path, [
+        {"group": "salary", "command": "release-using-time-tracking", "data": {"timeTrackingId": "t"}},
+    ])
+    result = CliRunner().invoke(main, ["batch", "run", "--file", file, "--dry-run"])
+    assert result.exit_code == 0
+    assert "--confirm releaseWithTimeTracking" in result.output

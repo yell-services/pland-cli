@@ -76,9 +76,18 @@ def enforce(
     isatty: Callable[[], bool] | None = None,
     confirmer: Callable[[str], bool] | None = None,
     tokener: Callable[[str], str] | None = None,
+    confirm_token: str | None = None,
 ) -> None:
     """Enforce the risk tier. Returning means the call may proceed;
-    raising SystemExit(2) means aborted or blocked."""
+    raising SystemExit(2) means aborted or blocked.
+
+    `confirm_token` carries the confirmation the user would otherwise type at the
+    terminal, for a caller running without one — an agent that has the user's
+    explicit go. It replaces the typing, not the confirmation: the token still has
+    to match, so a mistyped or mistargeted command aborts exactly as before. Every
+    such run is audited as `*_confirmed_flag`, distinct from a typed one, so the
+    trail shows which confirmations a human actually entered.
+    """
     isatty = isatty or sys.stdin.isatty
     # Prompts go to stderr: with --json, stdout carries the result object, and a
     # confirmation written there would make it unparseable for the caller.
@@ -104,6 +113,16 @@ def enforce(
         return
 
     label = f"{method.upper()} {path}"
+
+    if confirm_token is not None:
+        expected = _resource_token(path)
+        if confirm_token.strip() != expected:
+            _abort(method, path, risk, "aborted",
+                   f"Aborted: --confirm {confirm_token!r} does not match {expected!r} "
+                   f"for {label}.")
+        audit({"method": method.upper(), "path": path, "risk": risk,
+               "decision": f"{risk}_confirmed_flag"})
+        return
 
     if risk == "critical":
         if not isatty():

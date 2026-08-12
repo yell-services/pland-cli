@@ -23,6 +23,7 @@ def _cmd_exports_list(ctx, limit, offset, fetch_all, extra_params):
         query={"limit": limit, "offset": offset}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

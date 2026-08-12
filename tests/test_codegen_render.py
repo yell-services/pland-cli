@@ -190,3 +190,16 @@ def test_render_keeps_quotes_and_emoji_literal():
     )
     assert "🔴" in marked and "\\ud83d" not in marked
     marked.encode("utf-8")  # Surrogate -> UnicodeEncodeError
+
+
+def test_a_write_command_offers_the_confirm_token_flag():
+    """The same non-interactive path as `batch run`, for a single write."""
+    op = _op(method="delete", path="/salaries/{id}", group="salary", command="delete")
+    code = render_command(op)
+    assert '"--confirm"' in code
+    assert "confirm_token=confirm_token" in code
+
+
+def test_a_read_command_has_no_confirm_flag():
+    op = _op(method="get", path="/salaries/{id}", group="salary", command="view")
+    assert '"--confirm"' not in render_command(op)

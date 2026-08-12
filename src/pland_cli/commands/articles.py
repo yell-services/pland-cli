@@ -24,15 +24,17 @@ def _cmd_articles_list(ctx, limit, offset, sort, fetch_all, extra_params):
         query={"limit": limit, "offset": offset, "sort": sort}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @articles_group.command("create-custom")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_articles_create_custom(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_articles_create_custom(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create a new article (custom logic)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -40,6 +42,7 @@ def _cmd_articles_create_custom(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @articles_group.command("get-last-number")
@@ -54,6 +57,7 @@ def _cmd_articles_get_last_number(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @articles_group.command("get")
@@ -68,15 +72,17 @@ def _cmd_articles_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @articles_group.command("delete")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_articles_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_articles_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete article"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -84,6 +90,7 @@ def _cmd_articles_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @articles_group.command("update")
@@ -91,9 +98,10 @@ def _cmd_articles_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_articles_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_articles_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update article"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -101,6 +109,7 @@ def _cmd_articles_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @articles_group.command("order-material", short_help="🟡 Order material for an object")
@@ -108,9 +117,10 @@ def _cmd_articles_update(ctx, id, data, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_articles_order_material(ctx, objectid, data, dry_run, assume_yes, extra_params):
+def _cmd_articles_order_material(ctx, objectid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Order material for an object"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -118,6 +128,7 @@ def _cmd_articles_order_material(ctx, objectid, data, dry_run, assume_yes, extra
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @articles_group.command("become-default", short_help="🟡 Set article as default for a budget")
@@ -125,9 +136,10 @@ def _cmd_articles_order_material(ctx, objectid, data, dry_run, assume_yes, extra
 @click.argument("BUDGET")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_articles_become_default(ctx, id, budget, dry_run, assume_yes, extra_params):
+def _cmd_articles_become_default(ctx, id, budget, dry_run, assume_yes, confirm_token, extra_params):
     """Set article as default for a budget"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -135,6 +147,7 @@ def _cmd_articles_become_default(ctx, id, budget, dry_run, assume_yes, extra_par
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @articles_group.command("is-default")
@@ -149,15 +162,17 @@ def _cmd_articles_is_default(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @articles_group.command("remove-default")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_articles_remove_default(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_articles_remove_default(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Remove article as default"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -165,6 +180,7 @@ def _cmd_articles_remove_default(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @articles_group.command("list-objects-for")
@@ -179,6 +195,7 @@ def _cmd_articles_list_objects_for(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @articles_group.command("get-distinct-values-custom")
@@ -194,15 +211,17 @@ def _cmd_articles_get_distinct_values_custom(ctx, fieldKey, fetch_all, extra_par
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @articles_group.command("update-amount-in-stock")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_articles_update_amount_in_stock(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_articles_update_amount_in_stock(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update amount in stock for multiple articles"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -210,6 +229,7 @@ def _cmd_articles_update_amount_in_stock(ctx, data, dry_run, assume_yes, extra_p
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 def register(root):

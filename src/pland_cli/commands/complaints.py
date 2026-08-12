@@ -39,15 +39,17 @@ def _cmd_complaints_list(ctx, limit, offset, sort, status, ids, objectIds, objec
         query={"limit": limit, "offset": offset, "sort": sort, "status": status, "ids": ids, "objectIds": objectIds, "object": object, "customerIds": customerIds, "objectManager": objectManager, "objectManagers": objectManagers, "objectsByName": objectsByName, "userIds": userIds, "user": user, "complaintStatus": complaintStatus, "from": from_, "to": to, "searchComplaint": searchComplaint, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @complaints_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_complaints_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_complaints_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create complaint"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -55,6 +57,7 @@ def _cmd_complaints_create(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @complaints_group.command("get")
@@ -69,15 +72,17 @@ def _cmd_complaints_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @complaints_group.command("delete", short_help="🟡 Delete complaint")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_complaints_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_complaints_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete complaint"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -85,6 +90,7 @@ def _cmd_complaints_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @complaints_group.command("update", short_help="🟡 Update complaint")
@@ -92,9 +98,10 @@ def _cmd_complaints_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_complaints_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_complaints_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update complaint"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -102,6 +109,7 @@ def _cmd_complaints_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @complaints_group.command("count")
@@ -131,6 +139,7 @@ def _cmd_complaints_count(ctx, status, ids, objectIds, object, customerIds, obje
         query={"status": status, "ids": ids, "objectIds": objectIds, "object": object, "customerIds": customerIds, "objectManager": objectManager, "objectManagers": objectManagers, "objectsByName": objectsByName, "userIds": userIds, "user": user, "complaintStatus": complaintStatus, "from": from_, "to": to, "searchComplaint": searchComplaint, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @complaints_group.command("count-new")
@@ -145,6 +154,7 @@ def _cmd_complaints_count_new(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @complaints_group.command("get-distinct-values")
@@ -160,6 +170,7 @@ def _cmd_complaints_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @complaints_group.command("get-user")
@@ -174,6 +185,7 @@ def _cmd_complaints_get_user(ctx, userid, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @complaints_group.command("assign", short_help="🟡 Assign complaint to user")
@@ -181,9 +193,10 @@ def _cmd_complaints_get_user(ctx, userid, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_complaints_assign(ctx, complaintid, data, dry_run, assume_yes, extra_params):
+def _cmd_complaints_assign(ctx, complaintid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Assign complaint to user"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -191,6 +204,7 @@ def _cmd_complaints_assign(ctx, complaintid, data, dry_run, assume_yes, extra_pa
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @complaints_group.command("resolve", short_help="🟡 Resolve complaint")
@@ -198,9 +212,10 @@ def _cmd_complaints_assign(ctx, complaintid, data, dry_run, assume_yes, extra_pa
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_complaints_resolve(ctx, complaintid, data, dry_run, assume_yes, extra_params):
+def _cmd_complaints_resolve(ctx, complaintid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Resolve complaint"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -208,6 +223,7 @@ def _cmd_complaints_resolve(ctx, complaintid, data, dry_run, assume_yes, extra_p
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @complaints_group.command("count-user")
@@ -222,6 +238,7 @@ def _cmd_complaints_count_user(ctx, userid, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @complaints_group.command("get-generations-left")
@@ -236,6 +253,7 @@ def _cmd_complaints_get_generations_left(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

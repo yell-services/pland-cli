@@ -21,15 +21,17 @@ def _cmd_pay_types_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @pay_types_group.command("delete", short_help="🟡 Delete pay type")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_pay_types_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_pay_types_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete pay type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -37,6 +39,7 @@ def _cmd_pay_types_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @pay_types_group.command("update", short_help="🟡 Update pay type")
@@ -44,9 +47,10 @@ def _cmd_pay_types_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_pay_types_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_pay_types_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update pay type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -54,6 +58,7 @@ def _cmd_pay_types_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @pay_types_group.command("get-salaries")
@@ -75,15 +80,17 @@ def _cmd_pay_types_get_salaries(ctx, limit, offset, sort, status, ids, name, req
         query={"limit": limit, "offset": offset, "sort": sort, "status": status, "ids": ids, "name": name, "requestable": requestable}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @pay_types_group.command("create-salary")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_pay_types_create_salary(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_pay_types_create_salary(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create salary pay type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -91,6 +98,7 @@ def _cmd_pay_types_create_salary(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @pay_types_group.command("get-absences")
@@ -112,15 +120,17 @@ def _cmd_pay_types_get_absences(ctx, limit, offset, sort, status, ids, name, req
         query={"limit": limit, "offset": offset, "sort": sort, "status": status, "ids": ids, "name": name, "requestable": requestable}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @pay_types_group.command("create-absence")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_pay_types_create_absence(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_pay_types_create_absence(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create absence pay type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -128,6 +138,7 @@ def _cmd_pay_types_create_absence(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 def register(root):

@@ -155,6 +155,14 @@ def execute(client, entries: list[ResolvedEntry]) -> tuple[int, list[dict]]:
     return succeeded, failures
 
 
+def _gate_token(entries: list[ResolvedEntry], risk: str) -> str | None:
+    """The token the real run will ask for, so --dry-run can name it."""
+    if risk == "free":
+        return None
+    gate = next(e for e in entries if e.risk == risk)
+    return guard._resource_token(gate.path)
+
+
 @enrich("batch", "run", new=True)
 @click.command()
 @click.option("--file", "file_", required=True, type=click.Path(exists=True, dir_okay=False),
@@ -162,8 +170,13 @@ def execute(client, entries: list[ResolvedEntry]) -> tuple[int, list[dict]]:
 @click.option("--dry-run", is_flag=True, help="Print the plan and exit without asking.")
 @click.option("--yes", "assume_yes", is_flag=True,
               help="Skip a 🟡 confirmation. Has no effect on 🔴.")
+@click.option("--confirm", "confirm_token", metavar="TOKEN",
+              help="Pass the confirmation token instead of typing it at a terminal. "
+                   "For a caller without a TTY that has the user's explicit go; the "
+                   "token still has to match. --dry-run prints the one to use.")
 @click.pass_context
-def batch_run(ctx: click.Context, file_: str, dry_run: bool, assume_yes: bool) -> None:
+def batch_run(ctx: click.Context, file_: str, dry_run: bool, assume_yes: bool,
+              confirm_token: str | None) -> None:
     """Run many operations from a file behind a single risk gate."""
     out_mod.set_json(ctx.obj.get("as_json", False))
     try:
@@ -180,7 +193,12 @@ def batch_run(ctx: click.Context, file_: str, dry_run: bool, assume_yes: bool) -
     click.echo(format_plan(entries), err=out_mod.USE_JSON)
     if dry_run:
         if out_mod.USE_JSON:
-            out_mod.out({"operations": len(entries), "risk": risk})
+            out_mod.out({"operations": len(entries), "risk": risk,
+                         "confirmToken": _gate_token(entries, risk)})
+        else:
+            token = _gate_token(entries, risk)
+            if token:
+                click.echo(f"Run it with: --confirm {token}")
         return
 
     if risk != "free":
@@ -188,7 +206,8 @@ def batch_run(ctx: click.Context, file_: str, dry_run: bool, assume_yes: bool) -
         # name a real request rather than a synthetic one.
         gate = next(e for e in entries if e.risk == risk)
         guard.enforce(method=gate.method, path=gate.path, risk=risk,
-                      draftable=None, assume_yes=assume_yes)
+                      draftable=None, assume_yes=assume_yes,
+                      confirm_token=confirm_token)
 
     succeeded, failures = execute(get_client(ctx), entries)
     if out_mod.USE_JSON:

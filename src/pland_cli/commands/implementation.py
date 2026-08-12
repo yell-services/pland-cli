@@ -28,6 +28,7 @@ def _cmd_implementation_get_progress(ctx, limit, offset, sort, userName, employm
         query={"limit": limit, "offset": offset, "sort": sort, "userName": userName, "employment": employment, "department": department, "tags": tags}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

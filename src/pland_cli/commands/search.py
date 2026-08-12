@@ -22,6 +22,7 @@ def _cmd_search_perform_global(ctx, searchTerm, fetch_all, extra_params):
         query={"searchTerm": searchTerm}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

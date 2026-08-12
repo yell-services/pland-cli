@@ -39,6 +39,7 @@ def _cmd_jobs_list(ctx, limit, offset, sort, status, ids, jobTemplateId, origina
         query={"limit": limit, "offset": offset, "sort": sort, "status": status, "ids": ids, "jobTemplateId": jobTemplateId, "originalId": originalId, "absenceId": absenceId, "notAccepted": notAccepted, "objectId": objectId, "objectIds": objectIds, "teamId": teamId, "userIds": userIds, "activityTypeId": activityTypeId, "currentlyWorking": currentlyWorking, "liveJobs": liveJobs, "assignmentIds": assignmentIds, "tags": tags}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @jobs_group.command("list-by-assignment")
@@ -53,6 +54,7 @@ def _cmd_jobs_list_by_assignment(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @jobs_group.command("list-for-user")
@@ -67,15 +69,17 @@ def _cmd_jobs_list_for_user(ctx, userid, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @jobs_group.command("check-user-capacity")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_check_user_capacity(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_jobs_check_user_capacity(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Check user job capacity"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -83,6 +87,7 @@ def _cmd_jobs_check_user_capacity(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("list-for-object")
@@ -97,15 +102,17 @@ def _cmd_jobs_list_for_object(ctx, objectid, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @jobs_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_jobs_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create a job"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -113,6 +120,7 @@ def _cmd_jobs_create(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("view")
@@ -127,6 +135,7 @@ def _cmd_jobs_view(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @jobs_group.command("delete", short_help="🟡 Delete a job")
@@ -136,9 +145,10 @@ def _cmd_jobs_view(ctx, id, extra_params):
 @click.option("--teamId", "teamId", default=None, help="Team ID (optional, for team job deletion)")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_delete(ctx, id, splitDate, type, teamId, dry_run, assume_yes, extra_params):
+def _cmd_jobs_delete(ctx, id, splitDate, type, teamId, dry_run, assume_yes, confirm_token, extra_params):
     """Delete a job"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -146,6 +156,7 @@ def _cmd_jobs_delete(ctx, id, splitDate, type, teamId, dry_run, assume_yes, extr
         query={"splitDate": splitDate, "type": type, "teamId": teamId}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("patch-old", short_help="🟡 Update a job (legacy)")
@@ -153,9 +164,10 @@ def _cmd_jobs_delete(ctx, id, splitDate, type, teamId, dry_run, assume_yes, extr
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_patch_old(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_jobs_patch_old(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update a job (legacy)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -163,6 +175,7 @@ def _cmd_jobs_patch_old(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("patch", short_help="🟡 Update a job")
@@ -170,9 +183,10 @@ def _cmd_jobs_patch_old(ctx, id, data, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_patch(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_jobs_patch(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update a job"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -180,15 +194,17 @@ def _cmd_jobs_patch(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("load-resources-and-calendar-data")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_load_resources_and_calendar_data(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_jobs_load_resources_and_calendar_data(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Load resources and calendar data"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -196,15 +212,17 @@ def _cmd_jobs_load_resources_and_calendar_data(ctx, data, dry_run, assume_yes, e
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("load-calendar-data")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_load_calendar_data(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_jobs_load_calendar_data(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Load calendar data"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -212,15 +230,17 @@ def _cmd_jobs_load_calendar_data(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("in-time-frame")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_in_time_frame(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_jobs_in_time_frame(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Get jobs in a specific time frame"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -228,6 +248,7 @@ def _cmd_jobs_in_time_frame(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("change-accepted-status", short_help="🟡 Change job accepted status")
@@ -235,9 +256,10 @@ def _cmd_jobs_in_time_frame(ctx, data, dry_run, assume_yes, extra_params):
 @click.argument("TYPE")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_change_accepted_status(ctx, id, type, dry_run, assume_yes, extra_params):
+def _cmd_jobs_change_accepted_status(ctx, id, type, dry_run, assume_yes, confirm_token, extra_params):
     """Change job accepted status"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -245,15 +267,17 @@ def _cmd_jobs_change_accepted_status(ctx, id, type, dry_run, assume_yes, extra_p
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("mark-as-started")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_mark_as_started(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_jobs_mark_as_started(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Mark job as started"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -261,6 +285,7 @@ def _cmd_jobs_mark_as_started(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("get-open")
@@ -277,6 +302,7 @@ def _cmd_jobs_get_open(ctx, from_, to, fetch_all, extra_params):
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @jobs_group.command("get-status-list-for")
@@ -291,6 +317,7 @@ def _cmd_jobs_get_status_list_for(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @jobs_group.command("get-status-list-for-object")
@@ -307,15 +334,17 @@ def _cmd_jobs_get_status_list_for_object(ctx, objectid, from_, to, extra_params)
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @jobs_group.command("calculate-target-times-and-allowed-times-for-user-ids")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_jobs_calculate_target_times_and_allowed_times_for_user_ids(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_jobs_calculate_target_times_and_allowed_times_for_user_ids(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Calculate user target and allowed times"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -323,6 +352,7 @@ def _cmd_jobs_calculate_target_times_and_allowed_times_for_user_ids(ctx, data, d
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @jobs_group.command("get-time-tracking-for")
@@ -337,6 +367,7 @@ def _cmd_jobs_get_time_tracking_for(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

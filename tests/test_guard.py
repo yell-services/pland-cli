@@ -107,3 +107,32 @@ def test_critical_token_prompt_goes_to_stderr(monkeypatch, tmp_path):
     assert result.exit_code == 0
     assert result.stdout == '{"ok": true}\n'
     assert "Type 'salaries' to confirm" in result.stderr
+
+
+def test_critical_confirm_token_runs_without_a_tty(monkeypatch, tmp_path):
+    """The agent got the user's explicit go, so typing the token at a TTY is
+    replaced by passing it. The token still has to be right: that is what keeps a
+    mistyped or mistargeted command from running."""
+    _enforce(monkeypatch, tmp_path, risk="critical", method="delete",
+             path="/salaries/1", isatty=lambda: False, confirm_token="salaries")
+
+
+def test_critical_wrong_confirm_token_aborts_without_a_tty(monkeypatch, tmp_path):
+    with pytest.raises((click.Abort, SystemExit)):
+        _enforce(monkeypatch, tmp_path, risk="critical", method="delete",
+                 path="/salaries/1", isatty=lambda: False, confirm_token="jobs")
+
+
+def test_critical_confirm_token_is_audited_as_such(monkeypatch, tmp_path):
+    log = tmp_path / "audit.jsonl"
+    monkeypatch.setattr(guard, "_audit_path", lambda: log)
+    guard.enforce(method="delete", path="/salaries/1", risk="critical",
+                  isatty=lambda: False, confirm_token="salaries")
+    rec = json.loads(log.read_text().strip())
+    assert rec["decision"] == "critical_confirmed_flag"
+
+
+def test_confirm_tier_also_accepts_the_token(monkeypatch, tmp_path):
+    # The token is the last non-ID segment, so "approve" here, not "absences".
+    _enforce(monkeypatch, tmp_path, risk="confirm", method="post",
+             path="/absences/1/approve", isatty=lambda: False, confirm_token="approve")

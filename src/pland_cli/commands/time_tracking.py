@@ -14,9 +14,10 @@ def time_tracking_group():
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_start_for_job(ctx, jobid, data, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_start_for_job(ctx, jobid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Start time tracking for a job"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -24,15 +25,17 @@ def _cmd_time_tracking_start_for_job(ctx, jobid, data, dry_run, assume_yes, extr
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("start-simple")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_start_simple(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_start_simple(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Start simple time tracking"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -40,15 +43,17 @@ def _cmd_time_tracking_start_simple(ctx, data, dry_run, assume_yes, extra_params
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("stop")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_stop(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_stop(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Stop active time tracking"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -56,6 +61,7 @@ def _cmd_time_tracking_stop(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("get-active")
@@ -70,6 +76,7 @@ def _cmd_time_tracking_get_active(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @time_tracking_group.command("filter")
@@ -94,6 +101,7 @@ def _cmd_time_tracking_filter(ctx, limit, offset, sort, userId, from_, to, objec
         query={"limit": limit, "offset": offset, "sort": sort, "userId": userId, "from": from_, "to": to, "objectId": objectId, "activityTypeId": activityTypeId, "status": status, "timeTrackingNotApproved": timeTrackingNotApproved}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @time_tracking_group.command("list-from-user")
@@ -111,15 +119,17 @@ def _cmd_time_tracking_list_from_user(ctx, userid, from_, to, includeForTracking
         query={"from": from_, "to": to, "includeForTrackingDate": includeForTrackingDate}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @time_tracking_group.command("sync-offline")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_sync_offline(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_sync_offline(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Sync single offline time tracking"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -127,15 +137,17 @@ def _cmd_time_tracking_sync_offline(ctx, data, dry_run, assume_yes, extra_params
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("sync-offline-batch")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_sync_offline_batch(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_sync_offline_batch(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Sync multiple offline time tracking entries"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -143,15 +155,17 @@ def _cmd_time_tracking_sync_offline_batch(ctx, data, dry_run, assume_yes, extra_
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("release-by-working", short_help="🔴 Release time tracking by working time (deprecated)")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_release_by_working(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_release_by_working(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Release time tracking by working time (deprecated)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -159,15 +173,17 @@ def _cmd_time_tracking_release_by_working(ctx, id, dry_run, assume_yes, extra_pa
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("release-by-target", short_help="🔴 Release time tracking by target time (deprecated)")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_release_by_target(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_release_by_target(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Release time tracking by target time (deprecated)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -175,6 +191,7 @@ def _cmd_time_tracking_release_by_target(ctx, id, dry_run, assume_yes, extra_par
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("release-by-custom-by-admin", short_help="🔴 Release time tracking with custom time by admin (deprecated)")
@@ -182,9 +199,10 @@ def _cmd_time_tracking_release_by_target(ctx, id, dry_run, assume_yes, extra_par
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_release_by_custom_by_admin(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_release_by_custom_by_admin(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Release time tracking with custom time by admin (deprecated)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -192,6 +210,7 @@ def _cmd_time_tracking_release_by_custom_by_admin(ctx, id, data, dry_run, assume
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("release-by-custom", short_help="🔴 Release time tracking with custom time (deprecated)")
@@ -199,9 +218,10 @@ def _cmd_time_tracking_release_by_custom_by_admin(ctx, id, data, dry_run, assume
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_release_by_custom(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_release_by_custom(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Release time tracking with custom time (deprecated)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -209,15 +229,17 @@ def _cmd_time_tracking_release_by_custom(ctx, id, data, dry_run, assume_yes, ext
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("cancel", short_help="🔴 Cancel time tracking entry")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_cancel(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_cancel(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Cancel time tracking entry"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -225,15 +247,17 @@ def _cmd_time_tracking_cancel(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("un-cancel", short_help="🔴 Restore cancelled time tracking entry")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_un_cancel(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_un_cancel(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Restore cancelled time tracking entry"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -241,6 +265,7 @@ def _cmd_time_tracking_un_cancel(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("add-manually")
@@ -248,9 +273,10 @@ def _cmd_time_tracking_un_cancel(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_time_tracking_add_manually(ctx, jobid, data, dry_run, assume_yes, extra_params):
+def _cmd_time_tracking_add_manually(ctx, jobid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Add time tracking manually (deprecated)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -258,6 +284,7 @@ def _cmd_time_tracking_add_manually(ctx, jobid, data, dry_run, assume_yes, extra
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @time_tracking_group.command("get-not-approved-stamps")
@@ -278,6 +305,7 @@ def _cmd_time_tracking_get_not_approved_stamps(ctx, limit, offset, FilterUser, F
         query={"limit": limit, "offset": offset, "FilterUser": FilterUser, "FilterFrom": FilterFrom, "FilterTo": FilterTo, "FilterObject": FilterObject}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @time_tracking_group.command("can-be-approved-by-target")
@@ -293,6 +321,7 @@ def _cmd_time_tracking_can_be_approved_by_target(ctx, id, timeToAdd, extra_param
         query={"timeToAdd": timeToAdd}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @time_tracking_group.command("count-new")
@@ -307,6 +336,7 @@ def _cmd_time_tracking_count_new(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

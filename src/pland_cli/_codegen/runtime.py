@@ -25,7 +25,8 @@ def run_operation(ctx: click.Context, *, method: str, path: str, query: dict,
                   file_: str | None, output: str | None,
                   dry_run: bool = False, fetch_all: bool = False,
                   risk: str = "free", draftable: str | None = None,
-                  assume_yes: bool = False) -> None:
+                  assume_yes: bool = False,
+                  confirm_token: str | None = None) -> None:
     out_mod.set_json(ctx.obj.get("as_json", False))
     params = _build_params(query, extra_params)
     try:
@@ -48,7 +49,8 @@ def run_operation(ctx: click.Context, *, method: str, path: str, query: dict,
             return res if isinstance(res, dict) else {}
 
         guard.enforce(method=method, path=path, risk=risk, draftable=draftable,
-                      assume_yes=assume_yes, lookup=_lookup if draftable else None)
+                      assume_yes=assume_yes, lookup=_lookup if draftable else None,
+                      confirm_token=confirm_token)
 
     if "client" not in ctx.obj:
         from pland_cli.cli import _attach_client

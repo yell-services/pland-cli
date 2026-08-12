@@ -24,6 +24,7 @@ def _cmd_material_orders_list(ctx, limit, offset, sort, fetch_all, extra_params)
         query={"limit": limit, "offset": offset, "sort": sort}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @material_orders_group.command("count")
@@ -49,6 +50,7 @@ def _cmd_material_orders_count(ctx, status, ids, objectId, objectIds, objectMana
         query={"status": status, "ids": ids, "objectId": objectId, "objectIds": objectIds, "objectManagers": objectManagers, "objectName": objectName, "orderStatus": orderStatus, "from": from_, "to": to, "customerIds": customerIds, "searchOrders": searchOrders}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @material_orders_group.command("count-new")
@@ -63,6 +65,7 @@ def _cmd_material_orders_count_new(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @material_orders_group.command("get-distinct-values")
@@ -78,6 +81,7 @@ def _cmd_material_orders_get_distinct_values(ctx, fieldKey, fetch_all, extra_par
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @material_orders_group.command("get")
@@ -92,15 +96,17 @@ def _cmd_material_orders_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @material_orders_group.command("delete", short_help="🟡 Delete order")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_material_orders_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_material_orders_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete order"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -108,6 +114,7 @@ def _cmd_material_orders_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @material_orders_group.command("update", short_help="🟡 Update order")
@@ -115,9 +122,10 @@ def _cmd_material_orders_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_material_orders_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_material_orders_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update order"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -125,15 +133,17 @@ def _cmd_material_orders_update(ctx, id, data, dry_run, assume_yes, extra_params
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @material_orders_group.command("get-or-create-chat")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_material_orders_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_material_orders_get_or_create_chat(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Get/create material order chat"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -141,15 +151,17 @@ def _cmd_material_orders_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @material_orders_group.command("finish", short_help="🟡 Mark order as finished")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_material_orders_finish(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_material_orders_finish(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Mark order as finished"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -157,6 +169,7 @@ def _cmd_material_orders_finish(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @material_orders_group.command("remove-item", short_help="🟡 Remove order item")
@@ -165,9 +178,10 @@ def _cmd_material_orders_finish(ctx, id, dry_run, assume_yes, extra_params):
 @click.argument("ORDERITEMID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_material_orders_remove_item(ctx, id, type, orderitemid, dry_run, assume_yes, extra_params):
+def _cmd_material_orders_remove_item(ctx, id, type, orderitemid, dry_run, assume_yes, confirm_token, extra_params):
     """Remove order item"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -175,6 +189,7 @@ def _cmd_material_orders_remove_item(ctx, id, type, orderitemid, dry_run, assume
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @material_orders_group.command("change-budget", short_help="🟡 Change order items budget or adds article if missing")
@@ -183,9 +198,10 @@ def _cmd_material_orders_remove_item(ctx, id, type, orderitemid, dry_run, assume
 @click.argument("BUDGET")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_material_orders_change_budget(ctx, id, articleid, budget, dry_run, assume_yes, extra_params):
+def _cmd_material_orders_change_budget(ctx, id, articleid, budget, dry_run, assume_yes, confirm_token, extra_params):
     """Change order items budget or adds article if missing"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -193,6 +209,7 @@ def _cmd_material_orders_change_budget(ctx, id, articleid, budget, dry_run, assu
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @material_orders_group.command("get-pdf")
@@ -208,6 +225,7 @@ def _cmd_material_orders_get_pdf(ctx, id, output, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=output, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

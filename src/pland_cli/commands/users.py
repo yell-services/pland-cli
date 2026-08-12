@@ -36,15 +36,17 @@ def _cmd_users_list(ctx, limit, offset, sort, name, username, status, employment
         query={"limit": limit, "offset": offset, "sort": sort, "name": name, "username": username, "status": status, "employment": employment, "ids": ids, "excludeIds": excludeIds, "tags": tags, "activityTypeId": activityTypeId, "workedOnObjects": workedOnObjects, "worksOnObject": worksOnObject, "currentlyWorking": currentlyWorking, "basedOnObjectManager": basedOnObjectManager}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @users_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_users_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create a new user"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -52,6 +54,7 @@ def _cmd_users_create(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("get-last-number")
@@ -66,6 +69,7 @@ def _cmd_users_get_last_number(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @users_group.command("get-distinct-values")
@@ -81,6 +85,7 @@ def _cmd_users_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @users_group.command("count")
@@ -107,6 +112,7 @@ def _cmd_users_count(ctx, name, username, status, employment, ids, excludeIds, t
         query={"name": name, "username": username, "status": status, "employment": employment, "ids": ids, "excludeIds": excludeIds, "tags": tags, "activityTypeId": activityTypeId, "workedOnObjects": workedOnObjects, "worksOnObject": worksOnObject, "currentlyWorking": currentlyWorking, "basedOnObjectManager": basedOnObjectManager}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @users_group.command("get-by-id")
@@ -121,15 +127,17 @@ def _cmd_users_get_by_id(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @users_group.command("delete", short_help="🔴 Delete user")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_users_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete user"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -137,6 +145,7 @@ def _cmd_users_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("update", short_help="🟡 Update user")
@@ -144,9 +153,10 @@ def _cmd_users_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_users_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update user"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -154,15 +164,17 @@ def _cmd_users_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("update-many", short_help="🟡 Update multiple users")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_update_many(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_users_update_many(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update multiple users"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -170,15 +182,17 @@ def _cmd_users_update_many(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("get-chat")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_get_chat(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_users_get_chat(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Get or create user chat"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -186,15 +200,17 @@ def _cmd_users_get_chat(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("generate-password", short_help="🔴 Generate new password for user")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_generate_password(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_users_generate_password(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Generate new password for user"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -202,15 +218,17 @@ def _cmd_users_generate_password(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("set-device-token")
 @click.argument("TOKEN")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_set_device_token(ctx, token, dry_run, assume_yes, extra_params):
+def _cmd_users_set_device_token(ctx, token, dry_run, assume_yes, confirm_token, extra_params):
     """Set device token for push notifications"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -218,15 +236,17 @@ def _cmd_users_set_device_token(ctx, token, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("set-web-push-token")
 @click.argument("TOKEN")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_set_web_push_token(ctx, token, dry_run, assume_yes, extra_params):
+def _cmd_users_set_web_push_token(ctx, token, dry_run, assume_yes, confirm_token, extra_params):
     """Set web push token for browser notifications"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -234,14 +254,16 @@ def _cmd_users_set_web_push_token(ctx, token, dry_run, assume_yes, extra_params)
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("send-smsto-all", short_help="🔴 Send SMS credentials to all users")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_send_smsto_all(ctx, dry_run, assume_yes, extra_params):
+def _cmd_users_send_smsto_all(ctx, dry_run, assume_yes, confirm_token, extra_params):
     """Send SMS credentials to all users"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -249,6 +271,7 @@ def _cmd_users_send_smsto_all(ctx, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("set-home-location")
@@ -256,9 +279,10 @@ def _cmd_users_send_smsto_all(ctx, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_set_home_location(ctx, userid, data, dry_run, assume_yes, extra_params):
+def _cmd_users_set_home_location(ctx, userid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set user home location"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -266,6 +290,7 @@ def _cmd_users_set_home_location(ctx, userid, data, dry_run, assume_yes, extra_p
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("set-profile-image")
@@ -273,9 +298,10 @@ def _cmd_users_set_home_location(ctx, userid, data, dry_run, assume_yes, extra_p
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_set_profile_image(ctx, userid, data, dry_run, assume_yes, extra_params):
+def _cmd_users_set_profile_image(ctx, userid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set user profile image"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -283,6 +309,7 @@ def _cmd_users_set_profile_image(ctx, userid, data, dry_run, assume_yes, extra_p
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("get-all-employment-types")
@@ -298,14 +325,16 @@ def _cmd_users_get_all_employment_types(ctx, filterPassiveUserGroups, fetch_all,
         query={"filterPassiveUserGroups": filterPassiveUserGroups}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @users_group.command("set-last-time-active")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_set_last_time_active(ctx, dry_run, assume_yes, extra_params):
+def _cmd_users_set_last_time_active(ctx, dry_run, assume_yes, confirm_token, extra_params):
     """Update user last active time"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -313,15 +342,17 @@ def _cmd_users_set_last_time_active(ctx, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("filter")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_filter(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_users_filter(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Filter users with advanced criteria"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -329,6 +360,7 @@ def _cmd_users_filter(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("get-by-number")
@@ -343,6 +375,7 @@ def _cmd_users_get_by_number(ctx, usernumber, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @users_group.command("set-end-date-for-and-all-jobs", short_help="🔴 Set end date for user and their jobs")
@@ -350,9 +383,10 @@ def _cmd_users_get_by_number(ctx, usernumber, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_users_set_end_date_for_and_all_jobs(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_users_set_end_date_for_and_all_jobs(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set end date for user and their jobs"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -360,6 +394,7 @@ def _cmd_users_set_end_date_for_and_all_jobs(ctx, id, data, dry_run, assume_yes,
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @users_group.command("get-available-tags")
@@ -386,6 +421,7 @@ def _cmd_users_get_available_tags(ctx, name, username, status, employment, ids, 
         query={"name": name, "username": username, "status": status, "employment": employment, "ids": ids, "excludeIds": excludeIds, "tags": tags, "activityTypeId": activityTypeId, "workedOnObjects": workedOnObjects, "worksOnObject": worksOnObject, "currentlyWorking": currentlyWorking, "basedOnObjectManager": basedOnObjectManager}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @users_group.command("get-own")
@@ -400,6 +436,7 @@ def _cmd_users_get_own(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

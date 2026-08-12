@@ -43,15 +43,17 @@ def _cmd_invoice_list(ctx, limit, offset, sort, invoiceTypeOf, assignmentIds, ac
         query={"limit": limit, "offset": offset, "sort": sort, "invoiceTypeOf": invoiceTypeOf, "assignmentIds": assignmentIds, "activityTypeId": activityTypeId, "invoiceByReminderTemplate": invoiceByReminderTemplate, "status": status, "name": name, "ids": ids, "customer": customer, "objectIds": objectIds, "objectIdsByTag": objectIdsByTag, "statusTags": statusTags, "referenceIds": referenceIds, "fakturaDocuments": fakturaDocuments, "issuedOnFrom": issuedOnFrom, "issuedOnTo": issuedOnTo, "documentNumber": documentNumber, "fakturaDocumentNames": fakturaDocumentNames, "documentPrefix": documentPrefix, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create invoice"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -59,6 +61,7 @@ def _cmd_invoice_create(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("get-last-number")
@@ -73,6 +76,7 @@ def _cmd_invoice_get_last_number(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_group.command("count")
@@ -106,6 +110,7 @@ def _cmd_invoice_count(ctx, invoiceTypeOf, assignmentIds, activityTypeId, invoic
         query={"invoiceTypeOf": invoiceTypeOf, "assignmentIds": assignmentIds, "activityTypeId": activityTypeId, "invoiceByReminderTemplate": invoiceByReminderTemplate, "status": status, "name": name, "ids": ids, "customer": customer, "objectIds": objectIds, "objectIdsByTag": objectIdsByTag, "statusTags": statusTags, "referenceIds": referenceIds, "fakturaDocuments": fakturaDocuments, "issuedOnFrom": issuedOnFrom, "issuedOnTo": issuedOnTo, "documentNumber": documentNumber, "fakturaDocumentNames": fakturaDocumentNames, "documentPrefix": documentPrefix, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_group.command("get-distinct-values")
@@ -121,6 +126,7 @@ def _cmd_invoice_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_group.command("get")
@@ -135,15 +141,17 @@ def _cmd_invoice_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_group.command("delete", short_help="🟡 Delete invoice")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_invoice_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete invoice"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -151,6 +159,7 @@ def _cmd_invoice_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable="Invoice", assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("update", short_help="🟡 Update invoice")
@@ -158,9 +167,10 @@ def _cmd_invoice_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update invoice"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -168,15 +178,17 @@ def _cmd_invoice_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("set-fixed", short_help="🟡 Set invoices to fixed status")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_set_fixed(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_set_fixed(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set invoices to fixed status"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -184,15 +196,17 @@ def _cmd_invoice_set_fixed(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("set-canceled", short_help="🔴 Cancel invoices")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_set_canceled(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_set_canceled(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Cancel invoices"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -200,6 +214,7 @@ def _cmd_invoice_set_canceled(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("create-stripe-account-link")
@@ -214,6 +229,7 @@ def _cmd_invoice_create_stripe_account_link(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_group.command("create-payment-link")
@@ -228,6 +244,7 @@ def _cmd_invoice_create_payment_link(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_group.command("link-to-credit", short_help="🟡 Link invoice to credit")
@@ -235,9 +252,10 @@ def _cmd_invoice_create_payment_link(ctx, id, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_link_to_credit(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_link_to_credit(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Link invoice to credit"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -245,6 +263,7 @@ def _cmd_invoice_link_to_credit(ctx, id, data, dry_run, assume_yes, extra_params
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("link-to-reminder", short_help="🟡 Link invoice to reminder")
@@ -252,9 +271,10 @@ def _cmd_invoice_link_to_credit(ctx, id, data, dry_run, assume_yes, extra_params
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_link_to_reminder(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_link_to_reminder(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Link invoice to reminder"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -262,6 +282,7 @@ def _cmd_invoice_link_to_reminder(ctx, id, data, dry_run, assume_yes, extra_para
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("get-transactions")
@@ -276,6 +297,7 @@ def _cmd_invoice_get_transactions(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_group.command("generate-multiple-zugferd-pdfs", short_help="🟡 Generate ZUGFeRD PDFs for multiple invoices")
@@ -283,9 +305,10 @@ def _cmd_invoice_get_transactions(ctx, id, extra_params):
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_generate_multiple_zugferd_pdfs(ctx, data, output, dry_run, assume_yes, extra_params):
+def _cmd_invoice_generate_multiple_zugferd_pdfs(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Generate ZUGFeRD PDFs for multiple invoices"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -293,6 +316,7 @@ def _cmd_invoice_generate_multiple_zugferd_pdfs(ctx, data, output, dry_run, assu
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("generate-single-zugferd-pdf", short_help="🟡 Generate ZUGFeRD PDF for invoice")
@@ -300,9 +324,10 @@ def _cmd_invoice_generate_multiple_zugferd_pdfs(ctx, data, output, dry_run, assu
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_generate_single_zugferd_pdf(ctx, data, output, dry_run, assume_yes, extra_params):
+def _cmd_invoice_generate_single_zugferd_pdf(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Generate ZUGFeRD PDF for invoice"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -310,6 +335,7 @@ def _cmd_invoice_generate_single_zugferd_pdf(ctx, data, output, dry_run, assume_
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("export")
@@ -319,9 +345,10 @@ def _cmd_invoice_generate_single_zugferd_pdf(ctx, data, output, dry_run, assume_
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_export(ctx, from_, to, data, output, dry_run, assume_yes, extra_params):
+def _cmd_invoice_export(ctx, from_, to, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Export invoices"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -329,15 +356,17 @@ def _cmd_invoice_export(ctx, from_, to, data, output, dry_run, assume_yes, extra
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("send-with-zugferd", short_help="🟡 Send invoices with ZUGFeRD attachments")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_send_with_zugferd(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_send_with_zugferd(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Send invoices with ZUGFeRD attachments"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -345,15 +374,17 @@ def _cmd_invoice_send_with_zugferd(ctx, data, dry_run, assume_yes, extra_params)
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("send-with-xrechnung", short_help="🟡 Send invoices with XRechnung attachments")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_send_with_xrechnung(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_send_with_xrechnung(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Send invoices with XRechnung attachments"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -361,6 +392,7 @@ def _cmd_invoice_send_with_xrechnung(ctx, data, dry_run, assume_yes, extra_param
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("generate-xinvoice-xml", short_help="🟡 Generate XRechnung XML for invoice")
@@ -368,9 +400,10 @@ def _cmd_invoice_send_with_xrechnung(ctx, data, dry_run, assume_yes, extra_param
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_generate_xinvoice_xml(ctx, data, output, dry_run, assume_yes, extra_params):
+def _cmd_invoice_generate_xinvoice_xml(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Generate XRechnung XML for invoice"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -378,15 +411,17 @@ def _cmd_invoice_generate_xinvoice_xml(ctx, data, output, dry_run, assume_yes, e
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("generate-remaining-payments", short_help="🟡 Generate remaining payments for invoices")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_generate_remaining_payments(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_generate_remaining_payments(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Generate remaining payments for invoices"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -394,15 +429,17 @@ def _cmd_invoice_generate_remaining_payments(ctx, data, dry_run, assume_yes, ext
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @invoice_group.command("get-dashboard-data")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_get_dashboard_data(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_invoice_get_dashboard_data(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Get invoice dashboard data"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -410,6 +447,7 @@ def _cmd_invoice_get_dashboard_data(ctx, data, dry_run, assume_yes, extra_params
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 def register(root):

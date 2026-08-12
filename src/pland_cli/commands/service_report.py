@@ -29,15 +29,17 @@ def _cmd_service_report_list(ctx, limit, offset, serviceReportTypeOf, assignment
         query={"limit": limit, "offset": offset, "serviceReportTypeOf": serviceReportTypeOf, "assignmentIds": assignmentIds, "activityTypeId": activityTypeId, "customerId": customerId, "objectIds": objectIds, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @service_report_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create service report"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -45,6 +47,7 @@ def _cmd_service_report_create(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("get")
@@ -59,15 +62,17 @@ def _cmd_service_report_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @service_report_group.command("delete", short_help="🟡 Delete service report")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_service_report_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete service report"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -75,6 +80,7 @@ def _cmd_service_report_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("update", short_help="🟡 Update service report")
@@ -82,9 +88,10 @@ def _cmd_service_report_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update service report"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -92,6 +99,7 @@ def _cmd_service_report_update(ctx, id, data, dry_run, assume_yes, extra_params)
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("get-last-number")
@@ -106,6 +114,7 @@ def _cmd_service_report_get_last_number(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @service_report_group.command("get-count")
@@ -126,6 +135,7 @@ def _cmd_service_report_get_count(ctx, serviceReportTypeOf, assignmentIds, activ
         query={"serviceReportTypeOf": serviceReportTypeOf, "assignmentIds": assignmentIds, "activityTypeId": activityTypeId, "customerId": customerId, "objectIds": objectIds, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @service_report_group.command("generate-pdf", short_help="🟡 Generate service report PDF")
@@ -133,9 +143,10 @@ def _cmd_service_report_get_count(ctx, serviceReportTypeOf, assignmentIds, activ
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_generate_pdf(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_generate_pdf(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Generate service report PDF"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -143,6 +154,7 @@ def _cmd_service_report_generate_pdf(ctx, id, data, dry_run, assume_yes, extra_p
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("list-referenced-faktura-documents")
@@ -157,6 +169,7 @@ def _cmd_service_report_list_referenced_faktura_documents(ctx, id, extra_params)
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @service_report_group.command("attach-documents-to")
@@ -164,9 +177,10 @@ def _cmd_service_report_list_referenced_faktura_documents(ctx, id, extra_params)
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_attach_documents_to(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_attach_documents_to(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Attach documents to service report"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -174,6 +188,7 @@ def _cmd_service_report_attach_documents_to(ctx, id, data, dry_run, assume_yes, 
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("add-documents-to")
@@ -181,9 +196,10 @@ def _cmd_service_report_attach_documents_to(ctx, id, data, dry_run, assume_yes, 
 @click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_add_documents_to(ctx, id, file_, dry_run, assume_yes, extra_params):
+def _cmd_service_report_add_documents_to(ctx, id, file_, dry_run, assume_yes, confirm_token, extra_params):
     """Add documents to service report"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -191,6 +207,7 @@ def _cmd_service_report_add_documents_to(ctx, id, file_, dry_run, assume_yes, ex
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=file_, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("get-or-create-chat")
@@ -205,15 +222,17 @@ def _cmd_service_report_get_or_create_chat(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @service_report_group.command("create-preview", short_help="🟡 Create service report preview")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_create_preview(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_create_preview(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create service report preview"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -221,15 +240,17 @@ def _cmd_service_report_create_preview(ctx, data, dry_run, assume_yes, extra_par
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("duplicate")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_duplicate(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_service_report_duplicate(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Duplicate service report"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -237,6 +258,7 @@ def _cmd_service_report_duplicate(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("generate-combined-pdf", short_help="🟡 Generate combined service report PDF")
@@ -244,9 +266,10 @@ def _cmd_service_report_duplicate(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_generate_combined_pdf(ctx, data, output, dry_run, assume_yes, extra_params):
+def _cmd_service_report_generate_combined_pdf(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Generate combined service report PDF"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -254,6 +277,7 @@ def _cmd_service_report_generate_combined_pdf(ctx, data, output, dry_run, assume
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("generate-zip", short_help="🟡 Generate service report ZIP archive")
@@ -261,9 +285,10 @@ def _cmd_service_report_generate_combined_pdf(ctx, data, output, dry_run, assume
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_generate_zip(ctx, data, output, dry_run, assume_yes, extra_params):
+def _cmd_service_report_generate_zip(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Generate service report ZIP archive"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -271,15 +296,17 @@ def _cmd_service_report_generate_zip(ctx, data, output, dry_run, assume_yes, ext
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("set-fixed", short_help="🟡 Set service reports to fixed")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_set_fixed(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_set_fixed(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set service reports to fixed"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -287,6 +314,7 @@ def _cmd_service_report_set_fixed(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("get-user")
@@ -303,6 +331,7 @@ def _cmd_service_report_get_user(ctx, userid, assignmentId, includeFaktured, ext
         query={"assignmentId": assignmentId, "includeFaktured": includeFaktured}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @service_report_group.command("create-from-app", short_help="🟡 Create service report from app")
@@ -310,9 +339,10 @@ def _cmd_service_report_get_user(ctx, userid, assignmentId, includeFaktured, ext
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_create_from_app(ctx, userid, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_create_from_app(ctx, userid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create service report from app"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -320,6 +350,7 @@ def _cmd_service_report_create_from_app(ctx, userid, data, dry_run, assume_yes, 
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("sign", short_help="🟡 Sign service report")
@@ -328,9 +359,10 @@ def _cmd_service_report_create_from_app(ctx, userid, data, dry_run, assume_yes, 
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_sign(ctx, userid, servicereportid, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_sign(ctx, userid, servicereportid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Sign service report"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -338,15 +370,17 @@ def _cmd_service_report_sign(ctx, userid, servicereportid, data, dry_run, assume
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("set-to-finished", short_help="🟡 Set service reports to finished")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_set_to_finished(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_set_to_finished(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set service reports to finished"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -354,6 +388,7 @@ def _cmd_service_report_set_to_finished(ctx, data, dry_run, assume_yes, extra_pa
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("set-to-faktured", short_help="🟡 Set service report to faktured")
@@ -361,9 +396,10 @@ def _cmd_service_report_set_to_finished(ctx, data, dry_run, assume_yes, extra_pa
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_set_to_faktured(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_set_to_faktured(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set service report to faktured"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -371,15 +407,17 @@ def _cmd_service_report_set_to_faktured(ctx, id, data, dry_run, assume_yes, extr
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("set-multiple-to-faktured", short_help="🟡 Set multiple service reports to faktured")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_service_report_set_multiple_to_faktured(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_service_report_set_multiple_to_faktured(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set multiple service reports to faktured"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -387,6 +425,7 @@ def _cmd_service_report_set_multiple_to_faktured(ctx, data, dry_run, assume_yes,
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @service_report_group.command("get-distinct-values")
@@ -402,6 +441,7 @@ def _cmd_service_report_get_distinct_values(ctx, fieldKey, fetch_all, extra_para
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

@@ -29,15 +29,17 @@ def _cmd_contacts_list(ctx, limit, offset, sort, objectIds, customerId, name, sh
         query={"limit": limit, "offset": offset, "sort": sort, "objectIds": objectIds, "customerId": customerId, "name": name, "showInApp": showInApp, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @contacts_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_contacts_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_contacts_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create contact"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -45,6 +47,7 @@ def _cmd_contacts_create(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @contacts_group.command("get")
@@ -59,15 +62,17 @@ def _cmd_contacts_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @contacts_group.command("delete", short_help="🟡 Delete contact")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_contacts_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_contacts_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete contact"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -75,6 +80,7 @@ def _cmd_contacts_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @contacts_group.command("update", short_help="🟡 Update contact")
@@ -82,9 +88,10 @@ def _cmd_contacts_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_contacts_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_contacts_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update contact"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -92,6 +99,7 @@ def _cmd_contacts_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @contacts_group.command("get-distinct-values")
@@ -107,15 +115,17 @@ def _cmd_contacts_get_distinct_values(ctx, fieldKey, fetch_all, extra_params):
         query={"fieldKey": fieldKey}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @contacts_group.command("update-many", short_help="🟡 Batch update contacts")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_contacts_update_many(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_contacts_update_many(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Batch update contacts"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -123,6 +133,7 @@ def _cmd_contacts_update_many(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @contacts_group.command("list-for-object")
@@ -137,6 +148,7 @@ def _cmd_contacts_list_for_object(ctx, objectid, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @contacts_group.command("list-job")
@@ -151,6 +163,7 @@ def _cmd_contacts_list_job(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

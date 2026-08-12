@@ -21,15 +21,17 @@ def _cmd_payments_get_by_id(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @payments_group.command("delete", short_help="🟡 Delete payment")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_payments_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_payments_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete payment"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -37,6 +39,7 @@ def _cmd_payments_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @payments_group.command("update", short_help="🟡 Update payment")
@@ -44,9 +47,10 @@ def _cmd_payments_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_payments_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_payments_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update payment"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -54,6 +58,7 @@ def _cmd_payments_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @payments_group.command("get")
@@ -74,6 +79,7 @@ def _cmd_payments_get(ctx, limit, offset, sort, invoiceIds, paymentDateFrom, pay
         query={"limit": limit, "offset": offset, "sort": sort, "invoiceIds": invoiceIds, "paymentDateFrom": paymentDateFrom, "paymentDateTo": paymentDateTo}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @payments_group.command("create-invoice", short_help="🟡 Create payment for invoice")
@@ -81,9 +87,10 @@ def _cmd_payments_get(ctx, limit, offset, sort, invoiceIds, paymentDateFrom, pay
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_payments_create_invoice(ctx, invoiceid, data, dry_run, assume_yes, extra_params):
+def _cmd_payments_create_invoice(ctx, invoiceid, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create payment for invoice"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -91,6 +98,7 @@ def _cmd_payments_create_invoice(ctx, invoiceid, data, dry_run, assume_yes, extr
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 def register(root):

@@ -86,6 +86,8 @@ def render_command(op: Operation) -> str:
         sig_params.append("dry_run")
         lines.append('@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")')
         sig_params.append("assume_yes")
+        lines.append('@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user\'s explicit go; the token still has to match.")')
+        sig_params.append("confirm_token")
 
     is_list_get = op.method == "get" and not op.path_params and not op.returns_binary
     if is_list_get:
@@ -114,9 +116,11 @@ def render_command(op: Operation) -> str:
     out_arg = "output" if op.returns_binary else "None"
     dry_arg = "dry_run" if op.method != "get" else "False"
     yes_arg = "assume_yes" if op.method != "get" else "False"
+    token_arg = "confirm_token" if op.method != "get" else "None"
     draft = draftable_for(op.method, op.path, op.tag)
     draft_arg = f'"{draft}"' if draft else "None"
     lines.append(f"        data={body_arg}, file_={file_arg}, output={out_arg}, dry_run={dry_arg},")
     lines.append(f'        risk="{risk}", draftable={draft_arg}, assume_yes={yes_arg},')
+    lines.append(f'        confirm_token={token_arg},')
     lines.append("    )")
     return "\n".join(lines)

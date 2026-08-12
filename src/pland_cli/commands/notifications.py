@@ -27,6 +27,7 @@ def _cmd_notifications_get_all(ctx, limit, offset, sort, from_, to, wasRead, fet
         query={"limit": limit, "offset": offset, "sort": sort, "from": from_, "to": to, "wasRead": wasRead}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @notifications_group.command("count-user")
@@ -41,6 +42,7 @@ def _cmd_notifications_count_user(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @notifications_group.command("all-entities-count")
@@ -55,15 +57,17 @@ def _cmd_notifications_all_entities_count(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @notifications_group.command("mark-as-checked")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_notifications_mark_as_checked(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_notifications_mark_as_checked(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Mark notification as checked"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -71,15 +75,17 @@ def _cmd_notifications_mark_as_checked(ctx, id, dry_run, assume_yes, extra_param
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @notifications_group.command("mark-as-read")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_notifications_mark_as_read(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_notifications_mark_as_read(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Mark notification as read"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -87,15 +93,17 @@ def _cmd_notifications_mark_as_read(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @notifications_group.command("mark-as-un-read")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_notifications_mark_as_un_read(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_notifications_mark_as_un_read(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Mark notification as unread"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -103,6 +111,7 @@ def _cmd_notifications_mark_as_un_read(ctx, id, dry_run, assume_yes, extra_param
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 def register(root):

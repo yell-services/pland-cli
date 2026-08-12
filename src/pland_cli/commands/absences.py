@@ -43,15 +43,17 @@ def _cmd_absences_list(ctx, limit, offset, sort, status, ids, user, userIds, obj
         query={"limit": limit, "offset": offset, "sort": sort, "status": status, "ids": ids, "user": user, "userIds": userIds, "objectManagers": objectManagers, "notFinished": notFinished, "assigned": assigned, "object": object, "end": end, "dtEndFrom": dtEndFrom, "dtEndTo": dtEndTo, "dtStartTo": dtStartTo, "absencePayType": absencePayType, "userIdsByName": userIdsByName, "absenceType": absenceType, "affectedObjectIds": affectedObjectIds, "employmentUserIds": employmentUserIds, "userIdsByTag": userIdsByTag, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @absences_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_create(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_absences_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create new absence"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -59,6 +61,7 @@ def _cmd_absences_create(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @absences_group.command("get")
@@ -73,6 +76,7 @@ def _cmd_absences_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @absences_group.command("update-full", short_help="🟡 Update absence (full)")
@@ -80,9 +84,10 @@ def _cmd_absences_get(ctx, id, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_update_full(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_absences_update_full(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update absence (full)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -90,15 +95,17 @@ def _cmd_absences_update_full(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @absences_group.command("delete", short_help="🟡 Delete absence")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_absences_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete absence"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -106,6 +113,7 @@ def _cmd_absences_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @absences_group.command("update", short_help="🟡 Update absence")
@@ -113,9 +121,10 @@ def _cmd_absences_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_absences_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update absence"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -123,6 +132,7 @@ def _cmd_absences_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @absences_group.command("list-personal")
@@ -148,15 +158,17 @@ def _cmd_absences_list_personal(ctx, limit, offset, sort, status, ids, absencePa
         query={"limit": limit, "offset": offset, "sort": sort, "status": status, "ids": ids, "absencePayType": absencePayType, "absenceType": absenceType, "dtEndFrom": dtEndFrom, "dtEndTo": dtEndTo, "dtStartTo": dtStartTo, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @absences_group.command("approve", short_help="🟡 Approve absence")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_approve(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_absences_approve(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Approve absence"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -164,15 +176,17 @@ def _cmd_absences_approve(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @absences_group.command("approve-multiple", short_help="🟡 Approve multiple absences")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_approve_multiple(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_absences_approve_multiple(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Approve multiple absences"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -180,6 +194,7 @@ def _cmd_absences_approve_multiple(ctx, data, dry_run, assume_yes, extra_params)
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @absences_group.command("decline", short_help="🟡 Decline absence")
@@ -187,9 +202,10 @@ def _cmd_absences_approve_multiple(ctx, data, dry_run, assume_yes, extra_params)
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_decline(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_absences_decline(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Decline absence"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -197,6 +213,7 @@ def _cmd_absences_decline(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @absences_group.command("cancel", short_help="🟡 Cancel absence")
@@ -204,9 +221,10 @@ def _cmd_absences_decline(ctx, id, data, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_cancel(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_absences_cancel(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Cancel absence"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -214,6 +232,7 @@ def _cmd_absences_cancel(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @absences_group.command("assign-replacements", short_help="🟡 Assign absence replacements")
@@ -221,9 +240,10 @@ def _cmd_absences_cancel(ctx, id, data, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_absences_assign_replacements(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_absences_assign_replacements(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Assign absence replacements"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -231,6 +251,7 @@ def _cmd_absences_assign_replacements(ctx, id, data, dry_run, assume_yes, extra_
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @absences_group.command("get-user-vacation-days")
@@ -247,6 +268,7 @@ def _cmd_absences_get_user_vacation_days(ctx, userid, from_, to, extra_params):
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @absences_group.command("get-user-days-absent")
@@ -263,6 +285,7 @@ def _cmd_absences_get_user_days_absent(ctx, userid, from_, to, extra_params):
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @absences_group.command("count")
@@ -277,6 +300,7 @@ def _cmd_absences_count(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @absences_group.command("count-new")
@@ -291,6 +315,7 @@ def _cmd_absences_count_new(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

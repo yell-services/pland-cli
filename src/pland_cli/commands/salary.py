@@ -37,6 +37,7 @@ def _cmd_salary_list_salaries(ctx, limit, offset, sort, status, ids, user, from_
         query={"limit": limit, "offset": offset, "sort": sort, "status": status, "ids": ids, "user": user, "from": from_, "to": to, "object": object, "objectIds": objectIds, "objectsByName": objectsByName, "fromWithIncludedTrackingDate": fromWithIncludedTrackingDate, "activityTypeId": activityTypeId, "jobIds": jobIds, "trackingJobDate": trackingJobDate, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @salary_group.command("get")
@@ -51,15 +52,17 @@ def _cmd_salary_get(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @salary_group.command("delete", short_help="🔴 Delete salary")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_salary_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete salary"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -67,6 +70,7 @@ def _cmd_salary_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("update", short_help="🔴 Update salary")
@@ -74,9 +78,10 @@ def _cmd_salary_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_salary_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update salary"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -84,15 +89,17 @@ def _cmd_salary_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("get-chat")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_get_chat(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_salary_get_chat(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Get or create salary chat"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -100,15 +107,17 @@ def _cmd_salary_get_chat(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("release-using-time-tracking", short_help="🔴 Release salary using time tracking")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_release_using_time_tracking(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_salary_release_using_time_tracking(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Release salary using time tracking"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -116,15 +125,17 @@ def _cmd_salary_release_using_time_tracking(ctx, data, dry_run, assume_yes, extr
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("release-using-job", short_help="🔴 Release salary using job")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_release_using_job(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_salary_release_using_job(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Release salary using job"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -132,15 +143,17 @@ def _cmd_salary_release_using_job(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("get-groups")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_get_groups(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_salary_get_groups(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Get salary groups"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -148,6 +161,7 @@ def _cmd_salary_get_groups(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("get-overview-for-users")
@@ -156,9 +170,10 @@ def _cmd_salary_get_groups(ctx, data, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_get_overview_for_users(ctx, from_, to, data, dry_run, assume_yes, extra_params):
+def _cmd_salary_get_overview_for_users(ctx, from_, to, data, dry_run, assume_yes, confirm_token, extra_params):
     """Get salary overview for users"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -166,6 +181,7 @@ def _cmd_salary_get_overview_for_users(ctx, from_, to, data, dry_run, assume_yes
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("get-overview-for-objects")
@@ -174,9 +190,10 @@ def _cmd_salary_get_overview_for_users(ctx, from_, to, data, dry_run, assume_yes
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_get_overview_for_objects(ctx, from_, to, data, dry_run, assume_yes, extra_params):
+def _cmd_salary_get_overview_for_objects(ctx, from_, to, data, dry_run, assume_yes, confirm_token, extra_params):
     """Get salary overview for objects"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -184,6 +201,7 @@ def _cmd_salary_get_overview_for_objects(ctx, from_, to, data, dry_run, assume_y
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("get-user-absence-salaries")
@@ -200,6 +218,7 @@ def _cmd_salary_get_user_absence_salaries(ctx, userid, from_, to, extra_params):
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @salary_group.command("get-user-salaries")
@@ -217,6 +236,7 @@ def _cmd_salary_get_user_salaries(ctx, userid, from_, to, includeForTrackingDate
         query={"from": from_, "to": to, "includeForTrackingDate": includeForTrackingDate}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @salary_group.command("export-rows-in-background")
@@ -225,9 +245,10 @@ def _cmd_salary_get_user_salaries(ctx, userid, from_, to, includeForTrackingDate
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_export_rows_in_background(ctx, from_, to, data, dry_run, assume_yes, extra_params):
+def _cmd_salary_export_rows_in_background(ctx, from_, to, data, dry_run, assume_yes, confirm_token, extra_params):
     """Export salary rows in background"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -235,6 +256,7 @@ def _cmd_salary_export_rows_in_background(ctx, from_, to, data, dry_run, assume_
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("export-rows")
@@ -244,9 +266,10 @@ def _cmd_salary_export_rows_in_background(ctx, from_, to, data, dry_run, assume_
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_export_rows(ctx, from_, to, data, output, dry_run, assume_yes, extra_params):
+def _cmd_salary_export_rows(ctx, from_, to, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Export salary rows"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -254,6 +277,7 @@ def _cmd_salary_export_rows(ctx, from_, to, data, output, dry_run, assume_yes, e
         query={"from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("export-for-objects")
@@ -264,9 +288,10 @@ def _cmd_salary_export_rows(ctx, from_, to, data, output, dry_run, assume_yes, e
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_export_for_objects(ctx, exportType, from_, to, data, output, dry_run, assume_yes, extra_params):
+def _cmd_salary_export_for_objects(ctx, exportType, from_, to, data, output, dry_run, assume_yes, confirm_token, extra_params):
     """Export salary data for objects"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -274,15 +299,17 @@ def _cmd_salary_export_for_objects(ctx, exportType, from_, to, data, output, dry
         query={"exportType": exportType, "from": from_, "to": to}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("release-all-times-in-time-frame", short_help="🔴 Release all times in time frame")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_release_all_times_in_time_frame(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_salary_release_all_times_in_time_frame(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Release all times in time frame"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -290,15 +317,17 @@ def _cmd_salary_release_all_times_in_time_frame(ctx, data, dry_run, assume_yes, 
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @salary_group.command("release-job-occurrences", short_help="🔴 Release job occurrences")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_salary_release_job_occurrences(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_salary_release_job_occurrences(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Release job occurrences"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -306,6 +335,7 @@ def _cmd_salary_release_job_occurrences(ctx, data, dry_run, assume_yes, extra_pa
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 def register(root):

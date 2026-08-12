@@ -13,9 +13,10 @@ def assignments_group():
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_duplicate(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_duplicate(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Duplicate assignments"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -23,6 +24,7 @@ def _cmd_assignments_duplicate(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("list")
@@ -54,6 +56,7 @@ def _cmd_assignments_list(ctx, limit, offset, sort, status, ids, type, objectIds
         query={"limit": limit, "offset": offset, "sort": sort, "status": status, "ids": ids, "type": type, "objectIds": objectIds, "objectIdsByTag": objectIdsByTag, "name": name, "activityTypeId": activityTypeId, "assignmentBillingTypes": assignmentBillingTypes, "assignmentSearch": assignmentSearch, "assignmentBillingType": assignmentBillingType, "assignmentStatus": assignmentStatus, "assignmentsWithProductIds": assignmentsWithProductIds, "customer": customer, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @assignments_group.command("get-last-number")
@@ -68,6 +71,7 @@ def _cmd_assignments_get_last_number(ctx, fetch_all, extra_params):
         query={}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @assignments_group.command("get-distinct-field-values")
@@ -97,6 +101,7 @@ def _cmd_assignments_get_distinct_field_values(ctx, fieldKey, status, ids, type,
         query={"fieldKey": fieldKey, "status": status, "ids": ids, "type": type, "objectIds": objectIds, "objectIdsByTag": objectIdsByTag, "name": name, "activityTypeId": activityTypeId, "assignmentBillingTypes": assignmentBillingTypes, "assignmentSearch": assignmentSearch, "assignmentBillingType": assignmentBillingType, "assignmentStatus": assignmentStatus, "assignmentsWithProductIds": assignmentsWithProductIds, "customer": customer, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @assignments_group.command("count-with-filter")
@@ -125,15 +130,17 @@ def _cmd_assignments_count_with_filter(ctx, status, ids, type, objectIds, object
         query={"status": status, "ids": ids, "type": type, "objectIds": objectIds, "objectIdsByTag": objectIdsByTag, "name": name, "activityTypeId": activityTypeId, "assignmentBillingTypes": assignmentBillingTypes, "assignmentSearch": assignmentSearch, "assignmentBillingType": assignmentBillingType, "assignmentStatus": assignmentStatus, "assignmentsWithProductIds": assignmentsWithProductIds, "customer": customer, "generalField": generalField}, extra_params=extra_params, fetch_all=fetch_all,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @assignments_group.command("update-many", short_help="🟡 Update multiple assignments")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_update_many(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_update_many(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update multiple assignments"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -141,6 +148,7 @@ def _cmd_assignments_update_many(ctx, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("view")
@@ -155,15 +163,17 @@ def _cmd_assignments_view(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @assignments_group.command("delete", short_help="🟡 Delete assignment")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_delete(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_assignments_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Delete assignment"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -171,6 +181,7 @@ def _cmd_assignments_delete(ctx, id, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("update", short_help="🟡 Update assignment")
@@ -178,9 +189,10 @@ def _cmd_assignments_delete(ctx, id, dry_run, assume_yes, extra_params):
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_update(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update assignment"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -188,15 +200,17 @@ def _cmd_assignments_update(ctx, id, data, dry_run, assume_yes, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("get-or-create-chat")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_params):
+def _cmd_assignments_get_or_create_chat(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
     """Get or create assignment chat"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -204,6 +218,7 @@ def _cmd_assignments_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_para
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("set-end-date", short_help="🔴 Set assignment and jobs end date")
@@ -211,9 +226,10 @@ def _cmd_assignments_get_or_create_chat(ctx, id, dry_run, assume_yes, extra_para
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_set_end_date(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_set_end_date(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Set assignment and jobs end date"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -221,6 +237,7 @@ def _cmd_assignments_set_end_date(ctx, id, data, dry_run, assume_yes, extra_para
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="critical", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("get-user")
@@ -235,14 +252,16 @@ def _cmd_assignments_get_user(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @assignments_group.command("generate-recurring-invoices", short_help="🟡 Generate recurring invoices (Debug)")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_generate_recurring_invoices(ctx, dry_run, assume_yes, extra_params):
+def _cmd_assignments_generate_recurring_invoices(ctx, dry_run, assume_yes, confirm_token, extra_params):
     """Generate recurring invoices (Debug)"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -250,15 +269,17 @@ def _cmd_assignments_generate_recurring_invoices(ctx, dry_run, assume_yes, extra
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("create-invoices-for", short_help="🟡 Create invoices for assignments")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_create_invoices_for(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_create_invoices_for(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create invoices for assignments"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -266,15 +287,17 @@ def _cmd_assignments_create_invoices_for(ctx, data, dry_run, assume_yes, extra_p
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("create-service-reports-for", short_help="🟡 Create service reports for assignments")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_create_service_reports_for(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_create_service_reports_for(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Create service reports for assignments"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -282,6 +305,7 @@ def _cmd_assignments_create_service_reports_for(ctx, data, dry_run, assume_yes, 
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("realize-dynamic-positions", short_help="🟡 Realize dynamic positions")
@@ -289,9 +313,10 @@ def _cmd_assignments_create_service_reports_for(ctx, data, dry_run, assume_yes, 
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_realize_dynamic_positions(ctx, id, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_realize_dynamic_positions(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
     """Realize dynamic positions"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -299,6 +324,7 @@ def _cmd_assignments_realize_dynamic_positions(ctx, id, data, dry_run, assume_ye
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("get-partial-invoices-for")
@@ -313,15 +339,17 @@ def _cmd_assignments_get_partial_invoices_for(ctx, id, extra_params):
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=False,
         risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @assignments_group.command("get-next-invoice-date-preview")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_get_next_invoice_date_preview(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_get_next_invoice_date_preview(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Preview next invoice dates"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -329,15 +357,17 @@ def _cmd_assignments_get_next_invoice_date_preview(ctx, data, dry_run, assume_ye
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("calculate-capacities")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_calculate_capacities(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_calculate_capacities(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Calculate assignment capacities"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -345,15 +375,17 @@ def _cmd_assignments_calculate_capacities(ctx, data, dry_run, assume_yes, extra_
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("calculate-covers")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_calculate_covers(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_calculate_covers(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Calculate assignment coverage"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -361,15 +393,17 @@ def _cmd_assignments_calculate_covers(ctx, data, dry_run, assume_yes, extra_para
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="free", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 @assignments_group.command("update-product-prices", short_help="🟡 Update product prices")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
 @click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_assignments_update_product_prices(ctx, data, dry_run, assume_yes, extra_params):
+def _cmd_assignments_update_product_prices(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
     """Update product prices"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
@@ -377,6 +411,7 @@ def _cmd_assignments_update_product_prices(ctx, data, dry_run, assume_yes, extra
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
         risk="confirm", draftable=None, assume_yes=assume_yes,
+        confirm_token=confirm_token,
     )
 
 def register(root):
