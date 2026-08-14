@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-08-14
+
 ### Added
 
 - `--dry-run` now reports the full target URL, not just the request path, so a
@@ -17,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   it never passed through the shared hook and was the only one of the 522 commands
   that could write without a preview. A conformance test now fails if any write
   command lacks the flag.
+- `batch run --dry-run --json` lists every request the file would send under
+  `operations`, each in the same shape a single command's dry run prints. It used
+  to report only how many entries there were, which an agent cannot check against
+  what it meant to do. The counter moved to `count`.
 - `pland batch run --file <json>` runs many operations behind a single risk gate,
   derived as the maximum risk across the file's entries. Prints a plan first,
   continues past individual failures, exits 1 if any entry failed.
@@ -130,4 +136,5 @@ sections — some call sites need adjusting.
 - Help texts keep their double quotes. The renderer replaced `"` with `'`,
   which made JSON examples in `--help` output unusable.
 
+[0.3.0]: https://github.com/yell-services/pland-cli/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/yell-services/pland-cli/compare/v0.1.0...v0.2.0
