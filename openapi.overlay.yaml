@@ -26,7 +26,10 @@ remove:
   /surcharges/count: [get]
   /surcharges/distinctValues: [get]
   # Not "Failed to parse Id" but "Method not allowed. Must be one of: POST".
-  /invoiceReminders/: [get]
+  # /invoiceReminders/ was listed here too and that was wrong: on 2026-08-14 a
+  # plain GET returned the reminder list. Whatever the earlier probe hit, the
+  # route serves GET — removing it cost us the only way to reach a reminder by
+  # its invoice, because nothing on the invoice carries the reminder id.
   /invoiceReminders/templates: [get]
 
   # Paths with {id} need a second oracle. When the route exists, an invalid ID

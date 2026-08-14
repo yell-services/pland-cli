@@ -1,6 +1,6 @@
 # pland-cli
 
-> Inofficial, agent-native CLI for the pland.app API — HR, time tracking, payroll/salaries, absences, invoices, offers, customer objects, quality control, documents. 522 commands across 56 resource groups, generated from pland.app's OpenAPI spec, with `--json` output built for AI agents. Python 3.11+ CLI, Apache-2.0-licensed. Not affiliated with pland.app.
+> Inofficial, agent-native CLI for the pland.app API — HR, time tracking, payroll/salaries, absences, invoices, offers, customer objects, quality control, documents. 523 commands across 56 resource groups, generated from pland.app's OpenAPI spec, with `--json` output built for AI agents. Python 3.11+ CLI, Apache-2.0-licensed. Not affiliated with pland.app.
 
 pland-cli lets developers and AI agents drive the pland.app API from the terminal. Every command speaks `--json` for machine-readable output; a hand-maintained enrichment overlay works around unreliable server-side filters (date ranges, object filters) and returns correct results. Agents can introspect rather than guess via `pland describe <group> <command>` and `pland schema <Name>`, and install a curated skill with `pland skill install --agent claude|codex`.
 
@@ -28,7 +28,7 @@ export PLAND_API_KEY="<id>:<secret>"     # or: pland auth set-key
 pland --json users active
 ```
 
-## Command discovery (522 commands — don't guess)
+## Command discovery (523 commands — don't guess)
 
 - `pland --help` (56 groups) · `pland <group> --help`
 - `pland describe <group> <command>` — method, path, parameters

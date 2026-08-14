@@ -92,7 +92,9 @@ def test_overlay_removes_renames_and_adds():
     # remove: the route does not exist live ("Failed to parse Id: count")
     assert "/surcharges/count" not in spec["paths"]
     # remove: only GET goes away, POST stays
-    assert set(spec["paths"]["/invoiceReminders/"]) == {"post"}
+    assert set(spec["paths"]["/invoiceReminders/templates"]) == {"post"}
+    # ...and the sibling collection keeps its GET: it serves the reminder list
+    assert set(spec["paths"]["/invoiceReminders/"]) == {"get", "post"}
     # params: the API expects fieldKey, the spec said field
     names = [p["name"] for p in spec["paths"]["/invoices/distinctValues"]["get"]["parameters"]]
     assert names == ["fieldKey"]

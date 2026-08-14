@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `invoice-reminders list` exists again. The overlay dropped `GET /invoiceReminders/`
+  as a route the API does not serve, but a plain GET returns the reminder list — and
+  it is the only way to reach a reminder at all, because an invoice carries no
+  reminder id, just `remindedDate` and `newestReminderTitle`. Without it, a reminder
+  raised in error could be neither found nor deleted. The sibling entries in that
+  overlay block (`/surcharges/count`, `/surcharges/distinctValues`,
+  `/invoiceReminders/templates`) were re-probed and are correct: they stay removed.
+
 ## [0.3.0] - 2026-08-14
 
 ### Added
