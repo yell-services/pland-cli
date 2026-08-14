@@ -4,7 +4,7 @@ Agent-native CLI für die pland.app API. Befehl: `pland`.
 
 ## Installation & Key
 ```bash
-uv tool install git+https://github.com/<user>/pland-cli
+uv tool install git+https://github.com/yell-services/pland-cli
 export PLAND_API_KEY="<id>:<secret>"   # oder: pland auth set-key
 ```
 

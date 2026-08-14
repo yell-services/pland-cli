@@ -11,9 +11,9 @@ Agent-native CLI für die pland.app API (deutsche HR-/ERP-/Facility-Plattform).
 
 ```bash
 # Installieren — direkt von GitHub, kein PyPI nötig:
-uv tool install git+https://github.com/<user>/pland-cli
+uv tool install git+https://github.com/yell-services/pland-cli
 # oder ohne Installation ausführen:
-uvx --from git+https://github.com/<user>/pland-cli pland --help
+uvx --from git+https://github.com/yell-services/pland-cli pland --help
 
 # API-Key hinterlegen (eine Variante):
 export PLAND_API_KEY="<id>:<secret>"      # Umgebungsvariable
