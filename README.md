@@ -84,7 +84,7 @@ pland --json pay-types wage <id>
   (clientseitig gefiltert) statt der generischen.
 - `objectId` bei Invoices ignoriert → `pland invoice drafts --object-id <id>` (clientseitig gefiltert).
 - Dokumente: `pland documents upload <pdf> --kind faktura|regular` — `faktura` mergt an die Rechnung.
-- Schreiben (POST/PATCH/DELETE): erst `--dry-run` ansehen, dann ohne Flag ausführen.
+- Writes (POST/PATCH/PUT/DELETE): preview with `--dry-run`, then run without the flag.
 
 ## Profile
 
@@ -116,6 +116,28 @@ vor versehentlichem Löschen durch Agenten. Jede Schreiboperation wird in
 > **Gegen einen gekaperten Agenten** mit gültigem Key kann die CLI nicht hart
 > schützen (er könnte die API direkt ansprechen). Erzeuge den API-Key daher von
 > einem Account mit **minimalen Rechten** (least privilege).
+
+### Dry runs
+
+Every write command (POST/PATCH/PUT/DELETE — 320 of the 522) takes `--dry-run`.
+The request is built in full and then not sent: no risk gate, no API key needed,
+nothing reaches the network.
+
+```console
+$ pland --json salary release-using-time-tracking --data '{"timeTrackingId":"x"}' --dry-run
+{
+  "dry_run": true,
+  "method": "POST",
+  "url": "https://cloud-api.pland.app/v2/salaries/releaseWithTimeTracking",
+  "path": "/salaries/releaseWithTimeTracking",
+  "params": null,
+  "body": {"timeTrackingId": "x"}
+}
+```
+
+`url` reflects the active `--profile`, so a preview tells prod from beta. A
+multipart upload adds `"file"` with the file name. Read commands do not take the
+flag — there is nothing to simulate on a list or a detail fetch.
 
 ### Batch operations
 

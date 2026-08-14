@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `--dry-run` now reports the full target URL, not just the request path, so a
+  preview tells prod from beta before a write lands in payroll or invoicing. A
+  multipart upload also names the file. The output gained a `dry_run: true` marker
+  so a caller can tell a preview from an API response.
+- `documents upload` accepts `--dry-run`. Being hand-written rather than generated,
+  it never passed through the shared hook and was the only one of the 522 commands
+  that could write without a preview. A conformance test now fails if any write
+  command lacks the flag.
 - `pland batch run --file <json>` runs many operations behind a single risk gate,
   derived as the maximum risk across the file's entries. Prints a plan first,
   continues past individual failures, exits 1 if any entry failed.

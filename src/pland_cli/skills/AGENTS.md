@@ -12,7 +12,9 @@ export PLAND_API_KEY="<id>:<secret>"   # oder: pland auth set-key
 - Immer `--json`: `pland --json <gruppe> <command>`.
 - Discovery: `pland --help`, `pland <gruppe> --help`, `pland describe <gruppe> <command>`, `pland schema <Name>`.
 - Listen: `--all` für vollständige Pagination.
-- Schreiben (POST/PATCH/DELETE): erst `--dry-run`.
+- Writes (POST/PATCH/PUT/DELETE): preview with `--dry-run` first. It sends nothing
+  and returns `{"dry_run": true, "method", "url", "path", "params", "body"}` —
+  verify `url` matches the profile you meant. Reads have no `--dry-run`.
 - Profile: `--profile prod|beta|local` (Default `prod`).
 
 ## Schreibende Operationen — Schutzlayer

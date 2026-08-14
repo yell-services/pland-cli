@@ -29,7 +29,11 @@ pland auth set-key                          # oder persistent (~/.config/pland)
   - `pland describe <gruppe> <command>` → Methode, Pfad, Parameter
   - `pland schema <Name>` → Request-/Response-Schema (z. B. `pland schema Absence`)
 - **Listen:** Default eine Seite; `--all` paginiert vollständig (mit Dedup).
-- **Schreiben (POST/PATCH/DELETE):** erst `--dry-run` ansehen, dann ohne Flag ausführen.
+- **Writes (POST/PATCH/PUT/DELETE):** preview with `--dry-run`, then run without the
+  flag. Nothing is sent and no key is needed; you get back
+  `{"dry_run": true, "method", "url", "path", "params", "body"}` (plus `"file"` for
+  an upload). Check `url` against the profile you meant. Read commands have no
+  `--dry-run` — there is nothing to simulate.
 - **Profile:** `--profile prod|beta|local` (Default `prod`).
 
 ## Schreibende Operationen — Schutzlayer
