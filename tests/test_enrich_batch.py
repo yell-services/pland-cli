@@ -327,10 +327,53 @@ def test_json_dry_run_keeps_stdout_parseable(tmp_path):
     ])
     result = CliRunner().invoke(main, ["--json", "batch", "run", "--file", file, "--dry-run"])
     assert result.exit_code == 0
-    assert json.loads(result.stdout) == {"operations": 1, "risk": "critical",
-                                        "confirmToken": "releaseWithTimeTracking"}
+    payload = json.loads(result.stdout)
+    assert payload["dry_run"] is True
+    assert payload["count"] == 1
+    assert payload["risk"] == "critical"
+    assert payload["confirmToken"] == "releaseWithTimeTracking"
     # The human still sees the plan before any gate — on stderr, out of the way.
     assert "salary release-using-time-tracking" in result.stderr
+
+
+def test_json_dry_run_lists_every_request(tmp_path, monkeypatch):
+    """An agent has to read what each entry would send, not just how many."""
+    monkeypatch.setenv("PLAND_BASE_URL", "https://api.test/v2")
+    file = _write(tmp_path, [
+        {"group": "salary", "command": "release-using-time-tracking",
+         "data": {"timeTrackingId": "t"}},
+        {"group": "holiday", "command": "delete", "args": ["h1"]},
+    ])
+    result = CliRunner().invoke(main, ["--json", "batch", "run", "--file", file, "--dry-run"])
+    assert result.exit_code == 0
+    ops = json.loads(result.stdout)["operations"]
+    assert [o["index"] for o in ops] == [0, 1]
+    assert ops[0] == {
+        "index": 0, "group": "salary", "command": "release-using-time-tracking",
+        "risk": "critical", "method": "POST",
+        "url": "https://api.test/v2/salaries/releaseWithTimeTracking",
+        "path": "/salaries/releaseWithTimeTracking", "params": None,
+        "body": {"timeTrackingId": "t"},
+    }
+    # The path argument has to appear in the URL, or the preview names the wrong record.
+    assert ops[1]["url"] == "https://api.test/v2/holidays/h1"
+    assert ops[1]["method"] == "DELETE"
+
+
+def test_json_dry_run_sends_no_request(tmp_path, monkeypatch):
+    """A batch preview must not touch the API, whatever the file holds."""
+    def _no_client(ctx):  # pragma: no cover - reaching this IS the failure
+        raise AssertionError("batch dry run resolved a client")
+
+    import pland_cli.enrichment.batch as batch_mod
+    monkeypatch.setattr(batch_mod, "get_client", _no_client)
+    file = _write(tmp_path, [
+        {"group": "users", "command": "delete", "args": ["u1"]},
+        {"group": "salary", "command": "release-using-time-tracking",
+         "data": {"timeTrackingId": "t"}},
+    ])
+    result = CliRunner().invoke(main, ["--json", "batch", "run", "--file", file, "--dry-run"])
+    assert result.exit_code == 0
 
 
 def test_free_only_batch_does_not_prompt(tmp_path, monkeypatch):

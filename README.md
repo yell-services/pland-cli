@@ -167,6 +167,12 @@ printed before the gate; `--dry-run` prints it and exits. Operations run in file
 order, a failure is recorded rather than aborting the run, and the exit code is 1
 if anything failed.
 
+Under `--json`, `--dry-run` returns `{dry_run, count, risk, confirmToken,
+operations}`, where each entry of `operations` carries the same
+`method`/`url`/`path`/`params`/`body` a single command's dry run prints, plus its
+`index`, `group`, `command` and `risk`. The human plan goes to stderr so stdout
+stays parseable.
+
 **Trade-off, stated plainly:** a single gate means one mistaken file can touch
 every record in it, where previously each record cost its own confirmation. In
 exchange the token now guards a plan you can actually read. Use `--dry-run`
