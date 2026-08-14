@@ -73,6 +73,47 @@ def test_document_upload_sends_user_id_form_field(tmp_path, monkeypatch):
     assert seen["has_user_value"] is True
 
 
+def test_document_upload_dry_run_sends_nothing(tmp_path, monkeypatch):
+    """The one hand-written write command has to preview like every generated one."""
+    import json
+
+    pdf = tmp_path / "lohnabrechnung.pdf"
+    pdf.write_bytes(b"%PDF-1.4 test")
+
+    def handler(request):  # pragma: no cover - reaching this IS the failure
+        raise AssertionError(f"a dry run sent {request.method} {request.url}")
+
+    import pland_cli.enrichment.documents as doc
+    monkeypatch.setattr(doc, "get_client", lambda ctx: _mk(handler))
+    monkeypatch.setenv("PLAND_BASE_URL", "https://api.test/v2")
+
+    result = CliRunner().invoke(
+        main,
+        ["--json", "documents", "upload", str(pdf), "--kind", "faktura", "--dry-run"],
+    )
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["method"] == "POST"
+    assert payload["url"] == "https://api.test/v2/documents/"
+    assert payload["params"] == {"type": "faktura"}
+    assert payload["file"] == "lohnabrechnung.pdf"
+
+
+def test_document_upload_dry_run_needs_no_api_key(tmp_path, monkeypatch):
+    """A preview must work before a key exists — get_client is never reached."""
+    pdf = tmp_path / "anhang.pdf"
+    pdf.write_bytes(b"%PDF-1.4 test")
+
+    def _no_client(ctx):  # pragma: no cover - reaching this IS the failure
+        raise AssertionError("dry run resolved a client")
+
+    import pland_cli.enrichment.documents as doc
+    monkeypatch.setattr(doc, "get_client", _no_client)
+
+    result = CliRunner().invoke(main, ["--json", "documents", "upload", str(pdf), "--dry-run"])
+    assert result.exit_code == 0
+
+
 def test_doc_params_helper():
     from pland_cli.enrichment.documents import _doc_params
     assert _doc_params("faktura") == {"type": "faktura"}
