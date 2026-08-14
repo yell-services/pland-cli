@@ -12,7 +12,9 @@ export PLAND_API_KEY="<id>:<secret>"   # oder: pland auth set-key
 - Immer `--json`: `pland --json <gruppe> <command>`.
 - Discovery: `pland --help`, `pland <gruppe> --help`, `pland describe <gruppe> <command>`, `pland schema <Name>`.
 - Listen: `--all` für vollständige Pagination.
-- Schreiben (POST/PATCH/DELETE): erst `--dry-run`.
+- Writes (POST/PATCH/PUT/DELETE): preview with `--dry-run` first. It sends nothing
+  and returns `{"dry_run": true, "method", "url", "path", "params", "body"}` —
+  verify `url` matches the profile you meant. Reads have no `--dry-run`.
 - Profile: `--profile prod|beta|local` (Default `prod`).
 
 ## Schreibende Operationen — Schutzlayer
@@ -27,7 +29,9 @@ Commands sind nach Risiko markiert: 🟡 (confirm) und 🔴 (critical) im `--hel
 - Vor jedem Schreiben erst `--dry-run` zeigen, dann fragen.
 - **Viele Schreibvorgänge:** `pland batch run --file ops.json` bündelt sie hinter
   **einer** Rückfrage (Stufe = höchstes Risiko in der Datei). Erst `--dry-run`
-  zeigen, dann den User die Datei freigeben lassen. 🔴 verlangt weiterhin ein
+  zeigen, dann den User die Datei freigeben lassen. With `--json` it returns
+  `{dry_run, count, risk, confirmToken, operations}`; read `operations` to check
+  every request the file would send. 🔴 verlangt weiterhin ein
   Terminal — ein Agent kann das nicht selbst auslösen. Query-Parameter lassen sich
   in einem Batch-Eintrag nicht abbilden — u. a. `jobs delete` (`splitDate`, `type`,
   `teamId`) niemals batchen, sondern einzeln ausführen.

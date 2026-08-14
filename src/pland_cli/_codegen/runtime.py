@@ -20,6 +20,50 @@ def _build_params(query: dict, extra_params: str | None) -> dict | None:
     return params or None
 
 
+def resolve_base_url(ctx: click.Context) -> str:
+    """The base URL a real run would target, from the config the client uses.
+
+    Resolved once per command: a batch dry run would otherwise re-read and
+    re-parse config.toml for every entry in the file.
+    """
+    from pland_cli.core.config import resolve_config
+
+    try:
+        return resolve_config(profile=ctx.obj.get("profile")).base_url
+    except ValueError as e:
+        raise click.ClickException(str(e)) from e
+
+
+def dry_run_payload(base_url: str, method: str, path: str,
+                    params: dict | None = None, body: Any = None,
+                    file_: str | None = None) -> dict[str, Any]:
+    """The request as data — what would go out, without going out.
+
+    Carries the full URL rather than the path alone: a preview that cannot tell
+    prod from beta is worth little before a write lands in a payroll system.
+    """
+    payload: dict[str, Any] = {
+        "method": method.upper(),
+        "url": base_url.rstrip("/") + "/" + path.lstrip("/"),
+        "path": path,
+        "params": params,
+        "body": body,
+    }
+    if file_:
+        payload["file"] = Path(file_).name
+    return payload
+
+
+def show_dry_run(ctx: click.Context, method: str, path: str,
+                 params: dict | None, body: Any = None,
+                 file_: str | None = None) -> None:
+    """Print the request that would have gone out, and send nothing."""
+    out_mod.out({
+        "dry_run": True,
+        **dry_run_payload(resolve_base_url(ctx), method, path, params, body, file_),
+    })
+
+
 def run_operation(ctx: click.Context, *, method: str, path: str, query: dict,
                   extra_params: str | None, data: str | None,
                   file_: str | None, output: str | None,
@@ -35,7 +79,7 @@ def run_operation(ctx: click.Context, *, method: str, path: str, query: dict,
         raise click.BadParameter(f"--data is not valid JSON: {e}") from e
 
     if dry_run:
-        out_mod.out({"method": method.upper(), "path": path, "params": params, "body": body})
+        show_dry_run(ctx, method, path, params, body=body, file_=file_)
         return
 
     if risk != "free" or draftable:

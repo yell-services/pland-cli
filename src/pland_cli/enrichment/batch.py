@@ -10,6 +10,7 @@ import click
 import httpx
 
 from pland_cli._codegen.extract import Operation, extract_operations
+from pland_cli._codegen.runtime import dry_run_payload, resolve_base_url
 from pland_cli._codegen.security import classify
 from pland_cli._codegen.spec import load_spec
 from pland_cli.core import guard
@@ -193,8 +194,22 @@ def batch_run(ctx: click.Context, file_: str, dry_run: bool, assume_yes: bool,
     click.echo(format_plan(entries), err=out_mod.USE_JSON)
     if dry_run:
         if out_mod.USE_JSON:
-            out_mod.out({"operations": len(entries), "risk": risk,
-                         "confirmToken": _gate_token(entries, risk)})
+            # Each entry as the request it would send, in the same shape a
+            # single command's --dry-run prints. The text plan groups and
+            # summarises for a human; an agent needs to read every request.
+            base_url = resolve_base_url(ctx)
+            out_mod.out({
+                "dry_run": True,
+                "count": len(entries),
+                "risk": risk,
+                "confirmToken": _gate_token(entries, risk),
+                "operations": [
+                    {"index": e.index, "group": e.group, "command": e.command,
+                     "risk": e.risk,
+                     **dry_run_payload(base_url, e.method, e.path, body=e.data)}
+                    for e in entries
+                ],
+            })
         else:
             token = _gate_token(entries, risk)
             if token:

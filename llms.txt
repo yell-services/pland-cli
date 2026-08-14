@@ -52,4 +52,4 @@ pland --json pay-types wage <id>
 
 - Timestamps are Unix milliseconds.
 - Server-side `from`/`to` and `objectId` filters are unreliable — use the enriched commands (client-side filtered) instead.
-- For writes (POST/PATCH/DELETE), preview with `--dry-run` first, then run without the flag.
+- For writes (POST/PATCH/PUT/DELETE), preview with `--dry-run` first, then run without the flag. It sends nothing and prints `{"dry_run": true, "method", "url", "path", "params", "body"}`; check `url` against the profile you meant. Reads have no `--dry-run`.

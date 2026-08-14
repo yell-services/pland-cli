@@ -29,7 +29,11 @@ pland auth set-key                          # oder persistent (~/.config/pland)
   - `pland describe <gruppe> <command>` → Methode, Pfad, Parameter
   - `pland schema <Name>` → Request-/Response-Schema (z. B. `pland schema Absence`)
 - **Listen:** Default eine Seite; `--all` paginiert vollständig (mit Dedup).
-- **Schreiben (POST/PATCH/DELETE):** erst `--dry-run` ansehen, dann ohne Flag ausführen.
+- **Writes (POST/PATCH/PUT/DELETE):** preview with `--dry-run`, then run without the
+  flag. Nothing is sent and no key is needed; you get back
+  `{"dry_run": true, "method", "url", "path", "params", "body"}` (plus `"file"` for
+  an upload). Check `url` against the profile you meant. Read commands have no
+  `--dry-run` — there is nothing to simulate.
 - **Profile:** `--profile prod|beta|local` (Default `prod`).
 
 ## Schreibende Operationen — Schutzlayer
@@ -44,7 +48,9 @@ Commands sind nach Risiko markiert: 🟡 (confirm) und 🔴 (critical) im `--hel
 - Vor jedem Schreiben erst `--dry-run` zeigen, dann fragen.
 - **Viele Schreibvorgänge:** `pland batch run --file ops.json` bündelt sie hinter
   **einer** Rückfrage (Stufe = höchstes Risiko in der Datei). Erst `--dry-run`
-  zeigen, dann den User die Datei freigeben lassen. 🔴 verlangt weiterhin ein
+  zeigen, dann den User die Datei freigeben lassen. With `--json` the dry run
+  returns `{dry_run, count, risk, confirmToken, operations}` — read `operations`
+  to check every request the file would send. 🔴 verlangt weiterhin ein
   Terminal — ein Agent kann das nicht selbst auslösen. Query-Parameter lassen sich
   in einem Batch-Eintrag nicht abbilden — u. a. `jobs delete` (`splitDate`, `type`,
   `teamId`) niemals batchen, sondern einzeln ausführen.

@@ -84,7 +84,7 @@ pland --json pay-types wage <id>
   (clientseitig gefiltert) statt der generischen.
 - `objectId` bei Invoices ignoriert → `pland invoice drafts --object-id <id>` (clientseitig gefiltert).
 - Dokumente: `pland documents upload <pdf> --kind faktura|regular` — `faktura` mergt an die Rechnung.
-- Schreiben (POST/PATCH/DELETE): erst `--dry-run` ansehen, dann ohne Flag ausführen.
+- Writes (POST/PATCH/PUT/DELETE): preview with `--dry-run`, then run without the flag.
 
 ## Profile
 
@@ -117,6 +117,28 @@ vor versehentlichem Löschen durch Agenten. Jede Schreiboperation wird in
 > schützen (er könnte die API direkt ansprechen). Erzeuge den API-Key daher von
 > einem Account mit **minimalen Rechten** (least privilege).
 
+### Dry runs
+
+Every write command (POST/PATCH/PUT/DELETE — 320 of the 522) takes `--dry-run`.
+The request is built in full and then not sent: no risk gate, no API key needed,
+nothing reaches the network.
+
+```console
+$ pland --json salary release-using-time-tracking --data '{"timeTrackingId":"x"}' --dry-run
+{
+  "dry_run": true,
+  "method": "POST",
+  "url": "https://cloud-api.pland.app/v2/salaries/releaseWithTimeTracking",
+  "path": "/salaries/releaseWithTimeTracking",
+  "params": null,
+  "body": {"timeTrackingId": "x"}
+}
+```
+
+`url` reflects the active `--profile`, so a preview tells prod from beta. A
+multipart upload adds `"file"` with the file name. Read commands do not take the
+flag — there is nothing to simulate on a list or a detail fetch.
+
 ### Batch operations
 
 `pland batch run --file ops.json` executes many operations behind a **single**
@@ -144,6 +166,12 @@ operation asks for a typed token once, and `--yes` does not skip it. A plan is
 printed before the gate; `--dry-run` prints it and exits. Operations run in file
 order, a failure is recorded rather than aborting the run, and the exit code is 1
 if anything failed.
+
+Under `--json`, `--dry-run` returns `{dry_run, count, risk, confirmToken,
+operations}`, where each entry of `operations` carries the same
+`method`/`url`/`path`/`params`/`body` a single command's dry run prints, plus its
+`index`, `group`, `command` and `risk`. The human plan goes to stderr so stdout
+stays parseable.
 
 **Trade-off, stated plainly:** a single gate means one mistaken file can touch
 every record in it, where previously each record cost its own confirmation. In
