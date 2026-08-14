@@ -2,6 +2,7 @@ import json
 
 import click
 import httpx
+import pytest
 
 from pland_cli._codegen.runtime import run_operation
 from pland_cli.core.client import PlandClient
@@ -97,9 +98,48 @@ def test_dry_run_builds_request_without_client(capsys):
     run_operation(ctx, method="post", path="/absences/", query={}, extra_params=None,
                   data='{"x": 1}', file_=None, output=None, dry_run=True)
     payload = _json.loads(capsys.readouterr().out)
+    assert payload["dry_run"] is True
     assert payload["method"] == "POST"
     assert payload["path"] == "/absences/"
     assert payload["body"] == {"x": 1}
+
+
+def _explode(request):  # pragma: no cover - reaching this IS the failure
+    raise AssertionError(f"a dry run sent {request.method} {request.url}")
+
+
+def test_dry_run_sends_no_request(capsys):
+    """The whole point of the flag: the transport must never be touched."""
+    run_operation(_ctx(_explode), method="delete", path="/salaries/6501", query={},
+                  extra_params=None, data=None, file_=None, output=None, dry_run=True)
+    assert json.loads(capsys.readouterr().out)["method"] == "DELETE"
+
+
+def test_dry_run_reports_the_full_url(capsys, monkeypatch):
+    """Path alone cannot tell prod from beta — the target has to be readable."""
+    monkeypatch.setenv("PLAND_BASE_URL", "https://beta-api.pland.app/v2")
+    run_operation(_ctx(_explode), method="patch", path="/salaries/6501", query={"x": 1},
+                  extra_params=None, data='{"a": 2}', file_=None, output=None, dry_run=True)
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["url"] == "https://beta-api.pland.app/v2/salaries/6501"
+    assert payload["params"] == {"x": 1}
+    assert payload["body"] == {"a": 2}
+
+
+def test_dry_run_names_the_multipart_file(tmp_path, capsys):
+    f = tmp_path / "payroll.pdf"
+    f.write_bytes(b"%PDF")
+    run_operation(_ctx(_explode), method="post", path="/assets/", query={},
+                  extra_params=None, data=None, file_=str(f), output=None, dry_run=True)
+    assert json.loads(capsys.readouterr().out)["file"] == "payroll.pdf"
+
+
+def test_dry_run_rejects_an_unknown_profile():
+    ctx = click.Context(click.Command("x"))
+    ctx.obj = {"as_json": True, "profile": "prd"}
+    with pytest.raises(click.ClickException, match="prd"):
+        run_operation(ctx, method="post", path="/absences/", query={}, extra_params=None,
+                      data=None, file_=None, output=None, dry_run=True)
 
 
 def test_run_operation_blocks_confirm_without_tty(monkeypatch):

@@ -45,6 +45,28 @@ def test_command_count_matches_spec():
     assert total == len(ops)
 
 
+def test_every_write_command_offers_dry_run():
+    """One hook in the generator covers every write; this is what proves it did.
+
+    Reads GET is deliberately excluded — nothing to simulate there, and the flag
+    would only be noise in help output and docs.
+    """
+    ops = extract_operations(load_spec())
+    writes = {(op.group, op.command) for op in ops if op.method != "get"}
+    checked, missing = 0, []
+    for m in pkgutil.iter_modules(commands_pkg.__path__):
+        mod = importlib.import_module(f"pland_cli.commands.{m.name}")
+        group_var = [v for k, v in vars(mod).items() if k.endswith("_group")][0]
+        for cmd_name, cmd in group_var.commands.items():
+            if (group_var.name, cmd_name) not in writes:
+                continue
+            checked += 1
+            if not any(p.name == "dry_run" for p in cmd.params):
+                missing.append(f"{group_var.name} {cmd_name}")
+    assert not missing, f"{len(missing)} write commands without --dry-run: {missing[:10]}"
+    assert checked == len(writes), "not every write operation was reached"
+
+
 def test_click_argument_names_match_the_function_parameter():
     """Click lowercases an argument name; the signature has to agree.
 

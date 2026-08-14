@@ -20,6 +20,35 @@ def _build_params(query: dict, extra_params: str | None) -> dict | None:
     return params or None
 
 
+def show_dry_run(ctx: click.Context, method: str, path: str,
+                 params: dict | None, body: Any = None,
+                 file_: str | None = None) -> None:
+    """Print the request that would have gone out, and send nothing.
+
+    The URL is resolved from the same config the client is built from, so the
+    caller reads the endpoint a real run targets. A dry run that showed only the
+    path could not tell prod from beta — which is the one thing worth checking
+    before a write lands in a payroll system.
+    """
+    from pland_cli.core.config import resolve_config
+
+    try:
+        base_url = resolve_config(profile=ctx.obj.get("profile")).base_url
+    except ValueError as e:
+        raise click.ClickException(str(e)) from e
+    payload: dict[str, Any] = {
+        "dry_run": True,
+        "method": method.upper(),
+        "url": base_url.rstrip("/") + "/" + path.lstrip("/"),
+        "path": path,
+        "params": params,
+        "body": body,
+    }
+    if file_:
+        payload["file"] = Path(file_).name
+    out_mod.out(payload)
+
+
 def run_operation(ctx: click.Context, *, method: str, path: str, query: dict,
                   extra_params: str | None, data: str | None,
                   file_: str | None, output: str | None,
@@ -35,7 +64,7 @@ def run_operation(ctx: click.Context, *, method: str, path: str, query: dict,
         raise click.BadParameter(f"--data is not valid JSON: {e}") from e
 
     if dry_run:
-        out_mod.out({"method": method.upper(), "path": path, "params": params, "body": body})
+        show_dry_run(ctx, method, path, params, body=body, file_=file_)
         return
 
     if risk != "free" or draftable:
