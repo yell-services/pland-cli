@@ -83,7 +83,10 @@ def test_load_spec_dev_tree_resolves_real_spec():
     # A path only disappears when `remove` takes its last operation.
     dropped = sum(1 for path, gone in overlay["remove"].items()
                   if not (set(raw["paths"][path]) & methods) - set(gone))
-    assert len(load_spec()["paths"]) == len(raw["paths"]) - dropped + len(overlay["paths"])
+    # Only entries for paths upstream does not have grow the count — an entry
+    # correcting a documented operation replaces it in place.
+    added = sum(1 for path in overlay["paths"] if path not in raw["paths"])
+    assert len(load_spec()["paths"]) == len(raw["paths"]) - dropped + added
 
 
 def test_overlay_removes_renames_and_adds():
@@ -121,8 +124,25 @@ def test_overlay_is_a_pure_correction_layer():
         for method in methods:
             assert method in raw["paths"][path], f"remove: {method} {path} is gone"
 
-    for path in overlay["paths"]:
-        assert path not in raw["paths"], f"paths: {path} is documented upstream"
+    # A paths entry either adds a route upstream lacks, or corrects one it
+    # describes wrongly. The correcting kind has to still differ from upstream:
+    # the day it matches, pland.app has published the fix and the entry is dead
+    # weight.
+    for path, ops in overlay["paths"].items():
+        if path not in raw["paths"]:
+            continue
+        for method, op in ops.items():
+            assert raw["paths"][path].get(method) != op, (
+                f"paths: {method} {path} now matches upstream — drop the entry")
+
+    # Same contract for schema corrections.
+    upstream_schemas = (raw.get("components") or {}).get("schemas") or {}
+    for name, fields in (overlay.get("schemas") or {}).items():
+        if name not in upstream_schemas:
+            continue
+        for key, value in fields.items():
+            assert upstream_schemas[name].get(key) != value, (
+                f"schemas: {name}.{key} now matches upstream — drop the entry")
 
 
 def test_overlay_params_still_apply():
