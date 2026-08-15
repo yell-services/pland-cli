@@ -51,15 +51,28 @@ cancel under the same `referenceId` fail with `E11000 duplicate key`. Clean up
 via `pland invoice-storno list --all` (match on `referenceId`) and
 `pland invoice-storno delete <id>`.
 
-## Assignment confirmations are unreachable without a known ID
-`/assignmentConfirmations/{id}` is the only way in, and nothing hands out that
-id — no assignment field carries it, and the spec has no
-`assignmentConfirmationId` anywhere. Unlike the storno collection, this one is
-not merely undocumented: the API does not serve it. Probed 2026-08-15, all
-answering "Not found." or `Failed to parse Id` against a control probe on the
-same resource: `/assignmentConfirmations/` (plus `/list`, `/all`, `/count`) and
-`/fakturaDocuments/` as a generic entry point. No overlay entry can fix this —
-it needs a route from pland.app. Do not re-probe these.
+## Assignment confirmations: everything works except finding one
+The resource is fully covered — create them from accepted offers with
+`pland offers generate-assignment-confirmations`, then `get`, `send`, `delete`,
+`create-preview`, the two PDF commands, `attach-documents-to` and
+`list-referenced-documents` under `pland assignment-confirmations`. All ten
+routes have a command.
+
+Every one of them except the generator needs an id, and **nothing ever hands
+one out**. The generator answers `{"message": "Assignment confirmations
+generated"}` — no ids. No assignment or offer field carries the id either
+(`attachedFakturaDocumentIds` on an offer holds other document types), and the
+spec has no `assignmentConfirmationId` anywhere.
+
+There is also no way to list them. Probed 2026-08-15, all answering "Not found."
+or `Failed to parse Id` against a control probe on the same resource:
+`/assignmentConfirmations/` (plus `/list`, `/all`, `/count`) and
+`/fakturaDocuments/` as a generic entry point. Unlike the storno collection,
+this one is not merely undocumented — the API does not serve it, so no overlay
+entry can fix it. Do not re-probe these.
+
+Net effect: a confirmation you generate is write-only from the API's side. Ask
+pland.app for either a collection route or ids in the generator's response.
 
 ## Schutzlayer für Schreibvorgänge
 DELETE/PATCH auf kritische Daten sind 🟡/🔴 markiert und verlangen Bestätigung.
