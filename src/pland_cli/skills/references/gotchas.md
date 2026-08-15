@@ -51,28 +51,29 @@ cancel under the same `referenceId` fail with `E11000 duplicate key`. Clean up
 via `pland invoice-storno list --all` (match on `referenceId`) and
 `pland invoice-storno delete <id>`.
 
-## Assignment confirmations: everything works except finding one
-The resource is fully covered — create them from accepted offers with
-`pland offers generate-assignment-confirmations`, then `get`, `send`, `delete`,
-`create-preview`, the two PDF commands, `attach-documents-to` and
-`list-referenced-documents` under `pland assignment-confirmations`. All ten
-routes have a command.
+## Reaching a document that has no collection route
+`/assignmentConfirmations/` does not exist — there is no collection to list,
+and the generator (`pland offers generate-assignment-confirmations`) answers
+`{"message": "Assignment confirmations generated"}` without ids. That looks
+like a dead end but is not: the id comes from the **offer it was generated
+from**.
 
-Every one of them except the generator needs an id, and **nothing ever hands
-one out**. The generator answers `{"message": "Assignment confirmations
-generated"}` — no ids. No assignment or offer field carries the id either
-(`attachedFakturaDocumentIds` on an offer holds other document types), and the
-spec has no `assignmentConfirmationId` anywhere.
+```
+pland --json offers list                                    # or --all
+pland --json offers list-referenced-faktura-documents-for <OFFER_ID>
+#   -> [{documentType: "invoice", ...}, {documentType: "assignment_confirmation", _id: ...}]
+pland --json assignment-confirmations get <CONFIRMATION_ID>
+```
 
-There is also no way to list them. Probed 2026-08-15, all answering "Not found."
-or `Failed to parse Id` against a control probe on the same resource:
-`/assignmentConfirmations/` (plus `/list`, `/all`, `/count`) and
-`/fakturaDocuments/` as a generic entry point. Unlike the storno collection,
-this one is not merely undocumented — the API does not serve it, so no overlay
-entry can fix it. Do not re-probe these.
+`referencedFakturaDocuments` is the general mechanism linking faktura documents
+to each other, and every type carries it: a storno points at its invoice, a
+credit and an invoice reminder likewise. Reach for it whenever a document type
+has no collection of its own. Note `attachedFakturaDocumentIds` on the document
+is *not* the same thing and does not hold the related document.
 
-Net effect: a confirmation you generate is write-only from the API's side. Ask
-pland.app for either a collection route or ids in the generator's response.
+Do not conclude from a missing collection route that a type is unreachable —
+check the documents it is generated from first. Verified 2026-08-15: all 11
+assignment confirmations in the company were found this way, from 221 offers.
 
 ## Schutzlayer für Schreibvorgänge
 DELETE/PATCH auf kritische Daten sind 🟡/🔴 markiert und verlangen Bestätigung.
