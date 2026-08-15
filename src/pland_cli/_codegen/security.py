@@ -75,11 +75,15 @@ def classify(method: str, path: str, tag: str) -> str:
     if last == "many":
         return "confirm"
 
-    # 9) Users delete + Invoices Massen-Storno
+    # 9) Users delete
     if tag == "Users" and m == "delete":
         return "critical"
+    # Cancelling an invoice is bookkeeping, not destruction: nothing is removed,
+    # the invoice keeps its number and stays in the ledger with a canceledDate.
+    # Explicitly free (owner's call, 2026-08-15) — it has to sit before rule 15,
+    # which would otherwise catch it on "setto".
     if p == "/invoices/settocanceled":
-        return "critical"
+        return "free"
 
     # 9b) Documents: delete/modify -> critical (no --yes bypass). A real agent
     # test showed the confirm tier gets bypassed via --yes, and documents

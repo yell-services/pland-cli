@@ -15,7 +15,6 @@ from pland_cli._codegen.security import classify, draftable_for
     ("post", "/tasks/delete", "Tasks", "critical"),
     ("delete", "/api_key/{keyId}", "API Keys", "critical"),
     ("post", "/account/change-password", "Authentication", "critical"),
-    ("post", "/invoices/setToCanceled", "Invoice", "critical"),
     ("delete", "/documents/{id}", "Documents", "critical"),
     ("patch", "/documents/{id}", "Documents", "critical"),
     # confirm
@@ -33,6 +32,10 @@ from pland_cli._codegen.security import classify, draftable_for
     ("post", "/notification/v2/read", "Push Notifications", "free"),
     ("post", "/auth/login", "Authentication", "free"),
     ("post", "/salaries/objectExport", "Salary", "free"),
+    # Cancelling only stamps canceledDate; it deletes nothing. Classified free
+    # deliberately, and the rule has to win over rule 15, which matches the
+    # "setto" in the path and would otherwise make it confirm.
+    ("post", "/invoices/setToCanceled", "Invoice", "free"),
 ])
 def test_classify(method, path, tag, expected):
     assert classify(method, path, tag) == expected

@@ -7,7 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `invoice set-canceled` is no longer 🔴 critical, it runs unprompted. Cancelling
+  stamps `canceledDate` and removes nothing — the invoice keeps its number and
+  stays in the ledger. The critical tier demanded a human at a terminal, which
+  blocked every non-interactive caller from an everyday bookkeeping step.
+
 ### Fixed
+
+- `invoice set-canceled` works at all. Verified against the live API on
+  2026-08-15 by cancelling a real 0 EUR invoice: the published body is wrong
+  twice over. The field is `fakturaDocumentIds`, not `ids` (which earns
+  "Required parameters are: fakturaDocumentIds"), and `canceledAtDate` is
+  mandatory despite being documented as optional and nullable — leaving it out
+  makes the API fail with a PHP type error. Corrected in the overlay, and the
+  body is now reachable as `pland schema SetInvoicesCanceledRequest`.
+- `invoice create` documents `address` as required. Without it the API answers
+  "Missing parameters. Required parameters are: customerId, positions, currency,
+  issuedOn, address", though upstream lists only the other five.
+- The overlay can correct operations and schemas, not just add missing routes.
+  A `paths` entry for a documented path replaces that operation; the new
+  `schemas` section merges into `components/schemas` per top-level key. Both
+  keep the drift guard: an entry that comes to match upstream fails the suite,
+  which is when it should be deleted.
 
 - `invoice-reminders list` exists again. The overlay dropped `GET /invoiceReminders/`
   as a route the API does not serve, but a plain GET returns the reminder list — and
