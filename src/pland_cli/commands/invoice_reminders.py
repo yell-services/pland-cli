@@ -9,6 +9,34 @@ def invoice_reminders_group():
     """invoice-reminders-Operationen."""
     pass
 
+@invoice_reminders_group.command("list")
+@click.option("--limit", "limit", default=None, type=int, help="Maximum number of items to return")
+@click.option("--offset", "offset", default=None, type=int, help="Number of items to skip for pagination")
+@click.option("--sort", "sort", default=None, help="Sort as JSON: {\"by\":\"<field>\",\"direction\":1} (1 asc, -1 desc). The spec's \"field:1\" form returns 400.")
+@click.option("--status", "status", default=None, help="")
+@click.option("--customerId", "customerId", default=None, help="")
+@click.option("--objectIds", "objectIds", default=None, help="")
+@click.option("--issuedOnFrom", "issuedOnFrom", default=None, help="")
+@click.option("--issuedOnTo", "issuedOnTo", default=None, help="")
+@click.option("--referenceIds", "referenceIds", default=None, help="")
+@click.option("--documentNumber", "documentNumber", default=None, help="")
+@click.option("--name", "name", default=None, help="")
+@click.option("--statusTags", "statusTags", default=None, help="")
+@click.option("--generalFields", "generalFields", default=None, help="")
+@click.option("--all", "fetch_all", is_flag=True, help="Paginate through all pages.")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
+@click.pass_context
+def _cmd_invoice_reminders_list(ctx, limit, offset, sort, status, customerId, objectIds, issuedOnFrom, issuedOnTo, referenceIds, documentNumber, name, statusTags, generalFields, fetch_all, extra_params):
+    """List invoice reminders"""
+    from pland_cli._codegen.runtime import run_operation
+    run_operation(
+        ctx, method='get', path="/invoiceReminders/",
+        query={"limit": limit, "offset": offset, "sort": sort, "status": status, "customerId": customerId, "objectIds": objectIds, "issuedOnFrom": issuedOnFrom, "issuedOnTo": issuedOnTo, "referenceIds": referenceIds, "documentNumber": documentNumber, "name": name, "statusTags": statusTags, "generalFields": generalFields}, extra_params=extra_params, fetch_all=fetch_all,
+        data=None, file_=None, output=None, dry_run=False,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
+    )
+
 @invoice_reminders_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")

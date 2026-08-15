@@ -24,9 +24,12 @@ def _read(name: str) -> str | None:
 def apply_overlay(spec: dict, overlay: dict) -> dict:
     """Korrekturen aus openapi.overlay.yaml auf die Spec anwenden.
 
-    Three sections: ``remove`` (operations the API does not serve), ``params``
-    (misnamed or misdocumented query parameters) and ``paths`` (endpoints the
-    spec does not know about). See the comments in that file.
+    Four sections: ``remove`` (operations the API does not serve), ``params``
+    (misnamed or misdocumented query parameters), ``paths`` (endpoints the spec
+    does not know about, or operations it describes wrongly) and ``schemas``
+    (corrections to ``components/schemas``, merged per top-level key so an entry
+    fixing ``required`` leaves ``properties`` untouched). See the comments in
+    that file.
     """
     paths = spec.setdefault("paths", {})
 
@@ -48,6 +51,10 @@ def apply_overlay(spec: dict, overlay: dict) -> dict:
 
     for path, ops in (overlay.get("paths") or {}).items():
         paths.setdefault(path, {}).update(ops)
+
+    schemas = spec.setdefault("components", {}).setdefault("schemas", {})
+    for name, fields in (overlay.get("schemas") or {}).items():
+        schemas.setdefault(name, {}).update(fields)
 
     return spec
 

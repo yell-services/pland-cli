@@ -158,10 +158,10 @@ def test_runtime_risk_matches_generated_risk():
         expected = resolve_entries([entry])[0].risk
         assert generated[func] == expected, f"{group} {command}"
         checked += 1
-    # Exact, not a floor: 521 generated commands map onto a spec operation and
+    # Exact, not a floor: 522 generated commands map onto a spec operation and
     # 43 of them carry a required query parameter. If either number moves, the
     # comparison surface changed and this test must be re-read, not re-tuned.
-    assert (checked, refused) == (478, 43), f"compared {checked}, refused {refused}"
+    assert (checked, refused) == (479, 43), f"compared {checked}, refused {refused}"
 
 
 def _entry(i, group, command, method, path, risk):

@@ -20,7 +20,7 @@ def test_distribution_matches_spec():
     from collections import Counter
     c = Counter(classify(m, p, t) for m, p, t in _write_ops())
     # Verteilung (verifiziert gegen die aktuelle Spec). Bei Spec-Updates bewusst anpassen.
-    assert c["critical"] == 30, c
-    assert c["free"] == 167, c
+    assert c["critical"] == 29, c
+    assert c["free"] == 168, c
     assert c["confirm"] == 123, c
     assert sum(c.values()) == 320, c

@@ -26,7 +26,10 @@ remove:
   /surcharges/count: [get]
   /surcharges/distinctValues: [get]
   # Not "Failed to parse Id" but "Method not allowed. Must be one of: POST".
-  /invoiceReminders/: [get]
+  # /invoiceReminders/ was listed here too and that was wrong: on 2026-08-14 a
+  # plain GET returned the reminder list. Whatever the earlier probe hit, the
+  # route serves GET — removing it cost us the only way to reach a reminder by
+  # its invoice, because nothing on the invoice carries the reminder id.
   /invoiceReminders/templates: [get]
 
   # Paths with {id} need a second oracle. When the route exists, an invalid ID
@@ -73,7 +76,38 @@ params:
 # Found via a control probe: the response differs from the signature of a route
 # on the same resource that is guaranteed not to exist. Only GET is verified —
 # write operations are deliberately absent here.
+#
+# An entry may also replace an operation the spec describes wrongly; the whole
+# operation object is substituted, so it repeats every field the original had.
 paths:
+  # Verified 2026-08-15 against cloud-api.pland.app/v2 by cancelling a real
+  # 0 EUR invoice. The published body is wrong on two counts:
+  #   {"ids": [...]}  -> 400 "Required parameters are: fakturaDocumentIds"
+  #   canceledAtDate omitted (spec says optional, nullable) -> 500
+  #     "setToCanceled(): Argument #2 ($canceledAtDate) must be of type
+  #      MongoDB\BSON\UTCDateTime, null given"
+  # So the field is named fakturaDocumentIds and the date is mandatory.
+  /invoices/setToCanceled:
+    post:
+      tags: [Invoice]
+      summary: 'Cancel invoices'
+      description: 'Cancel one or more invoices by setting their status to canceled'
+      operationId: setInvoicesCanceled
+      requestBody:
+        description: 'Invoice IDs and the date they count as canceled'
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SetInvoicesCanceledRequest'}
+      responses:
+        '200': {description: 'Invoices canceled successfully'}
+        '400': {description: 'Invalid input'}
+        '401': {description: Unauthorized}
+        '403': {description: Forbidden}
+      security:
+        - API-Key: []
+        - Bearer-Auth: []
+
   /absences/count:
     get:
       tags: [Absences]
@@ -198,3 +232,35 @@ paths:
            description: Number of items to skip for pagination}
       responses:
         '200': {description: List of pay type templates}
+
+# --- Corrections to components/schemas --------------------------------------
+# Merged per top-level key, so an entry that fixes `required` leaves the
+# upstream `properties` alone. Reachable for callers via `pland schema <Name>`.
+schemas:
+  # Verified 2026-08-15: POST /invoices/ without `address` is rejected with
+  # "Missing parameters. Required parameters are: customerId, positions,
+  # currency, issuedOn, address". The other five are exactly the upstream
+  # required list, so the API validates them as one set — but only the invoice
+  # route was exercised, not the other document types sharing this base.
+  FakturaDocument:
+    required: [documentType, customerId, referenceId, issuedOn, currency, positions, address]
+
+  # Body of POST /invoices/setToCanceled, named so `pland schema` can reach it;
+  # the published spec only has it inline, and wrong. See the paths entry above.
+  SetInvoicesCanceledRequest:
+    title: Set Invoices Canceled Request
+    description: 'Body for POST /invoices/setToCanceled. Both fields are required —
+      the spec documents `ids` and an optional `canceledAtDate`, the API accepts
+      neither.'
+    type: object
+    required: [fakturaDocumentIds, canceledAtDate]
+    properties:
+      fakturaDocumentIds:
+        description: 'IDs of the invoices to cancel'
+        type: array
+        items: {type: string, format: objectid}
+      canceledAtDate:
+        description: 'Date the invoices count as canceled (UTC timestamp in
+          milliseconds). Mandatory: omitting it makes the API fail with a type
+          error, it is not nullable.'
+        type: integer

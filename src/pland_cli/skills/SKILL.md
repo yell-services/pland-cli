@@ -1,6 +1,6 @@
 ---
 name: pland-cli
-description: Use when interacting with the pland.app API — HR, time tracking, payroll/salaries, absences, invoices, offers, customer objects, quality control, documents. Provides the `pland` CLI (522 commands across 56 resource groups) with JSON output for agents.
+description: Use when interacting with the pland.app API — HR, time tracking, payroll/salaries, absences, invoices, offers, customer objects, quality control, documents. Provides the `pland` CLI (523 commands across 56 resource groups) with JSON output for agents.
 ---
 
 # pland-cli
@@ -23,7 +23,7 @@ pland auth set-key                          # oder persistent (~/.config/pland)
 ## Grundregeln für Agenten
 
 - **Immer `--json`** für maschinenlesbare Ausgabe: `pland --json <gruppe> <command>`.
-- **Discovery statt Raten** — die CLI hat 522 Commands; finde sie so:
+- **Discovery statt Raten** — die CLI hat 523 Commands; finde sie so:
   - `pland --help` → alle 56 Gruppen
   - `pland <gruppe> --help` → Commands der Gruppe
   - `pland describe <gruppe> <command>` → Methode, Pfad, Parameter
@@ -76,7 +76,7 @@ Commands sind nach Risiko markiert: 🟡 (confirm) und 🔴 (critical) im `--hel
 
 ## Vollständige Command-Liste
 
-Siehe `references/commands.md` (generiert, 56 Gruppen, 522 Commands). Bei Bedarf laden — nicht
+Siehe `references/commands.md` (generiert, 56 Gruppen, 523 Commands). Bei Bedarf laden — nicht
 vorab komplett lesen.
 
 ## Fehlerformat

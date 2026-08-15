@@ -7,7 +7,7 @@
 
 > Inoffizielle, agent-native CLI für die [pland.app](https://pland.app) API —
 > Zeiterfassung, Lohn, Urlaub, Objekte, Rechnungen, Qualitätskontrolle u. v. m.
-> **522 Commands** über 56 Ressourcen-Gruppen, generiert aus der OpenAPI-Spec,
+> **523 Commands** über 56 Ressourcen-Gruppen, generiert aus der OpenAPI-Spec,
 > mit JSON-Ausgabe für KI-Agenten.
 
 > **Keywords:** pland.app cli · pland api client · pland.app api · agent-native cli · claude code skill · codex cli skill · zeiterfassung lohn urlaub rechnungen api
@@ -55,7 +55,7 @@ Wenn du ein Agent bist und das hier liest, um die CLI zu nutzen:
 
 1. **Installieren:** `uv tool install git+https://github.com/yell-services/pland-cli`
 2. **Key setzen:** `export PLAND_API_KEY="<id>:<secret>"`
-3. **Commands finden** (nicht raten — 522 Stück):
+3. **Commands finden** (nicht raten — 523 Stück):
    - `pland --help` (56 Gruppen) · `pland <gruppe> --help`
    - `pland describe <gruppe> <command>` (Methode, Pfad, Parameter)
    - `pland schema <Name>` (z. B. `pland schema Absence`)
@@ -119,7 +119,7 @@ vor versehentlichem Löschen durch Agenten. Jede Schreiboperation wird in
 
 ### Dry runs
 
-Every write command (POST/PATCH/PUT/DELETE — 320 of the 522) takes `--dry-run`.
+Every write command (POST/PATCH/PUT/DELETE — 320 of the 523) takes `--dry-run`.
 The request is built in full and then not sent: no risk gate, no API key needed,
 nothing reaches the network.
 

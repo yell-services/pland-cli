@@ -392,6 +392,7 @@
 | `pland invoice-reminders get` | GET | Get invoice reminder |
 | `pland invoice-reminders get-distinct-values` | GET | Get distinct field values for invoice reminders |
 | `pland invoice-reminders get-or-create-chat` | POST | Get or create reminder chat |
+| `pland invoice-reminders list` | GET | List invoice reminders |
 | `pland invoice-reminders list-referenced-faktura-documents-for` | GET | List referenced documents |
 | `pland invoice-reminders send` | POST | Send reminders via email |
 | `pland invoice-reminders update` | PATCH | Update invoice reminder |
