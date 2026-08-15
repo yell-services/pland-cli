@@ -127,8 +127,10 @@ def enforce(
     if risk == "critical":
         if not isatty():
             _abort(method, path, risk, "blocked_no_tty",
-                   f"🔴 Critical operation {label} needs confirmation at the terminal "
-                   f"(no interactive TTY). No flag can bypass this.")
+                   f"🔴 Critical operation {label} needs confirmation and there is no "
+                   f"interactive TTY. Type it at a terminal, or pass "
+                   f"--confirm {_resource_token(path)!r} if you have the user's "
+                   f"explicit go — no flag skips the confirmation itself.")
         token = _resource_token(path)
         entered = tokener(f"🔴 CRITICAL: {label}. Type '{token}' to confirm")
         if (entered or "").strip() != token:

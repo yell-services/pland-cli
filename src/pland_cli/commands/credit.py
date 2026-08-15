@@ -35,19 +35,17 @@ def _cmd_credit_list(ctx, limit, offset, creditTypeOf, assignmentIds, activityTy
 @credit_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_credit_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_credit_create(ctx, data, dry_run, extra_params):
     """Create credit note"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/credits/",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @credit_group.command("get-last-number")
@@ -120,7 +118,7 @@ def _cmd_credit_get(ctx, id, extra_params):
 @credit_group.command("delete", short_help="🟡 Delete credit note")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
@@ -139,7 +137,7 @@ def _cmd_credit_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
@@ -158,19 +156,17 @@ def _cmd_credit_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_credit_generate_pdf(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_credit_generate_pdf(ctx, id, data, dry_run, extra_params):
     """Generate credit note PDF"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/credits/" + id + "/pdf",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @credit_group.command("list-referenced-faktura-documents-from")
@@ -192,136 +188,122 @@ def _cmd_credit_list_referenced_faktura_documents_from(ctx, id, extra_params):
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_credit_attach_documents_to(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_credit_attach_documents_to(ctx, id, data, dry_run, extra_params):
     """Attach documents to credit note"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/credits/" + id + "/attachDocuments",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @credit_group.command("add-documents-to")
 @click.argument("ID")
 @click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_credit_add_documents_to(ctx, id, file_, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_credit_add_documents_to(ctx, id, file_, dry_run, extra_params):
     """Add documents to credit note"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/credits/" + id + "/addDocuments",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=file_, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @credit_group.command("get-or-create-chat")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_credit_get_or_create_chat(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_credit_get_or_create_chat(ctx, id, dry_run, extra_params):
     """Get or create credit note chat"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/credits/" + id + "/chat",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @credit_group.command("create-preview")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_credit_create_preview(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_credit_create_preview(ctx, data, dry_run, extra_params):
     """Create credit note preview"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/credits/preview",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @credit_group.command("duplicate")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_credit_duplicate(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_credit_duplicate(ctx, data, dry_run, extra_params):
     """Duplicate credit note"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/credits/duplicate",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @credit_group.command("generate-combined-pdf")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_credit_generate_combined_pdf(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_credit_generate_combined_pdf(ctx, data, output, dry_run, extra_params):
     """Generate combined credit PDF"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/credits/pdf",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @credit_group.command("generate-zip")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_credit_generate_zip(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_credit_generate_zip(ctx, data, output, dry_run, extra_params):
     """Generate credit ZIP archive"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/credits/zip",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @credit_group.command("send", short_help="🟡 Send credit notes")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
@@ -339,7 +321,7 @@ def _cmd_credit_send(ctx, data, dry_run, assume_yes, confirm_token, extra_params
 @credit_group.command("set-fixed", short_help="🟡 Set credit notes to fixed")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context

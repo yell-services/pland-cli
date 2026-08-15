@@ -30,19 +30,17 @@ def _cmd_equipment_types_list(ctx, limit, offset, sort, fetch_all, extra_params)
 @equipment_types_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_equipment_types_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_equipment_types_create(ctx, data, dry_run, extra_params):
     """Create equipment type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/equipmentType/",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @equipment_types_group.command("get")
@@ -63,38 +61,34 @@ def _cmd_equipment_types_get(ctx, id, extra_params):
 @equipment_types_group.command("delete")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_equipment_types_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_equipment_types_delete(ctx, id, dry_run, extra_params):
     """Delete equipment type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='delete', path="/equipmentType/" + id + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @equipment_types_group.command("update")
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_equipment_types_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_equipment_types_update(ctx, id, data, dry_run, extra_params):
     """Update equipment type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='patch', path="/equipmentType/" + id + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @equipment_types_group.command("get-distinct-values")

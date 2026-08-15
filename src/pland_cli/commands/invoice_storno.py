@@ -13,43 +13,39 @@ def invoice_storno_group():
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_storno_create_pdf(ctx, data, output, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_storno_create_pdf(ctx, data, output, dry_run, extra_params):
     """Generate combined PDF for multiple storno documents"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/stornos/pdf",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_storno_group.command("create-preview")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_storno_create_preview(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_storno_create_preview(ctx, data, dry_run, extra_params):
     """Create preview of storno document"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/stornos/preview",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_storno_group.command("create-send", short_help="🟡 Send storno documents via email")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
@@ -82,7 +78,7 @@ def _cmd_invoice_storno_get(ctx, id, extra_params):
 @invoice_storno_group.command("delete", short_help="🟡 Delete storno document")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
@@ -101,7 +97,7 @@ def _cmd_invoice_storno_delete(ctx, id, dry_run, assume_yes, confirm_token, extr
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
@@ -121,19 +117,17 @@ def _cmd_invoice_storno_update(ctx, id, data, dry_run, assume_yes, confirm_token
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_storno_create_pdf_by_id(ctx, id, data, output, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_storno_create_pdf_by_id(ctx, id, data, output, dry_run, extra_params):
     """Generate PDF for specific storno document"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/stornos/" + id + "/pdf",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=output, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_storno_group.command("get-referenced-faktura-documents")
@@ -155,38 +149,34 @@ def _cmd_invoice_storno_get_referenced_faktura_documents(ctx, id, extra_params):
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_storno_create_attach_documents(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_storno_create_attach_documents(ctx, id, data, dry_run, extra_params):
     """Attach documents to storno"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/stornos/" + id + "/attachDocuments",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_storno_group.command("create-add-documents")
 @click.argument("ID")
 @click.option("--file", "file_", type=click.Path(exists=True), help="File (multipart).")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_storno_create_add_documents(ctx, id, file_, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_storno_create_add_documents(ctx, id, file_, dry_run, extra_params):
     """Add new documents to storno"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/stornos/" + id + "/addDocuments",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=file_, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_storno_group.command("list")

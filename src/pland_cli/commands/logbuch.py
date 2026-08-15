@@ -28,38 +28,34 @@ def _cmd_logbuch_view_chat(ctx, id, extra_params):
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_subscribe_users_to_chat(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_logbuch_subscribe_users_to_chat(ctx, id, data, dry_run, extra_params):
     """Subscribe users to a chat"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/chat/v2/" + id + "/subscribe",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @logbuch_group.command("unsubscribe-users-from-chat")
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_unsubscribe_users_from_chat(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_logbuch_unsubscribe_users_from_chat(ctx, id, data, dry_run, extra_params):
     """Unsubscribe users from a chat"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/chat/v2/" + id + "/unsubscribe",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @logbuch_group.command("get-users-with-access-to-chat")
@@ -81,38 +77,34 @@ def _cmd_logbuch_get_users_with_access_to_chat(ctx, id, extra_params):
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_send_chat_message(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_logbuch_send_chat_message(ctx, id, data, dry_run, extra_params):
     """Send a chat message"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/chat/v2/" + id + "/send",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @logbuch_group.command("send-note-message")
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_send_note_message(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_logbuch_send_note_message(ctx, id, data, dry_run, extra_params):
     """Send a note message"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/chat/v2/" + id + "/sendNote",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @logbuch_group.command("send-thread-message")
@@ -120,19 +112,17 @@ def _cmd_logbuch_send_note_message(ctx, id, data, dry_run, assume_yes, confirm_t
 @click.option("--parentMessageId", "parentMessageId", default=None, help="Parent message ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_send_thread_message(ctx, id, parentMessageId, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_logbuch_send_thread_message(ctx, id, parentMessageId, data, dry_run, extra_params):
     """Send a thread message"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/chat/v2/" + id + "/sendThread",
         query={"parentMessageId": parentMessageId}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @logbuch_group.command("list-for-chat")
@@ -153,38 +143,34 @@ def _cmd_logbuch_list_for_chat(ctx, id, extra_params):
 @logbuch_group.command("mark-messages-as-read")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_mark_messages_as_read(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_logbuch_mark_messages_as_read(ctx, id, dry_run, extra_params):
     """Mark messages as read"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/chat/v2/" + id + "/markMessagesAsRead",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @logbuch_group.command("delete-message")
 @click.argument("ID")
 @click.argument("MESSAGEID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_delete_message(ctx, id, messageid, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_logbuch_delete_message(ctx, id, messageid, dry_run, extra_params):
     """Delete a message"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='delete', path="/chat/v2/" + id + "/messages/" + messageid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @logbuch_group.command("patch-message")
@@ -192,19 +178,17 @@ def _cmd_logbuch_delete_message(ctx, id, messageid, dry_run, assume_yes, confirm
 @click.argument("MESSAGEID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_patch_message(ctx, id, messageid, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_logbuch_patch_message(ctx, id, messageid, data, dry_run, extra_params):
     """Update a message"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='patch', path="/chat/v2/" + id + "/messages/" + messageid + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @logbuch_group.command("pin-message")
@@ -212,19 +196,17 @@ def _cmd_logbuch_patch_message(ctx, id, messageid, data, dry_run, assume_yes, co
 @click.argument("MESSAGEID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_logbuch_pin_message(ctx, id, messageid, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_logbuch_pin_message(ctx, id, messageid, data, dry_run, extra_params):
     """Pin or unpin a message"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/chat/v2/" + id + "/messages/" + messageid + "/pin",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

@@ -67,6 +67,36 @@ def test_every_write_command_offers_dry_run():
     assert checked == len(writes), "not every write operation was reached"
 
 
+def test_confirmation_flags_only_where_there_is_a_gate():
+    """--yes and --confirm exist exactly on the commands that can be gated.
+
+    On a free write they would clear nothing, so offering them suggests a
+    confirmation that never happens. The pairing matters in the other direction
+    too: a gated command missing --confirm cannot be run by a caller without a
+    TTY at all.
+    """
+    from pland_cli._codegen.security import classify
+
+    seen = 0
+    for m in pkgutil.iter_modules(commands_pkg.__path__):
+        mod = importlib.import_module(f"pland_cli.commands.{m.name}")
+        group_var = [v for k, v in vars(mod).items() if k.endswith("_group")][0]
+        for cmd_name, cmd in group_var.commands.items():
+            names = {p.name for p in cmd.params}
+            gated = {"assume_yes", "confirm_token"} <= names
+            partial = bool({"assume_yes", "confirm_token"} & names) and not gated
+            assert not partial, f"{group_var.name} {cmd_name} has only one of the two flags"
+            if not gated:
+                continue
+            seen += 1
+    ops = extract_operations(load_spec())
+    expected = sum(
+        1 for op in ops
+        if op.method != "get" and classify(op.method, op.path, op.tag) in ("confirm", "critical")
+    )
+    assert seen == expected, f"{seen} commands carry the flags, {expected} operations are gated"
+
+
 def test_click_argument_names_match_the_function_parameter():
     """Click lowercases an argument name; the signature has to agree.
 

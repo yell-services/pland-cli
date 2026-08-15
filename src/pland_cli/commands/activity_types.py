@@ -12,19 +12,17 @@ def activity_types_group():
 @activity_types_group.command("create-with-assignment")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_activity_types_create_with_assignment(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_activity_types_create_with_assignment(ctx, data, dry_run, extra_params):
     """Create activity type with assignment"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/activityTypes/withAssignment",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @activity_types_group.command("list")
@@ -51,19 +49,17 @@ def _cmd_activity_types_list(ctx, limit, offset, sort, name, status, generalFiel
 @activity_types_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_activity_types_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_activity_types_create(ctx, data, dry_run, extra_params):
     """Create activity type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/activityTypes/",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @activity_types_group.command("get")
@@ -84,38 +80,34 @@ def _cmd_activity_types_get(ctx, id, extra_params):
 @activity_types_group.command("delete")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_activity_types_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_activity_types_delete(ctx, id, dry_run, extra_params):
     """Delete activity type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='delete', path="/activityTypes/" + id + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @activity_types_group.command("update")
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_activity_types_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_activity_types_update(ctx, id, data, dry_run, extra_params):
     """Update activity type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='patch', path="/activityTypes/" + id + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

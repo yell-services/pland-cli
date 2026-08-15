@@ -81,10 +81,14 @@ def render_command(op: Operation) -> str:
         lines.append('@click.option("--output", type=click.Path(), help="Write the response to a file.")')
         sig_params.append("output")
 
+    # Every write gets --dry-run; a free one has no gate to clear, so --yes and
+    # --confirm would only be flags that do nothing.
+    gated = risk in ("confirm", "critical")
     if op.method != "get":
         lines.append('@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")')
         sig_params.append("dry_run")
-        lines.append('@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")')
+    if gated:
+        lines.append('@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")')
         sig_params.append("assume_yes")
         lines.append('@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user\'s explicit go; the token still has to match.")')
         sig_params.append("confirm_token")
@@ -115,8 +119,8 @@ def render_command(op: Operation) -> str:
     file_arg = "file_" if op.is_multipart else "None"
     out_arg = "output" if op.returns_binary else "None"
     dry_arg = "dry_run" if op.method != "get" else "False"
-    yes_arg = "assume_yes" if op.method != "get" else "False"
-    token_arg = "confirm_token" if op.method != "get" else "None"
+    yes_arg = "assume_yes" if gated else "False"
+    token_arg = "confirm_token" if gated else "None"
     draft = draftable_for(op.method, op.path, op.tag)
     draft_arg = f'"{draft}"' if draft else "None"
     lines.append(f"        data={body_arg}, file_={file_arg}, output={out_arg}, dry_run={dry_arg},")

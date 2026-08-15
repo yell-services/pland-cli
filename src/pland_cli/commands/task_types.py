@@ -32,19 +32,17 @@ def _cmd_task_types_list(ctx, page, limit, status, name, ids, fetch_all, extra_p
 @task_types_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_task_types_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_task_types_create(ctx, data, dry_run, extra_params):
     """Create a new task type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/taskTypes/",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @task_types_group.command("get")
@@ -65,38 +63,34 @@ def _cmd_task_types_get(ctx, id, extra_params):
 @task_types_group.command("delete")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_task_types_delete(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_task_types_delete(ctx, id, dry_run, extra_params):
     """Deletes a task type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='delete', path="/taskTypes/" + id + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @task_types_group.command("update")
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_task_types_update(ctx, id, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_task_types_update(ctx, id, data, dry_run, extra_params):
     """Update task type"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='patch', path="/taskTypes/" + id + "",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 def register(root):

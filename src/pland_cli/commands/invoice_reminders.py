@@ -40,19 +40,17 @@ def _cmd_invoice_reminders_list(ctx, limit, offset, sort, status, customerId, ob
 @invoice_reminders_group.command("create")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_reminders_create(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_reminders_create(ctx, data, dry_run, extra_params):
     """Create invoice reminder"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/invoiceReminders/",
         query={}, extra_params=extra_params, fetch_all=False,
         data=data, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_reminders_group.command("get-distinct-values")
@@ -90,7 +88,7 @@ def _cmd_invoice_reminders_get(ctx, id, extra_params):
 @invoice_reminders_group.command("delete", short_help="🟡 Delete invoice reminder")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
@@ -109,7 +107,7 @@ def _cmd_invoice_reminders_delete(ctx, id, dry_run, assume_yes, confirm_token, e
 @click.argument("ID")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
@@ -127,41 +125,37 @@ def _cmd_invoice_reminders_update(ctx, id, data, dry_run, assume_yes, confirm_to
 @invoice_reminders_group.command("generate-combined-pdf")
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_reminders_generate_combined_pdf(ctx, output, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_reminders_generate_combined_pdf(ctx, output, dry_run, extra_params):
     """Generate combined PDF for reminders"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/invoiceReminders/pdf",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=output, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_reminders_group.command("create-preview")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_reminders_create_preview(ctx, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_reminders_create_preview(ctx, dry_run, extra_params):
     """Create reminder preview"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/invoiceReminders/preview",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_reminders_group.command("send", short_help="🟡 Send reminders via email")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
@@ -180,19 +174,17 @@ def _cmd_invoice_reminders_send(ctx, dry_run, assume_yes, confirm_token, extra_p
 @click.argument("ID")
 @click.option("--output", type=click.Path(), help="Write the response to a file.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_reminders_generate_pdf(ctx, id, output, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_reminders_generate_pdf(ctx, id, output, dry_run, extra_params):
     """Generate reminder PDF"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/invoiceReminders/" + id + "/pdf",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=output, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_reminders_group.command("list-referenced-faktura-documents-for")
@@ -213,61 +205,55 @@ def _cmd_invoice_reminders_list_referenced_faktura_documents_for(ctx, id, extra_
 @invoice_reminders_group.command("attach-documents-to")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_reminders_attach_documents_to(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_reminders_attach_documents_to(ctx, id, dry_run, extra_params):
     """Attach documents to reminder"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/invoiceReminders/" + id + "/attachDocuments",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_reminders_group.command("add-documents-to")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_reminders_add_documents_to(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_reminders_add_documents_to(ctx, id, dry_run, extra_params):
     """Add documents to reminder"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/invoiceReminders/" + id + "/addDocuments",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_reminders_group.command("get-or-create-chat")
 @click.argument("ID")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context
-def _cmd_invoice_reminders_get_or_create_chat(ctx, id, dry_run, assume_yes, confirm_token, extra_params):
+def _cmd_invoice_reminders_get_or_create_chat(ctx, id, dry_run, extra_params):
     """Get or create reminder chat"""
     from pland_cli._codegen.runtime import run_operation
     run_operation(
         ctx, method='post', path="/invoiceReminders/" + id + "/chat",
         query={}, extra_params=extra_params, fetch_all=False,
         data=None, file_=None, output=None, dry_run=dry_run,
-        risk="free", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
     )
 
 @invoice_reminders_group.command("create-from", short_help="🟡 Create reminders from invoices")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 always requires terminal input).")
+@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
 @click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
 @click.option("--extra-params", default=None, help="Additional query params as JSON.")
 @click.pass_context

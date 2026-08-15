@@ -43,15 +43,22 @@ Commands sind nach Risiko markiert: 🟡 (confirm) und 🔴 (critical) im `--hel
 - **Niemals** eigenmächtig `--yes` setzen, um eine 🟡-Bestätigung zu umgehen — frage
   zuerst den User ausdrücklich um Zustimmung in dieser Sitzung.
 - 🔴-Operationen (Lohn, Zeiterfassungs-Freigaben, Mitarbeiter löschen, Massen-
-  löschung, Account-Änderung) verlangen eine Terminal-Eingabe durch einen Menschen
-  und lassen sich nicht per Flag auslösen — fordere den User auf, sie selbst zu bestätigen.
+  löschung, Account-Änderung) lassen sich **nicht** mit `--yes` freigeben. Sie
+  verlangen ein getipptes Bestätigungswort — am Terminal, oder per
+  `--confirm <TOKEN>` für einen Aufrufer ohne TTY. Das Token muss stimmen, sonst
+  bricht der Aufruf ab; `--dry-run` nennt es. **Setze `--confirm` niemals
+  eigenmächtig** — es ersetzt das Tippen, nicht die Zustimmung, und die musst du
+  vorher ausdrücklich einholen. Im Zweifel den User selbst bestätigen lassen.
+  Solche Läufe stehen als `*_confirmed_flag` im Audit-Log, getrennt von den
+  wirklich getippten.
 - Vor jedem Schreiben erst `--dry-run` zeigen, dann fragen.
 - **Viele Schreibvorgänge:** `pland batch run --file ops.json` bündelt sie hinter
   **einer** Rückfrage (Stufe = höchstes Risiko in der Datei). Erst `--dry-run`
   zeigen, dann den User die Datei freigeben lassen. With `--json` the dry run
   returns `{dry_run, count, risk, confirmToken, operations}` — read `operations`
-  to check every request the file would send. 🔴 verlangt weiterhin ein
-  Terminal — ein Agent kann das nicht selbst auslösen. Query-Parameter lassen sich
+  to check every request the file would send. 🔴 verlangt weiterhin das getippte
+  Token (Terminal oder `--confirm`, siehe oben) — der Dry-Run nennt es unter
+  `confirmToken`. Query-Parameter lassen sich
   in einem Batch-Eintrag nicht abbilden — u. a. `jobs delete` (`splitDate`, `type`,
   `teamId`) niemals batchen, sondern einzeln ausführen.
 

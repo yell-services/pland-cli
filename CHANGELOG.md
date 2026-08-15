@@ -7,7 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.4.0] - 2026-08-15
+### Changed
+
+- The docs no longer claim 🔴 cannot be cleared without a terminal. `--confirm`
+  has done exactly that since it was added, for a caller with the user's
+  explicit go, and four places still said otherwise: two in the skill, the
+  `--yes` help text, and the guard's own no-TTY error. That error now names the
+  token to pass. Wrong in the dangerous direction — a reader took 🔴 for
+  human-enforced and relied on it.
+- **Breaking:** `--yes` and `--confirm` are gone from free commands, where they
+  cleared nothing and implied a confirmation that never happened. They stay on
+  all 152 gated writes; the other 168 keep `--dry-run`. A script passing `--yes`
+  to a free command now fails with "no such option" — notably
+  `invoice set-canceled`, free since this release. A conformance test pins the
+  pairing in both directions.
 
 ### Added
 
