@@ -35,6 +35,24 @@ Aufeinanderfolgende Seiten können Einträge doppelt liefern → per `_id` dedup
 Vor einem PATCH die Read-only-Felder strippen: `_id, object, customer, recipient,
 assignments, previousInvoices, totals, status, companyId`.
 
+## Storno: Body-Felder, Endgültigkeit, Waisen
+`pland invoice set-canceled` erwartet `fakturaDocumentIds` (nicht `ids`) und
+`canceledAtDate` als Pflichtfeld — die veröffentlichte Spec ist an beiden Punkten
+falsch, korrigiert im Overlay. Body abrufbar mit
+`pland schema SetInvoicesCanceledRequest`.
+
+Ein Storno ist **nicht zurücknehmbar**: es gibt keine Un-Storno-Route (nur Time
+Tracking hat `unCancel`), und `canceledDate` per PATCH zu leeren wird angenommen,
+ändert aber nichts. Die Rechnung selbst bleibt mit ihrer Nummer erhalten.
+
+Beim Stornieren entsteht ein eigener `InvoiceStorno`-Datensatz, den die Rechnung
+nicht verlinkt (`stornoId` bleibt `null`). `invoice delete` löscht ihn **nicht**
+mit — der Record bleibt als Waise zurück. Weil ein Unique-Index auf
+`referenceId` liegt, scheitert ein späteres Storno mit derselben `referenceId`
+an `E11000 duplicate key`. Aufräumen über
+`pland invoice-storno list --all` (nach `referenceId` suchen) und
+`pland invoice-storno delete <id>`.
+
 ## Schutzlayer für Schreibvorgänge
 DELETE/PATCH auf kritische Daten sind 🟡/🔴 markiert und verlangen Bestätigung.
 Entwürfe (Rechnungen/Angebote ohne `fixDate`) werden automatisch als unkritisch

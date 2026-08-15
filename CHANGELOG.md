@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `invoice-storno list`, `count` and `get-distinct-values`. The spec reaches a
+  storno only through `/stornos/{id}`, and nothing hands out that id: cancelling
+  an invoice creates a storno record behind the scenes while the invoice keeps
+  `stornoId: null`. A storno raised in error could therefore be neither found
+  nor deleted. The collection turns out to be served but undocumented — verified
+  2026-08-15, 200 with 364 records, against a control probe on the same resource
+  that reports "Failed to parse Id". Same dead end, and same fix, as the
+  `/invoiceReminders/` entry.
+
 ### Changed
 
 - `invoice set-canceled` is no longer 🔴 critical, it runs unprompted. Cancelling

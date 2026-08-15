@@ -401,6 +401,7 @@
 
 | Command | Methode | Beschreibung |
 |---|---|---|
+| `pland invoice-storno count` | GET | Count storno documents |
 | `pland invoice-storno create-add-documents` | POST | Add new documents to storno |
 | `pland invoice-storno create-attach-documents` | POST | Attach documents to storno |
 | `pland invoice-storno create-pdf` | POST | Generate combined PDF for multiple storno documents |
@@ -409,7 +410,9 @@
 | `pland invoice-storno create-send` | POST | Send storno documents via email |
 | `pland invoice-storno delete` | DELETE | Delete storno document |
 | `pland invoice-storno get` | GET | Get storno document details |
+| `pland invoice-storno get-distinct-values` | GET | Distinct values for a storno field |
 | `pland invoice-storno get-referenced-faktura-documents` | GET | Get referenced documents for storno |
+| `pland invoice-storno list` | GET | List storno documents |
 | `pland invoice-storno update` | PATCH | Update storno document |
 
 ## invoice-templates

@@ -218,6 +218,47 @@ paths:
       responses:
         '200': {description: List of exports}
 
+  # Storno documents as a collection. The spec only reaches a storno through
+  # /stornos/{id}, and nothing hands out that id: cancelling an invoice creates
+  # a storno record behind the scenes, but the invoice keeps `stornoId: null`.
+  # So a storno raised in error could be neither found nor deleted — the same
+  # dead end the /invoiceReminders/ entry above describes.
+  # Verified 2026-08-15: the collection answers 200 with 364 records, while the
+  # control probe /stornos/definitelyNotARoute reports "Failed to parse Id",
+  # i.e. no such route. `offset` only paginates together with `sort` — unsorted,
+  # the server's order is not stable; core.pagination injects a sort already.
+  /stornos/:
+    get:
+      tags: [Invoice Storno]
+      operationId: listStornos
+      summary: List storno documents
+      parameters:
+        - {name: limit, in: query, schema: {type: integer},
+           description: Maximum number of items to return}
+        - {name: offset, in: query, schema: {type: integer},
+           description: Number of items to skip for pagination}
+      responses:
+        '200': {description: List of storno documents}
+
+  /stornos/count:
+    get:
+      tags: [Invoice Storno]
+      operationId: countStornos
+      summary: Count storno documents
+      responses:
+        '200': {description: Count}
+
+  /stornos/distinctValues:
+    get:
+      tags: [Invoice Storno]
+      operationId: getStornoDistinctValues
+      summary: Distinct values for a storno field
+      parameters:
+        - {name: fieldKey, in: query, required: true, schema: {type: string},
+           description: Field name to get distinct values for}
+      responses:
+        '200': {description: Distinct values}
+
   # Collective-agreement templates (payTypeEntries, surchargeEntries) — the
   # template wizard from the pland release of 2026-05-22.
   /payTypeTemplates/:
