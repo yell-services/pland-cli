@@ -35,23 +35,31 @@ Aufeinanderfolgende Seiten können Einträge doppelt liefern → per `_id` dedup
 Vor einem PATCH die Read-only-Felder strippen: `_id, object, customer, recipient,
 assignments, previousInvoices, totals, status, companyId`.
 
-## Storno: Body-Felder, Endgültigkeit, Waisen
-`pland invoice set-canceled` erwartet `fakturaDocumentIds` (nicht `ids`) und
-`canceledAtDate` als Pflichtfeld — die veröffentlichte Spec ist an beiden Punkten
-falsch, korrigiert im Overlay. Body abrufbar mit
-`pland schema SetInvoicesCanceledRequest`.
+## Cancelling an invoice: body fields, finality, orphans
+`pland invoice set-canceled` wants `fakturaDocumentIds` (not `ids`) and requires
+`canceledAtDate` — the published spec is wrong on both counts, corrected in the
+overlay. Fetch the body with `pland schema SetInvoicesCanceledRequest`.
 
-Ein Storno ist **nicht zurücknehmbar**: es gibt keine Un-Storno-Route (nur Time
-Tracking hat `unCancel`), und `canceledDate` per PATCH zu leeren wird angenommen,
-ändert aber nichts. Die Rechnung selbst bleibt mit ihrer Nummer erhalten.
+A cancel **cannot be taken back**. There is no un-cancel route (only Time
+Tracking has `unCancel`), and clearing `canceledDate` via PATCH is accepted and
+ignored. The invoice itself survives and keeps its number.
 
-Beim Stornieren entsteht ein eigener `InvoiceStorno`-Datensatz, den die Rechnung
-nicht verlinkt (`stornoId` bleibt `null`). `invoice delete` löscht ihn **nicht**
-mit — der Record bleibt als Waise zurück. Weil ein Unique-Index auf
-`referenceId` liegt, scheitert ein späteres Storno mit derselben `referenceId`
-an `E11000 duplicate key`. Aufräumen über
-`pland invoice-storno list --all` (nach `referenceId` suchen) und
+Cancelling creates an `InvoiceStorno` record that the invoice does not link —
+`stornoId` stays `null`. `invoice delete` does **not** take it along, so the
+record is left orphaned. A unique index on `referenceId` then makes a later
+cancel under the same `referenceId` fail with `E11000 duplicate key`. Clean up
+via `pland invoice-storno list --all` (match on `referenceId`) and
 `pland invoice-storno delete <id>`.
+
+## Assignment confirmations are unreachable without a known ID
+`/assignmentConfirmations/{id}` is the only way in, and nothing hands out that
+id — no assignment field carries it, and the spec has no
+`assignmentConfirmationId` anywhere. Unlike the storno collection, this one is
+not merely undocumented: the API does not serve it. Probed 2026-08-15, all
+answering "Not found." or `Failed to parse Id` against a control probe on the
+same resource: `/assignmentConfirmations/` (plus `/list`, `/all`, `/count`) and
+`/fakturaDocuments/` as a generic entry point. No overlay entry can fix this —
+it needs a route from pland.app. Do not re-probe these.
 
 ## Schutzlayer für Schreibvorgänge
 DELETE/PATCH auf kritische Daten sind 🟡/🔴 markiert und verlangen Bestätigung.
