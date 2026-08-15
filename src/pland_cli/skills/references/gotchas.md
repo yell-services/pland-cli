@@ -59,7 +59,16 @@ like a dead end but is not: the id comes from the **offer it was generated
 from**.
 
 ```
-pland --json offers list                                    # or --all
+pland --json assignment-confirmations list                  # walks every offer
+pland --json assignment-confirmations list --offer-id <ID>  # skips the walk
+```
+
+That command does the rounds for you and tags each hit with its `offerId`. It
+costs one request per offer (~20 s at a few hundred) because no bulk route
+exists, and it warns on stderr if any offer could not be read — a short list
+must not read as a complete one. By hand it is two steps:
+
+```
 pland --json offers list-referenced-faktura-documents-for <OFFER_ID>
 #   -> [{documentType: "invoice", ...}, {documentType: "assignment_confirmation", _id: ...}]
 pland --json assignment-confirmations get <CONFIRMATION_ID>

@@ -442,5 +442,20 @@ def _cmd_invoice_get_dashboard_data(ctx, data, dry_run, extra_params):
         confirm_token=None,
     )
 
+@invoice_group.command("get-referenced-faktura-documents")
+@click.argument("ID")
+@click.option("--extra-params", default=None, help="Additional query params as JSON.")
+@click.pass_context
+def _cmd_invoice_get_referenced_faktura_documents(ctx, id, extra_params):
+    """Get referenced documents for invoice"""
+    from pland_cli._codegen.runtime import run_operation
+    run_operation(
+        ctx, method='get', path="/invoices/" + id + "/referencedFakturaDocuments",
+        query={}, extra_params=extra_params, fetch_all=False,
+        data=None, file_=None, output=None, dry_run=False,
+        risk="free", draftable=None, assume_yes=False,
+        confirm_token=None,
+    )
+
 def register(root):
     root.add_command(invoice_group)

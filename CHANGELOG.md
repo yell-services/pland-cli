@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `assignment-confirmations list` finds confirmations that have no collection
+  route, by walking the offers they were generated from and reading each one's
+  `referencedFakturaDocuments`. `--offer-id` skips the walk. One request per
+  offer, since no bulk route exists (~20 s at a few hundred), and any offer
+  that cannot be read is reported on stderr rather than silently shortening the
+  result. Found all 14 confirmations in a live company across 221 offers.
+- `invoice get-referenced-faktura-documents`. The spec documents
+  `referencedFakturaDocuments` on six faktura types but not on invoices, where
+  the API serves it just the same — verified against a control probe on the
+  same resource. It is the second route to an assignment confirmation, since
+  the invoice raised from an offer references it too.
+
 ## [0.5.0] - 2026-08-15
 
 ### Changed

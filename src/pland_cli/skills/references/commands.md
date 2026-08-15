@@ -357,6 +357,7 @@
 | `pland invoice get-dashboard-data` | POST | Get invoice dashboard data |
 | `pland invoice get-distinct-values` | GET | Get distinct field values |
 | `pland invoice get-last-number` | GET | Get last invoice number |
+| `pland invoice get-referenced-faktura-documents` | GET | Get referenced documents for invoice |
 | `pland invoice get-transactions` | GET | Get matching transactions for invoice |
 | `pland invoice link-to-credit` | POST | Link invoice to credit |
 | `pland invoice link-to-reminder` | POST | Link invoice to reminder |

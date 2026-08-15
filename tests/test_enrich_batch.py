@@ -158,13 +158,14 @@ def test_runtime_risk_matches_generated_risk():
         expected = resolve_entries([entry])[0].risk
         assert generated[func] == expected, f"{group} {command}"
         checked += 1
-    # Exact, not a floor: 525 generated commands map onto a spec operation and
+    # Exact, not a floor: 526 generated commands map onto a spec operation and
     # 44 of them carry a required query parameter. If either number moves, the
     # comparison surface changed and this test must be re-read, not re-tuned.
-    # Last moved when the overlay added the /stornos/ collection: `list` and
-    # `count` joined the comparison, `get-distinct-values` is refused for its
-    # required fieldKey — 479/43 before, 481/44 after.
-    assert (checked, refused) == (481, 44), f"compared {checked}, refused {refused}"
+    # Moved twice by the overlay: the /stornos/ collection added `list` and
+    # `count` to the comparison and `get-distinct-values` to the refused
+    # (479/43 -> 481/44), then invoice `get-referenced-faktura-documents`, a
+    # plain GET with no required query parameter (481/44 -> 482/44).
+    assert (checked, refused) == (482, 44), f"compared {checked}, refused {refused}"
 
 
 def _entry(i, group, command, method, path, risk):
