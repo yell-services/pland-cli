@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-08-15
+
 ### Changed
 
 - The docs no longer claim 🔴 cannot be cleared without a terminal. `--confirm`
@@ -195,6 +197,7 @@ sections — some call sites need adjusting.
 - Help texts keep their double quotes. The renderer replaced `"` with `'`,
   which made JSON examples in `--help` output unusable.
 
+[0.5.0]: https://github.com/yell-services/pland-cli/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/yell-services/pland-cli/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/yell-services/pland-cli/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/yell-services/pland-cli/compare/v0.1.0...v0.2.0
