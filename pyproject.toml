@@ -41,7 +41,7 @@ Changelog     = "https://github.com/yell-services/pland-cli/blob/main/CHANGELOG.
 pland = "pland_cli.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "respx>=0.21", "ruff>=0.6", "mypy>=1.11", "types-PyYAML"]
+dev = ["pytest>=8.0", "respx>=0.21", "ruff>=0.16.3", "mypy>=1.11", "types-PyYAML"]
 
 [tool.hatch.version]
 # Single source of truth: pyproject would otherwise drift from __init__.py,
