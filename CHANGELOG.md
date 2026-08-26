@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-08-26
+
+### Fixed
+
+- The four faktura send routes take `sendToEmail` for the recipient, not the
+  published `overrideEmail`. The API ignores the documented name — and does not
+  fail on it: a document with no recipient of its own comes back under `skipped`
+  with nothing sent, while a document that has one delivers **to the customer**.
+  A recipient override that silently mails the customer is worse than none, and
+  it sent two 2024 documents to live customers before the cause was found.
+  Verified on `/stornos/send` and `/offers/send`; on `/credits/send` and
+  `/assignmentConfirmations/send` only the ignored `overrideEmail` is verified,
+  since probing the fix there would have risked another live mail. The overlay
+  comments record which is which.
+- `credit send` takes `fakturaDocumentIds`, not the published `ids` — the API
+  says so in its 400.
+
+### Documented
+
+- A send response never tells you who received the mail. `success` means the API
+  accepted the call, nothing more; `statusTags[].recipient` and the logbuch entry
+  `activity_sent_faktura_document_to_email` are the only proof. Testing a send
+  safely needs a document with no address anywhere on it or its customer — and
+  `/offers/send` fixes a draft offer as a side effect, so drafts are not the
+  harmless choice they look like.
+
 ## [0.7.0] - 2026-08-26
 
 ### Removed
@@ -238,6 +264,7 @@ sections — some call sites need adjusting.
 - Help texts keep their double quotes. The renderer replaced `"` with `'`,
   which made JSON examples in `--help` output unusable.
 
+[0.7.1]: https://github.com/yell-services/pland-cli/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/yell-services/pland-cli/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/yell-services/pland-cli/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/yell-services/pland-cli/compare/v0.4.0...v0.5.0
