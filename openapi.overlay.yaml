@@ -120,6 +120,176 @@ paths:
         - API-Key: []
         - Bearer-Auth: []
 
+  # Verified 2026-08-26 against cloud-api.pland.app/v2 by sending a real storno.
+  # The recipient override is named `sendToEmail`, as on /invoices/sendZugferd
+  # and /invoices/sendXRechnung — not `overrideEmail` as published. Under the
+  # documented name the API ignores the field, resolves no recipient, and still
+  # answers 200: the document comes back in `skipped` (not `errors`), and the
+  # only trace is a `permanent_fail` status tag with an empty recipient. Nothing
+  # is sent and no logbuch entry is written, so the call reads as a success.
+  # With `sendToEmail` the document comes back in `success` and the logbuch
+  # records activity_sent_faktura_document_to_email.
+  # `ccEmails` was not exercised and stays as documented.
+  /stornos/send:
+    post:
+      tags: [Invoice Storno]
+      summary: 'Send storno documents via email'
+      description: 'Send one or multiple invoice storno documents to recipients via email'
+      operationId: bfa0423e7219eacde2c2d8959ef6932f
+      requestBody:
+        description: 'Email sending parameters'
+        required: true
+        content:
+          application/json:
+            schema:
+              required: [fakturaDocumentIds]
+              type: object
+              properties:
+                fakturaDocumentIds:
+                  description: Array of storno document IDs to send
+                  type: array
+                  items: {type: string, format: objectid}
+                sendToEmail:
+                  description: >-
+                    Recipient email address. Without it the API sends nothing and
+                    reports the document as skipped.
+                  type: string
+                  format: email
+                ccEmails:
+                  description: Additional CC email addresses
+                  type: array
+                  items: {type: string, format: email}
+      responses:
+        '200': {description: 'Storno documents sent successfully'}
+        '400': {description: 'Invalid request data'}
+        '401': {description: Unauthorized}
+      security:
+        - API-Key: []
+        - Bearer-Auth: []
+
+  # The same recipient bug as /stornos/send, and here it is the dangerous kind.
+  # Verified 2026-08-26: sending with the published `overrideEmail` does NOT
+  # fail — it ignores the field and delivers to the customer's stored contact.
+  # Two real 2024 documents went out to live customers that way before the cause
+  # was understood. `sendToEmail` is verified on this endpoint: with it the mail
+  # arrived at the address given, confirmed by the `recipient` in statusTags.
+  /offers/send:
+    post:
+      tags: [Offers]
+      summary: 'Send offers'
+      description: >-
+        Send offers via email. Automatically sets offers to fixed if they are in
+        draft status. Without sendToEmail the mail goes to the customer's stored
+        contact.
+      operationId: sendOffers
+      requestBody:
+        description: 'Offer IDs and recipient'
+        required: true
+        content:
+          application/json:
+            schema:
+              required: [fakturaDocumentIds]
+              type: object
+              properties:
+                fakturaDocumentIds:
+                  description: Array of offer IDs to send
+                  type: array
+                  items: {type: string, format: objectid}
+                sendToEmail:
+                  description: >-
+                    Recipient address. Omit it and the mail goes to the customer.
+                    The spec's `overrideEmail` is ignored, it does not override.
+                  type: string
+                  format: email
+      responses:
+        '200': {description: 'Offers sent'}
+        '400': {description: 'Invalid input'}
+        '401': {description: Unauthorized}
+      security:
+        - API-Key: []
+        - Bearer-Auth: []
+
+  # Two corrections. The id field is verified: the published `ids` gets back
+  # 400 "Missing parameters. Required parameters are: fakturaDocumentIds".
+  # The recipient field is NOT verified — every credit in the test company
+  # carries a customer address, so probing it would have risked another mail to
+  # a live customer. `sendToEmail` is carried over from /stornos/send and
+  # /offers/send, where it is verified, and because these four endpoints share
+  # one response shape ({success, errors, skipped}). Treat it as the best
+  # available guess until someone confirms it on a document with no recipient.
+  /credits/send:
+    post:
+      tags: [Credit]
+      summary: 'Send credit notes'
+      description: >-
+        Send credit notes via email. Without sendToEmail the mail goes to the
+        customer's stored contact.
+      operationId: sendCredits
+      requestBody:
+        description: 'Credit IDs and recipient'
+        required: true
+        content:
+          application/json:
+            schema:
+              required: [fakturaDocumentIds]
+              type: object
+              properties:
+                fakturaDocumentIds:
+                  description: Array of credit note IDs to send
+                  type: array
+                  items: {type: string, format: objectid}
+                sendToEmail:
+                  description: >-
+                    Recipient address (unverified on this endpoint, see overlay).
+                    The spec's `overrideEmail` is ignored elsewhere.
+                  type: string
+                  format: email
+      responses:
+        '200': {description: 'Credit notes sent'}
+        '400': {description: 'Invalid input'}
+        '401': {description: Unauthorized}
+      security:
+        - API-Key: []
+        - Bearer-Auth: []
+
+  # `overrideEmail` is verified as ignored here — a 2024 confirmation went to the
+  # customer despite it. `sendToEmail` is unverified for the same reason as
+  # /credits/send: no confirmation in the company lacks a recipient address.
+  /assignmentConfirmations/send:
+    post:
+      tags: [Assignment Confirmations]
+      summary: 'Send assignment confirmations'
+      description: >-
+        Send assignment confirmations via email. Generates PDFs. Without
+        sendToEmail the mail goes to the customer's stored contact.
+      operationId: sendAssignmentConfirmations
+      requestBody:
+        description: 'Confirmation IDs and recipient'
+        required: true
+        content:
+          application/json:
+            schema:
+              required: [fakturaDocumentIds]
+              type: object
+              properties:
+                fakturaDocumentIds:
+                  description: Array of assignment confirmation IDs to send
+                  type: array
+                  items: {type: string, format: objectid}
+                sendToEmail:
+                  description: >-
+                    Recipient address (unverified on this endpoint, see overlay).
+                    The spec's `overrideEmail` is ignored, it does not override.
+                  type: string
+                  format: email
+      responses:
+        '200': {description: 'Confirmations sent'}
+        '400': {description: 'Invalid input'}
+        '401': {description: Unauthorized}
+      security:
+        - API-Key: []
+        - Bearer-Auth: []
+
   /absences/count:
     get:
       tags: [Absences]

@@ -70,6 +70,73 @@ seconds left two behind. `fakturaDocumentIds` is an array — hand every id to o
 call. Back-to-back calls race server-side, and each cancel is irreversible, which
 is why `invoice set-canceled` is 🔴.
 
+## Sending any faktura document: `overrideEmail` does not override
+Four endpoints publish `overrideEmail` — `/stornos/send`, `/offers/send`,
+`/credits/send`, `/assignmentConfirmations/send`. The API ignores that name on
+every one of them and reads **`sendToEmail`** instead, as `/invoices/sendZugferd`
+and `/invoices/sendXRechnung` already do in the published spec.
+
+Ignoring it does not mean failing. What happens next depends on whether the
+document can resolve a recipient of its own:
+
+| document has a stored recipient | result with `overrideEmail` |
+|---|---|
+| no  | nothing is sent, document comes back in `skipped` |
+| yes | **the mail goes to the customer** |
+
+That second row is how two 2024 documents reached live customers on 2026-08-26
+during a test that was meant to send to an internal address. `overrideEmail`
+reads like a safe test switch and is the opposite of one.
+
+**Never judge a send by the response.** `success` only tells you the API
+accepted it; it does not tell you *who* received it. Check the recipient:
+
+```
+pland --json offers get <id>        # or invoice-storno / credit / …
+#   -> statusTags[].recipient is the address it actually went to
+pland --json logbuch list-for-chat <doc.chatId>
+#   -> activity_sent_faktura_document_to_email, absent when nothing was sent
+```
+
+To test a send safely, pick a document where **no** address is resolvable —
+neither on the document nor anywhere on the customer. Anything less and a
+mistake goes out to a real customer. Note also that `/offers/send` fixes a draft
+offer as a side effect, so a draft is not the harmless choice it looks like.
+
+Verified 2026-08-26 on `/stornos/send` and `/offers/send`. For `/credits/send`
+and `/assignmentConfirmations/send` only the ignored `overrideEmail` is
+verified; `sendToEmail` is carried over from the other two, because every credit
+and confirmation in the company has a customer address and probing it would have
+risked another live mail.
+
+## Sending a storno: a 200 that sent nothing
+`pland invoice-storno create-send` needs `sendToEmail` for the recipient — the
+published spec calls it `overrideEmail`, and the API ignores that name. It then
+resolves no recipient and still answers 200, with the document listed under
+`skipped` rather than `errors`:
+
+```json
+{"success": [], "errors": [], "skipped": ["<id>"]}
+```
+
+Nothing is sent. The only trace is a `permanent_fail` entry in `statusTags`
+whose `recipient` is empty. Read the response: **`skipped` is a failure**, only
+`success` means the mail went out. The second check is the logbuch — a real send
+writes `activity_sent_faktura_document_to_email`, a skipped one writes nothing:
+
+```
+pland --json logbuch list-for-chat <storno.chatId>
+```
+
+Verified 2026-08-26 by sending a real storno both ways. `/credits/send`,
+`/offers/send` and `/assignmentConfirmations/send` publish `overrideEmail` too
+and are likely to behave the same, but that was not exercised — sending is not
+something to probe on live customer documents.
+
+Beware the inherited `statusTags`: a fresh storno already carries the `sent` and
+`delivered` entries of the invoice it cancels, timestamped when *the invoice*
+went out. They say nothing about the storno.
+
 ## Company settings are read-only over the API, and `nextNumber` is not the counter
 `settings.<documentType>.nextNumber` reads like the running number and is not.
 It is where the range starts when the prefix rolls over, and it is never
