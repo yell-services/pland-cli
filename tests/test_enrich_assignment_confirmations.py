@@ -1,4 +1,3 @@
-import click
 from click.testing import CliRunner
 
 from pland_cli.enrichment.assignment_confirmations import assignment_confirmations_list
