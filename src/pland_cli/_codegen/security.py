@@ -78,12 +78,16 @@ def classify(method: str, path: str, tag: str) -> str:
     # 9) Users delete
     if tag == "Users" and m == "delete":
         return "critical"
-    # Cancelling an invoice is bookkeeping, not destruction: nothing is removed,
-    # the invoice keeps its number and stays in the ledger with a canceledDate.
-    # Explicitly free (owner's call, 2026-08-15) — it has to sit before rule 15,
-    # which would otherwise catch it on "setto".
+    # A cancel cannot be taken back — there is no un-cancel route — and it raises
+    # an InvoiceStorno that outlives a failed attempt. An orphaned one pins the
+    # storno number range, after which every cancel in the company dies with
+    # E11000; seen 2026-08-26, and only clearing it was raising nextNumber in the
+    # web UI. It was briefly free (2026-08-15, "bookkeeping, not destruction"):
+    # true of the invoice, not of the collateral. Critical again so an agent
+    # cannot fire one unattended. Sits before rule 15, which would otherwise
+    # catch it on "setto".
     if p == "/invoices/settocanceled":
-        return "free"
+        return "critical"
 
     # 9b) Documents: delete/modify -> critical (no --yes bypass). A real agent
     # test showed the confirm tier gets bypassed via --yes, and documents

@@ -24,24 +24,6 @@ def _cmd_company_get_info(ctx, fetch_all, extra_params):
         confirm_token=None,
     )
 
-@company_group.command("update", short_help="🟡 Update company")
-@click.option("--data", default=None, help="Request body as a JSON string.")
-@click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")
-@click.option("--yes", "assume_yes", is_flag=True, help="Skip the confirmation (🟡 only; 🔴 needs a terminal or --confirm).")
-@click.option("--confirm", "confirm_token", metavar="TOKEN", help="Pass the confirmation token instead of typing it at a terminal. For a caller without a TTY that has the user's explicit go; the token still has to match.")
-@click.option("--extra-params", default=None, help="Additional query params as JSON.")
-@click.pass_context
-def _cmd_company_update(ctx, data, dry_run, assume_yes, confirm_token, extra_params):
-    """Update company"""
-    from pland_cli._codegen.runtime import run_operation
-    run_operation(
-        ctx, method='patch', path="/company",
-        query={}, extra_params=extra_params, fetch_all=False,
-        data=data, file_=None, output=None, dry_run=dry_run,
-        risk="confirm", draftable=None, assume_yes=assume_yes,
-        confirm_token=confirm_token,
-    )
-
 @company_group.command("set-info", short_help="🟡 Set company info")
 @click.option("--data", default=None, help="Request body as a JSON string.")
 @click.option("--dry-run", "dry_run", is_flag=True, help="Show the request without sending it.")

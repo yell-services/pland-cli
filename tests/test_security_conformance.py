@@ -20,7 +20,9 @@ def test_distribution_matches_spec():
     from collections import Counter
     c = Counter(classify(m, p, t) for m, p, t in _write_ops())
     # Verteilung (verifiziert gegen die aktuelle Spec). Bei Spec-Updates bewusst anpassen.
-    assert c["critical"] == 29, c
-    assert c["free"] == 168, c
-    assert c["confirm"] == 123, c
-    assert sum(c.values()) == 320, c
+    # 29 -> 30 / 168 -> 167: setToCanceled is critical again (see security.py).
+    assert c["critical"] == 30, c
+    assert c["free"] == 167, c
+    # 123 -> 122: the overlay drops PATCH /company, a 🟡 the API cannot serve.
+    assert c["confirm"] == 122, c
+    assert sum(c.values()) == 319, c

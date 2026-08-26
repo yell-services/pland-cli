@@ -32,10 +32,11 @@ from pland_cli._codegen.security import classify, draftable_for
     ("post", "/notification/v2/read", "Push Notifications", "free"),
     ("post", "/auth/login", "Authentication", "free"),
     ("post", "/salaries/objectExport", "Salary", "free"),
-    # Cancelling only stamps canceledDate; it deletes nothing. Classified free
-    # deliberately, and the rule has to win over rule 15, which matches the
-    # "setto" in the path and would otherwise make it confirm.
-    ("post", "/invoices/setToCanceled", "Invoice", "free"),
+    # Cancelling only stamps canceledDate on the invoice, but it is irreversible
+    # and the storno it raises can orphan and block the whole number range, so
+    # critical it is. The rule has to win over rule 15, which matches the "setto"
+    # in the path and would otherwise make it confirm.
+    ("post", "/invoices/setToCanceled", "Invoice", "critical"),
 ])
 def test_classify(method, path, tag, expected):
     assert classify(method, path, tag) == expected

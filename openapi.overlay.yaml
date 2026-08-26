@@ -13,8 +13,8 @@ verified: 2026-08-09
 
 # --- Operations the spec documents but the API does not serve ---------------
 # Every one of these GETs answers "Failed to parse Id: <segment>", meaning the
-# route does not exist. Only GET is removed; POST/PATCH/DELETE on the same
-# paths are unverified and stay in place.
+# route does not exist. A write operation only lands here once it has been
+# probed with a body that changes nothing — see /company at the end.
 remove:
   /absences/capacity: [get]
   /absences/time-frame-check: [get]
@@ -45,6 +45,18 @@ remove:
   /qualityControl/object/{objectId}: [get]
   /qualityControl/objectManager/{id}: [get]
   /salaries/objects/{objectId}: [get]
+
+  # A registered route with no handler behind it. PUT /company answers "Method
+  # not allowed. Must be one of: GET, PATCH", so the router does know the PATCH
+  # — but building it fails in the container:
+  #   "PlanD\Components\Company\CompanyController:update is not resolvable".
+  # Verified 2026-08-26 with an unchanged settings body, so this is not about the
+  # payload, and /company is the only company route there is (/company/,
+  # /company/settings, /companies/{id} and /v1|/v3 all answer "Not found.").
+  # Company settings are therefore read-only over the API — including the
+  # document number ranges under settings.*.nextNumber. The web UI writes them
+  # without trouble, so this is the API surface, not the setting.
+  /company: [patch]
 
 # --- Query parameters the spec gets wrong -----------------------------------
 # Corrections by parameter name, across all paths. `expect` is the number of

@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- `company update`. The route is registered but has no handler behind it —
+  `PATCH /company` answers "CompanyController:update is not resolvable", with an
+  unchanged body just as much as a changed one, and `PUT` confirms the router
+  knows the method ("Must be one of: GET, PATCH"). The command could only ever
+  collect its 🟡 confirmation and then fail, so the overlay drops it. Company
+  settings are read-only over the API; `company get-info` still reads them.
+
+### Documented
+
+- Orphaned stornos break the document number range, not just `referenceId`. The
+  unique index covers the number, and the next one is `max(existing) + 1`, so a
+  record the collection keeps but no query returns pins that maximum and every
+  further cancel — on any invoice — repeats the same `E11000`. Neither `list`
+  (with or without a `documentNumber` filter), `get-distinct-values`, nor
+  `search perform-global` reveals it, so there is no id to delete and no way to
+  move the counter past it either.
+- `settings.<documentType>.nextNumber` is the value the range starts at when the
+  prefix rolls over, not the running counter, and it is never advanced. Raising
+  it in the web UI is the way out of a jammed range — the API cannot write it,
+  the UI can.
+
 ## [0.6.0] - 2026-08-16
 
 ### Added

@@ -171,7 +171,6 @@
 | `pland company set-custom-email-settings` | POST | Set custom email settings |
 | `pland company set-info` | PATCH | Set company info |
 | `pland company set-logo` | POST | Set company logo |
-| `pland company update` | PATCH | Update company |
 
 ## complaints
 

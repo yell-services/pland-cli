@@ -51,6 +51,45 @@ cancel under the same `referenceId` fail with `E11000 duplicate key`. Clean up
 via `pland invoice-storno list --all` (match on `referenceId`) and
 `pland invoice-storno delete <id>`.
 
+The same orphan can break the number range instead, and that is the worse
+failure. The unique index `companyId_1_numberPrefix_1_documentNumber_1` covers
+the document number, and the next storno number is `max(existing) + 1`. A
+record the collection keeps but no query returns — a half-written storno from a
+cancel that died mid-flight — pins that maximum permanently: every further
+cancel, on *any* invoice, recomputes the same number and gets `E11000`. Seen
+2026-08-26: the blocking number was invisible to `invoice-storno list` (with
+and without a `documentNumber` filter), to `get-distinct-values` on `_id` and
+on `documentNumber`, and to `search perform-global`. No id means no
+`invoice-storno delete`, and no API call moves the counter past it either (see
+below). What does work: raise `nextNumber` past the blocked number in the web
+UI. Verified 2026-08-26 — that is the way back, short of asking pland support to
+delete the record.
+
+Quick succession is what breeds these orphans: three `setToCanceled` inside 11
+seconds left two behind. `fakturaDocumentIds` is an array — hand every id to one
+call. Back-to-back calls race server-side, and each cancel is irreversible, which
+is why `invoice set-canceled` is 🔴.
+
+## Company settings are read-only over the API, and `nextNumber` is not the counter
+`settings.<documentType>.nextNumber` reads like the running number and is not.
+It is where the range starts when the prefix rolls over, and it is never
+advanced afterwards. Verified 2026-08-26 on invoices and stornos alike: each
+`nextNumber` sat hundreds below the highest number actually in use and matched
+the *first* number of the current prefix exactly. What gets handed out is
+`max(existing) + 1`.
+
+Changing any of it over the API is impossible. `PATCH /company` is the only
+write route — `PUT` answers "Method not allowed. Must be one of: GET, PATCH" —
+and its handler does not resolve
+(`PlanD\Components\Company\CompanyController:update is not resolvable`), with
+an unchanged body just the same. `/company/`, `/company/settings`,
+`/companies/{id}` and `/v1`, `/v3` all answer "Not found.". The overlay drops
+the operation, so `pland company update` does not exist; `company get-info`
+still reads.
+
+This is the API surface only — the web UI writes these settings without
+trouble, which is what makes it the repair path for a jammed number range.
+
 ## Reaching a document that has no collection route
 `/assignmentConfirmations/` does not exist — there is no collection to list,
 and the generator (`pland offers generate-assignment-confirmations`) answers

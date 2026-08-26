@@ -164,8 +164,10 @@ def test_runtime_risk_matches_generated_risk():
     # Moved twice by the overlay: the /stornos/ collection added `list` and
     # `count` to the comparison and `get-distinct-values` to the refused
     # (479/43 -> 481/44), then invoice `get-referenced-faktura-documents`, a
-    # plain GET with no required query parameter (481/44 -> 482/44).
-    assert (checked, refused) == (482, 44), f"compared {checked}, refused {refused}"
+    # plain GET with no required query parameter (481/44 -> 482/44). Then the
+    # overlay dropped PATCH /company, whose handler the API cannot resolve
+    # (482/44 -> 481/44).
+    assert (checked, refused) == (481, 44), f"compared {checked}, refused {refused}"
 
 
 def _entry(i, group, command, method, path, risk):

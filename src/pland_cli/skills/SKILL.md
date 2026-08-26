@@ -43,7 +43,8 @@ Commands sind nach Risiko markiert: 🟡 (confirm) und 🔴 (critical) im `--hel
 - **Niemals** eigenmächtig `--yes` setzen, um eine 🟡-Bestätigung zu umgehen — frage
   zuerst den User ausdrücklich um Zustimmung in dieser Sitzung.
 - 🔴-Operationen (Lohn, Zeiterfassungs-Freigaben, Mitarbeiter löschen, Massen-
-  löschung, Account-Änderung) lassen sich **nicht** mit `--yes` freigeben. Sie
+  löschung, Account-Änderung, Rechnungen stornieren) lassen sich **nicht** mit
+  `--yes` freigeben. Sie
   verlangen ein getipptes Bestätigungswort — am Terminal, oder per
   `--confirm <TOKEN>` für einen Aufrufer ohne TTY. Das Token muss stimmen, sonst
   bricht der Aufruf ab; `--dry-run` nennt es. **Setze `--confirm` niemals
