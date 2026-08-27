@@ -1,13 +1,17 @@
 # Corrections to openapi.yaml that pland.app has not published (yet).
 #
 # openapi.yaml is a verbatim copy of docs.pland.app — this file is layered on
-# top at load time (see _codegen/spec.py). Every entry is verified against the
-# live API (cloud-api.pland.app/v2); the date below says when. Once a point is
-# fixed upstream, its entry here goes away.
+# top at load time (see _codegen/spec.py). Entries are verified against the live
+# API (cloud-api.pland.app/v2); `verified` below dates the original sweep, and
+# anything added since carries its own date in the comment above it. Do not read
+# the file as uniformly verified: where a point could not be checked without a
+# side effect on live data, its comment says so outright. Once a point is fixed
+# upstream, its entry here goes away.
 #
 # How entries are verified: a GET against the real API. When a route does not
 # exist, the /{resource}/{id} fallback kicks in and the API answers with
-# "Failed to parse Id: <segment>".
+# "Failed to parse Id: <segment>". A write operation needs either a body that
+# changes nothing, or a target where a mistake cannot reach a customer.
 
 verified: 2026-08-09
 
