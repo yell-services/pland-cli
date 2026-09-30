@@ -35,6 +35,12 @@ Aufeinanderfolgende Seiten können Einträge doppelt liefern → per `_id` dedup
 Vor einem PATCH die Read-only-Felder strippen: `_id, object, customer, recipient,
 assignments, previousInvoices, totals, status, companyId`.
 
+## Fixing an invoice: `fakturaDocumentIds`, and only the day
+`pland invoice set-fixed` wants `fakturaDocumentIds` (not `ids`) — the published
+spec is wrong, corrected in the overlay. Fetch the body with
+`pland schema SetInvoicesFixedRequest`. `fixedAtDate` keeps only the day: sent as
+23:59:59, it comes back as 00:00 of the same day.
+
 ## Cancelling an invoice: body fields, finality, orphans
 `pland invoice set-canceled` wants `fakturaDocumentIds` (not `ids`) and requires
 `canceledAtDate` — the published spec is wrong on both counts, corrected in the

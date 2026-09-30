@@ -124,6 +124,38 @@ paths:
         - API-Key: []
         - Bearer-Auth: []
 
+  # Verified 2026-09-30 against cloud-api.pland.app/v2 with a nonexistent id, so
+  # nothing could be fixed by the probe:
+  #   {"ids": [...]}                 -> 400 "Required parameters are: fakturaDocumentIds"
+  #   {"fakturaDocumentIds": [...]}  -> 400 "No Default Entries found" — the id
+  #                                     lookup, so the body passed validation
+  # The same day five real invoices were fixed with `fakturaDocumentIds` and a
+  # `fixedAtDate` of 23:59:59 Europe/Berlin; all five came back with `fixDate`
+  # at 00:00 of that day. The API keeps the day, not the time. Whether
+  # `fixedAtDate` may be omitted was not exercised, so it stays optional.
+  /invoices/setFixed:
+    post:
+      tags: [Invoice]
+      summary: 'Set invoices to fixed status'
+      description: 'Set one or more invoices to fixed status, assigning them document
+        numbers and making them immutable. This transitions invoices from draft to open
+        status.'
+      operationId: setInvoicesFixed
+      requestBody:
+        description: 'Invoice IDs and optional fixed date'
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SetInvoicesFixedRequest'}
+      responses:
+        '200': {description: 'Invoices set to fixed successfully'}
+        '400': {description: 'Invalid input'}
+        '401': {description: Unauthorized}
+        '403': {description: Forbidden}
+      security:
+        - API-Key: []
+        - Bearer-Auth: []
+
   # Verified 2026-08-26 against cloud-api.pland.app/v2 by sending a real storno.
   # The recipient override is named `sendToEmail`, as on /invoices/sendZugferd
   # and /invoices/sendXRechnung — not `overrideEmail` as published. Under the
@@ -517,3 +549,23 @@ schemas:
           milliseconds). Mandatory: omitting it makes the API fail with a type
           error, it is not nullable.'
         type: integer
+
+  # Body of POST /invoices/setFixed, named for `pland schema` like the cancel
+  # body above. See the paths entry.
+  SetInvoicesFixedRequest:
+    title: Set Invoices Fixed Request
+    description: 'Body for POST /invoices/setFixed. The spec documents `ids`; the API
+      reads `fakturaDocumentIds`.'
+    type: object
+    required: [fakturaDocumentIds]
+    properties:
+      fakturaDocumentIds:
+        description: 'IDs of the invoices to fix'
+        type: array
+        items: {type: string, format: objectid}
+      fixedAtDate:
+        description: 'Date the invoices count as fixed (UTC timestamp in
+          milliseconds). Only the day is kept: the API stores 00:00 local time
+          of that day.'
+        type: integer
+        nullable: true

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `invoice set-fixed` takes `fakturaDocumentIds`, not the published `ids` — the
+  API says so in its 400. `fixedAtDate` keeps only the day: the API stores 00:00
+  of it, whatever time was sent. The body is reachable as
+  `pland schema SetInvoicesFixedRequest`.
+
 ## [0.7.1] - 2026-08-26
 
 ### Fixed
