@@ -145,8 +145,8 @@ def enforce(
         return
     if not isatty():
         _abort(method, path, risk, "blocked_no_tty",
-               f"🟡 {label} is protected and needs confirmation. No interactive "
-               f"TTY — release it deliberately with --yes.")
+               f"🟡 {label} is protected and needs confirmation from the user. No "
+               f"interactive TTY — with their approval, rerun with --yes.")
     if confirmer(f"🟡 Run {label}?"):
         audit({"method": method.upper(), "path": path, "risk": "confirm", "decision": "confirmed"})
         return
