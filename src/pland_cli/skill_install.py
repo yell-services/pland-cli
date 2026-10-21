@@ -6,9 +6,19 @@ from pathlib import Path
 
 import click
 
+TITLE_MARKER = "# pland-cli — "
+
 
 def _skills_dir() -> Path:
     return Path(str(resources.files("pland_cli").joinpath("skills")))
+
+
+def _is_ours(path: Path) -> bool:
+    """True for an AGENTS.md this installer wrote; anything else belongs to the project."""
+    try:
+        return path.read_text(encoding="utf-8", errors="replace").lstrip().startswith(TITLE_MARKER)
+    except OSError:
+        return False
 
 
 @click.group("skill")
@@ -32,8 +42,15 @@ def install(agent: str, dest: str | None) -> None:
         click.echo(f"Claude-Skill installiert → {pland_dir}")
     else:
         target = Path(dest) if dest else Path.cwd()
+        agents_md = target / "AGENTS.md"
+        if agents_md.exists() and not _is_ours(agents_md):
+            # never clobber a project-owned AGENTS.md; replacing our own is an update
+            raise click.ClickException(
+                f"{agents_md} existiert und stammt nicht von diesem Installer — Inhalt von Hand "
+                "zusammenführen oder mit --dest ein anderes Ziel wählen."
+            )
         target.mkdir(parents=True, exist_ok=True)
-        shutil.copy(src / "AGENTS.md", target / "AGENTS.md")
+        shutil.copy(src / "AGENTS.md", agents_md)
         refs = target / "references"
         refs.mkdir(exist_ok=True)
         for ref in (src / "references").glob("*.md"):
