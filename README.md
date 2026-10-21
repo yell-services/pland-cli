@@ -7,7 +7,7 @@
 
 > Inoffizielle, agent-native CLI für die [pland.app](https://pland.app) API —
 > Zeiterfassung, Lohn, Urlaub, Objekte, Rechnungen, Qualitätskontrolle u. v. m.
-> **523 Commands** über 56 Ressourcen-Gruppen, generiert aus der OpenAPI-Spec,
+> **500+ Commands** über 56 Ressourcen-Gruppen, generiert aus der OpenAPI-Spec,
 > mit JSON-Ausgabe für KI-Agenten.
 
 > **Keywords:** pland.app cli · pland api client · pland.app api · agent-native cli · claude code skill · codex cli skill · zeiterfassung lohn urlaub rechnungen api
@@ -55,7 +55,7 @@ Wenn du ein Agent bist und das hier liest, um die CLI zu nutzen:
 
 1. **Installieren:** `uv tool install git+https://github.com/yell-services/pland-cli`
 2. **Key setzen:** `export PLAND_API_KEY="<id>:<secret>"`
-3. **Commands finden** (nicht raten — 523 Stück):
+3. **Commands finden** (nicht raten — über 500 Stück):
    - `pland --help` (56 Gruppen) · `pland <gruppe> --help`
    - `pland describe <gruppe> <command>` (Methode, Pfad, Parameter)
    - `pland schema <Name>` (z. B. `pland schema Absence`)
@@ -109,7 +109,8 @@ nativen Builds. CI testet alle drei Betriebssysteme.
 ## Sicherheit
 
 Schreibende Operationen sind nach Risiko gestuft: 🟢 frei · 🟡 Bestätigung
-(`--yes` überspringt) · 🔴 Terminal-Eingabe nötig (kein Flag-Bypass). Das schützt
+(`--yes` überspringt) · 🔴 getipptes Bestätigungswort, am Terminal oder per
+`--confirm <TOKEN>` (`--yes` reicht nicht). Das schützt
 vor versehentlichem Löschen durch Agenten. Jede Schreiboperation wird in
 `~/.local/state/pland/audit.jsonl` protokolliert.
 

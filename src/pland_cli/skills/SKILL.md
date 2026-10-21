@@ -1,6 +1,6 @@
 ---
-name: pland-cli
-description: Use when interacting with the pland.app API — HR, time tracking, payroll/salaries, absences, invoices, offers, customer objects, quality control, documents. Provides the `pland` CLI (523 commands across 56 resource groups) with JSON output for agents.
+name: pland
+description: "Use when interacting with the pland.app API — HR, time tracking, payroll/salaries, absences, invoices, offers, customer objects, quality control, documents. Provides the `pland` CLI (500+ commands across 56 resource groups) with JSON output for agents."
 ---
 
 # pland-cli
@@ -23,7 +23,7 @@ pland auth set-key                          # oder persistent (~/.config/pland)
 ## Grundregeln für Agenten
 
 - **Immer `--json`** für maschinenlesbare Ausgabe: `pland --json <gruppe> <command>`.
-- **Discovery statt Raten** — die CLI hat 523 Commands; finde sie so:
+- **Discovery statt Raten** — die CLI hat über 500 Commands; finde sie so:
   - `pland --help` → alle 56 Gruppen
   - `pland <gruppe> --help` → Commands der Gruppe
   - `pland describe <gruppe> <command>` → Methode, Pfad, Parameter
@@ -47,7 +47,7 @@ Commands sind nach Risiko markiert: 🟡 (confirm) und 🔴 (critical) im `--hel
   `--yes` freigeben. Sie
   verlangen ein getipptes Bestätigungswort — am Terminal, oder per
   `--confirm <TOKEN>` für einen Aufrufer ohne TTY. Das Token muss stimmen, sonst
-  bricht der Aufruf ab; `--dry-run` nennt es. **Setze `--confirm` niemals
+  bricht der Aufruf ab. **Setze `--confirm` niemals
   eigenmächtig** — es ersetzt das Tippen, nicht die Zustimmung, und die musst du
   vorher ausdrücklich einholen. Im Zweifel den User selbst bestätigen lassen.
   Solche Läufe stehen als `*_confirmed_flag` im Audit-Log, getrennt von den
@@ -57,7 +57,7 @@ Commands sind nach Risiko markiert: 🟡 (confirm) und 🔴 (critical) im `--hel
   **einer** Rückfrage (Stufe = höchstes Risiko in der Datei). Erst `--dry-run`
   zeigen, dann den User die Datei freigeben lassen. With `--json` the dry run
   returns `{dry_run, count, risk, confirmToken, operations}` — read `operations`
-  to check every request the file would send. 🔴 verlangt weiterhin das getippte
+  to check every request the file would send. 🔴 verlangt auch im Batch das getippte
   Token (Terminal oder `--confirm`, siehe oben) — der Dry-Run nennt es unter
   `confirmToken`. Query-Parameter lassen sich
   in einem Batch-Eintrag nicht abbilden — u. a. `jobs delete` (`splitDate`, `type`,
@@ -84,7 +84,7 @@ Commands sind nach Risiko markiert: 🟡 (confirm) und 🔴 (critical) im `--hel
 
 ## Vollständige Command-Liste
 
-Siehe `references/commands.md` (generiert, 56 Gruppen, 523 Commands). Bei Bedarf laden — nicht
+Siehe `references/commands.md` (generiert, alle Gruppen und Commands). Bei Bedarf laden — nicht
 vorab komplett lesen.
 
 ## Fehlerformat
